@@ -1,0 +1,12 @@
+#root {
+  width: 100%;
+  max-width: 100%;
+  min-height: 100svh;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+}
