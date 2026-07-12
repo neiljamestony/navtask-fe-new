@@ -50,7 +50,7 @@ export const createTask = async (request: ITask) => {
             } else {
                 formData.append("due_date", "");
             }
-        formData.append("subTasks", JSON.stringify(request.subTasks || []))
+        formData.append("subTask", JSON.stringify(request.subTask || []))
         for (const customFile of request.attachments) {
             formData.append("attachments", customFile, customFile.name);
         }
@@ -104,7 +104,7 @@ export const updateTask = async (request: UTask) => {
         } else {
             formData.append("created_at", "");
         }
-        formData.append("subtasks", JSON.stringify(request.subtasks || []))
+        formData.append("subtask", JSON.stringify(request.subtask || []))
         for (const customFile of request.attachments) {
             if(customFile instanceof Blob){
                 newFiles.push(customFile)

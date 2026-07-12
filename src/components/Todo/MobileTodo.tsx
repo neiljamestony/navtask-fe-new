@@ -90,7 +90,7 @@ interface Task {
     id: number;
     priority: string;
     status: string;
-    subtasks: SubTask[] | [],
+    subtask: SubTask[] | [],
     title: string;
     user_id: number;
     attachments?: IFile[] | []
@@ -375,11 +375,11 @@ export default function MobileTodo() {
         return <Box>{p.icon}</Box>
     }
 
-    const handleTitle = (id: number, title: string, due_date: string, subtasks: SubTask[] | [], attachments?: IFile[] | []) => {
+    const handleTitle = (id: number, title: string, due_date: string, subtask: SubTask[] | [], attachments?: IFile[] | []) => {
         return (
             <Box sx={{ display: "flex", alignItems: 'center', gap: 1 }}>
                 {
-                    subtasks.length > 0 && due_date !== "" && <Box sx={{ marginLeft: -3 }}>
+                    subtask.length > 0 && due_date !== "" && <Box sx={{ marginLeft: -3 }}>
                         <IconButton onClick={(e) => handleSubTask(e, id)}>
                             {openSubTask.includes(id) ? <img src={ExpandSubTaskActive} alt="close-subtask" height={8} width={8}/> : <img src={ExpandSubTaskInActive} alt="open-subtask" height={8} width={8}/> }
                         </IconButton>
@@ -456,14 +456,14 @@ export default function MobileTodo() {
 
         result.forEach((task) => {
             finalFlattenedGrid.push(task);
-            if (openSubTask.includes(task.id) && task.subtasks && task.subtasks.length > 0) {
-                const formattedSubTasks = task.subtasks.map((subItem) => ({
+            if (openSubTask.includes(task.id) && task.subtask && task.subtask.length > 0) {
+                const formattedSubTasks = task.subtask.map((subItem) => ({
                     ...subItem,
                     isSubTask: true,
                     due_date: "", 
                     priority: "",
                     completed_date: null, 
-                    subtasks: [], 
+                    subtask: [], 
                     created_at: "", 
                     user_id: 0
                 }));
@@ -689,7 +689,7 @@ export default function MobileTodo() {
                                                                                 <Box>{handlePriorityIcons(task.priority)}</Box>
                                                                                 <Box>{handleStatusIcons(task.status, task.due_date, task.completed_date)}</Box>
                                                                             </Box>
-                                                                            <ListItemText>{handleTitle(task.id, task.title, task.due_date, task.subtasks, task.attachments)}</ListItemText>
+                                                                            <ListItemText>{handleTitle(task.id, task.title, task.due_date, task.subtask, task.attachments)}</ListItemText>
                                                                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, marginLeft: 1 }}>
                                                                                 <ListItemText>
                                                                                     {task.due_date !== "" && handleDueDate(task.status, task.due_date, task.priority) }

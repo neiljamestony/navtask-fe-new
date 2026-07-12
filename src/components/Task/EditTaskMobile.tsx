@@ -16,7 +16,7 @@ import type { UTask } from '../../typescript/interface';
 import { useDropzone } from 'react-dropzone'
 import EditFilePreview from './EditFilePreview';
 import DeleteIcon from '../../assets/Icons/Delete_active.svg'
-import { validFileTypes } from '../../utils/utils';
+import { limitText, validFileTypes } from '../../utils/utils';
 import DeleteSubTask from '../Todo/DeleteSubTask';
 import DropdownDialog from '../Dialog/Mobile/Dropdown';
 import { MobileAppBar } from '../MobileAppBar';
@@ -39,7 +39,7 @@ export default function EditTaskMobile() {
         attachmentId: [],
         user_id: 0,
         attachments: [],
-        subtasks: []
+        subtask: []
     })
     const [loading, setLoading] = useState(false);
     const [fetchingTask, setFetchingTask] = useState(false);
@@ -91,7 +91,7 @@ export default function EditTaskMobile() {
         {
             value: "completed",
             label: "Completed",
-            active: task && task.subtasks ? task.subtasks.length > 0 && !subtasksCompleted ? false : true : false
+            active: task && task.subtask ? task.subtask.length > 0 && !subtasksCompleted ? false : true : false
         },
         {
             value: "cancelled",
@@ -120,7 +120,7 @@ export default function EditTaskMobile() {
             const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
             const oversizedFiles = acceptedFiles.filter(file => file.size > MAX_FILE_SIZE);
             const validFiles = acceptedFiles.filter(file => file.size <= MAX_FILE_SIZE);
-            const fileNames = acceptedFiles.map(file => file.name);
+            const fileNames = acceptedFiles.map(file => limitText(file.name));
             setUploadedFileNames(fileNames)
 
             if (oversizedFiles.length > 0) {
@@ -166,7 +166,7 @@ export default function EditTaskMobile() {
 
     const handleSubmit = async () => {
         setLoading(true);
-        const hasEmptySubtask = task.subtasks.some((item) => item.title.trim() === "");
+        const hasEmptySubtask = task.subtask.some((item) => item.title.trim() === "");
         if(hasEmptySubtask){
             setLoading(false);
         }else{
@@ -203,10 +203,10 @@ export default function EditTaskMobile() {
     }
 
     const handleNewSubTask = () => {
-        const subTaskNumber = task.subtasks.length + 1;
+        const subTaskNumber = task.subtask.length + 1;
         setTask((prev) => ({
             ...prev,
-            subtasks: [...prev.subtasks, { title: "Subtask" + " " + subTaskNumber , status: "not-done" }]
+            subtask: [...prev.subtask, { title: "Subtask" + " " + subTaskNumber , status: "not-done" }]
         }))
     }
 
@@ -228,6 +228,7 @@ export default function EditTaskMobile() {
                 }else{
                     toast.error(result?.msg);
                 }
+                setFetchingTask(false)
                 setLoading(false);
             }
             setTask(result)
@@ -242,7 +243,7 @@ export default function EditTaskMobile() {
     const handleSubTaskChange = (index: number, field: string, value: string) => {
         setTask((prev) => ({
             ...prev,
-            subtasks: prev.subtasks?.map((item, i) => i === index ? {...item, [field]: value} : item)
+            subtask: prev.subtask?.map((item, i) => i === index ? {...item, [field]: value} : item)
         }))
     }
 
@@ -257,10 +258,10 @@ export default function EditTaskMobile() {
     }
 
     const handleRemoveSubTask = () => {
-        const newSubTasks = task.subtasks?.filter((_, index) => index !== subTaskToDelete.key);
+        const newSubTasks = task.subtask?.filter((_, index) => index !== subTaskToDelete.key);
         setTask((prev) => ({
             ...prev,
-            subtasks: newSubTasks
+            subtask: newSubTasks
         }))
     }
 
@@ -303,9 +304,9 @@ export default function EditTaskMobile() {
     useEffect(() => {
         if (!task) return;
 
-        const hasSubtasks = task.subtasks && task.subtasks.length > 0;
+        const hasSubtasks = task.subtask && task.subtask.length > 0;
         const completed = hasSubtasks 
-            ? task.subtasks.every(subtask => subtask.status === "done") 
+            ? task.subtask.every(subtask => subtask.status === "done") 
             : false;
 
         setSubTasksCompleted(completed);
@@ -334,7 +335,7 @@ export default function EditTaskMobile() {
                 setTask((prev) => ({...prev}));
             }
         }
-    },[task.subtasks])
+    },[task.subtask])
 
     useEffect(() => {
         let timer: any = "";
@@ -398,7 +399,7 @@ export default function EditTaskMobile() {
                                         title={dropdownDialogTitle === "priority" ? "Select Priority" : "Select Status"}
                                         defaultValue={task.status}
                                         options={dropdownDialogTitle === "priority" ? priorities : status}/>
-                                    <Box sx={{ paddingBottom: task?.subtasks.length > 0 ? 5 : 0 }}>
+                                    <Box sx={{ paddingBottom: task?.subtask.length > 0 ? 5 : 0 }}>
                                         <Container maxWidth="md" sx={{ paddingTop: 10, paddingBottom: 5 }}>
                                             <Stack spacing={2}>
                                                 <Box sx={{ display: "flex", justifyContent: 'center', alignItems: 'center', gap: 2 }}>
@@ -483,7 +484,7 @@ export default function EditTaskMobile() {
                                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                                         <DatePicker
                                                             label="Date Created"
-                                                            value={task.due_date ? dayjs(task.created_at) : null}
+                                                            value={task.created_at ? dayjs(task.created_at) : null}
                                                             disabled
                                                             slotProps={{
                                                                 textField: {
@@ -638,10 +639,10 @@ export default function EditTaskMobile() {
                                                 <Divider/>
                                                 <Box sx={{ display: "flex", justifyContent: "space-between"}}>
                                                     <Typography sx={{ fontFamily: "Roboto", fontSize: 16, fontWeight: 'bold' }}>Subtask</Typography>
-                                                    <Button color="primary" type="button" variant="outlined" sx={{ textTransform: "none", backgroundColor: '#fff', borderRadius: 6 }} startIcon={<Add/>} disabled={task.subtasks.length === 10 || task.status === 'completed'} onClick={handleNewSubTask}>New Subtask</Button>
+                                                    <Button color="primary" type="button" variant="outlined" sx={{ textTransform: "none", backgroundColor: '#fff', borderRadius: 6 }} startIcon={<Add/>} disabled={task.subtask.length === 10 || task.status === 'completed'} onClick={handleNewSubTask}>New Subtask</Button>
                                                 </Box>
                                                 {
-                                                    task.subtasks?.length > 0 && (
+                                                    task.subtask?.length > 0 && (
                                                         <Box sx={{ display: "flex", justifyContent: 'space-evenly', alignItems: 'center' }}>
                                                             <Typography variant="body2" sx={{ color: 'grey.600' }}>Title</Typography>
                                                             <Typography variant="body2" sx={{ color: 'grey.600' }}>Status</Typography>
@@ -649,9 +650,9 @@ export default function EditTaskMobile() {
                                                     )
                                                 }
                                                 {
-                                                    task.subtasks?.length > 0 && (
+                                                    task.subtask?.length > 0 && (
                                                         <>
-                                                            {task.subtasks.map((subTask, key) => (
+                                                            {task.subtask.map((subTask, key) => (
                                                                 <Box key={key} sx={{ display: "flex", justifyContent: 'center', alignItems: 'center', gap: 2 }}>
                                                                     <IconButton size="medium" sx={{ top: 10 }} onClick={() => handleOpenSubTaskDeletionModal(subTask.title, key)}><img src={DeleteIcon} alt="delete-icon" height={20} width="100%"/></IconButton>
                                                                     <TextField 
@@ -684,7 +685,7 @@ export default function EditTaskMobile() {
                                                                         label={subTask.status === "done" ? "Done" : "Not Done"}
                                                                         slotProps={{
                                                                             typography: {
-                                                                            sx: { fontSize: '14px' } 
+                                                                                sx: { fontSize: '14px' } 
                                                                             }
                                                                         }}
                                                                         />
@@ -694,7 +695,7 @@ export default function EditTaskMobile() {
                                                     )
                                                 }
                                             
-                                                { (task?.subtasks?.length > 0 && subtasksCompleted && task.status !== "completed") && ( 
+                                                { (task?.subtask?.length > 0 && subtasksCompleted && task.status !== "completed") && ( 
                                                     <>
                                                         <Divider/>
                                                         <Box sx={{ display: "flex", justifyContent: 'center', alignItems: 'center' }}>

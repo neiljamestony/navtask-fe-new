@@ -12,7 +12,7 @@ import UploadIcon from '../../assets/Icons/Upload.svg';
 import type { ITask } from '../../typescript/interface';
 import { createTask } from '../../api/task/task';
 import toast from 'react-hot-toast';
-import { validFileTypes } from '../../utils/utils';
+import { limitText, validFileTypes } from '../../utils/utils';
 
 import { useDropzone } from 'react-dropzone'
 import { MobileAppBar } from '../MobileAppBar';
@@ -40,7 +40,7 @@ export default function NewTaskMobile() {
         due_date: "",
         description: "",
         attachments: [],
-        subTasks: []
+        subTask: []
     })
 
     const priorities = [
@@ -84,7 +84,7 @@ export default function NewTaskMobile() {
         },
     ]
 
-    const {getRootProps, getInputProps} = useDropzone({
+    const { getRootProps, getInputProps } = useDropzone({
         multiple: true,
         maxFiles: 5,
         accept: validFileTypes,
@@ -104,7 +104,7 @@ export default function NewTaskMobile() {
             const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
             const oversizedFiles = acceptedFiles.filter(file => file.size > MAX_FILE_SIZE);
             const validFiles = acceptedFiles.filter(file => file.size <= MAX_FILE_SIZE);
-            const fileNames = acceptedFiles.map(file => file.name);
+            const fileNames = acceptedFiles.map(file => limitText(file.name));
 
             setUploadedFileNames(fileNames);
 
@@ -164,7 +164,7 @@ export default function NewTaskMobile() {
 
     const handleSubmit = async () => {
         setLoading(true);
-        const hasEmptySubtask = task.subTasks.some((item) => item.title.trim() === "");
+        const hasEmptySubtask = task.subTask.some((item) => item.title.trim() === "");
         if(hasEmptySubtask){
             setLoading(false);
         }else{
@@ -201,25 +201,25 @@ export default function NewTaskMobile() {
     }
 
     const handleNewSubTask = () => {
-        const subTaskNumber = task.subTasks.length + 1;
+        const subTaskNumber = task.subTask.length + 1;
         setTask((prev) => ({
             ...prev,
-            subTasks: [...prev.subTasks, { title: "Subtask" + " " + subTaskNumber, status: "not-done" }]
+            subTask: [...prev.subTask, { title: "Subtask" + " " + subTaskNumber, status: "not-done" }]
         }))
     }
 
     const handleSubTaskChange = (index: number, field: string, value: string) => {
         setTask((prev) => ({
             ...prev,
-            subTasks: prev.subTasks.map((item, i) => i === index ? {...item, [field]: value} : item)
+            subTask: prev.subTask.map((item, i) => i === index ? {...item, [field]: value} : item)
         }))
     }
 
     const handleRemoveSubTask = (key: number) => {
-        const newSubTasks = task.subTasks.filter((_, index) => index !== key);
+        const newSubTasks = task.subTask.filter((_, index) => index !== key);
         setTask((prev) => ({
             ...prev,
-            subTasks: newSubTasks
+            subTask: newSubTasks
         }))
     }
 
@@ -282,8 +282,8 @@ export default function NewTaskMobile() {
                 <Typography sx={{ fontFamily: "Roboto", fontWeight: 'bold' }}>New Task Mobile</Typography>
             </Box>
             <Box sx={{ 
-                overflowY: task?.subTasks.length > 0 || task.attachments !== null ? 'scroll' : 'none', 
-                paddingBottom: task?.subTasks.length > 0 ? 5 : 0
+                overflowY: task?.subTask.length > 0 || task.attachments !== null ? 'scroll' : 'none', 
+                paddingBottom: task?.subTask.length > 0 ? 5 : 0
             }}>
                 <Container maxWidth="md" sx={{ paddingTop: 5, paddingBottom: 10 }}>
                     <Stack spacing={2}>
@@ -497,7 +497,7 @@ export default function NewTaskMobile() {
                                         }}>Attachments</Box>
                                         {
                                             uploading ? (
-                                                <Box sx={{ marginTop: 3, width: "50%", minHeight: "15vh", textAlign: 'center' }}>
+                                                <Box sx={{ marginTop: 10, width: "50%", minHeight: "15vh", textAlign: 'center' }}>
                                                     <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
                                                         <Typography sx={{ fontSize: 14, marginBottom: 1 }}>{uploadedFileNames.toString()}</Typography>
                                                     </Box>
@@ -518,7 +518,7 @@ export default function NewTaskMobile() {
                                         !uploading && <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "flex-start", alignItems: "center", paddingBottom: 2, gap: 2 }}>
                                             {
                                                 task.attachments && task.attachments.map((file, key) => (
-                                                    <FilePreview file={file} removeFile={(e: React.MouseEvent<HTMLButtonElement>) => handleRemoveFile(e, key)}/>
+                                                    <FilePreview file={file} key={key} removeFile={(e: React.MouseEvent<HTMLButtonElement>) => handleRemoveFile(e, key)}/>
                                                 ))
                                             }
                                         </Box>
@@ -529,10 +529,10 @@ export default function NewTaskMobile() {
                         </Box>
                         <Box sx={{ display: "flex", justifyContent: "space-between"}}>
                             <Typography sx={{ fontFamily: "Roboto", fontSize: 16, fontWeight: 'bold' }}>Subtask</Typography>
-                            <Button color="primary" type="button" variant="outlined" sx={{ textTransform: "none", backgroundColor: '#fff', borderRadius: 6 }} startIcon={<Add/>} disabled={task.subTasks.length === 10} onClick={handleNewSubTask}>New Subtask</Button>
+                            <Button color="primary" type="button" variant="outlined" sx={{ textTransform: "none", backgroundColor: '#fff', borderRadius: 6 }} startIcon={<Add/>} disabled={task.subTask.length === 10} onClick={handleNewSubTask}>New Subtask</Button>
                         </Box>
                         {
-                            task.subTasks.length > 0 && (
+                            task.subTask.length > 0 && (
                                 <>
                                     <Box sx={{ display: "flex", justifyContent: 'space-between', alignItem: 'center' }}>
                                         {
@@ -542,7 +542,7 @@ export default function NewTaskMobile() {
                                         }
                                     </Box>
 
-                                    {task.subTasks.map((subTask, key) => (
+                                    {task.subTask.map((subTask, key) => (
                                         <Fragment key={key}>
                                             <Box sx={{ display: "flex", justifyContent: 'center', alignItems: 'center', gap: 2 }}>
                                                 <TextField 

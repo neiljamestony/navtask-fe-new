@@ -85,7 +85,7 @@ interface Task {
     id: number;
     priority: string;
     status: string;
-    subtasks: SubTask[] | [],
+    subtask: SubTask[] | [],
     title: string;
     user_id: number;
 }
@@ -329,7 +329,7 @@ export default function DesktopTodo() {
             renderCell: (params) => {
                 const id = params.row.id;
                 const due_date = params.row.due_date;
-                const subtasks = params.row.subtasks;
+                const subtasks = params.row.subtask;
                 const attachments = params.row.attachments;
                 return (
                     <Box sx={{ display: "flex", alignItems: 'center', gap: 1 }}>
@@ -468,88 +468,46 @@ export default function DesktopTodo() {
         },
     ];
 
-    // const handleSubTask = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, id: number, subtasks: SubTask[]) => {
-    //     e.stopPropagation();
-
-    //     const isCurrentlyOpen = openSubTask.includes(id);
-
-    //     setOpenSubTask((prev) => 
-    //         isCurrentlyOpen ? prev.filter((prevId) => prevId !== id) : [...prev, id]
-    //     );
-    //     const subTaskIds = subtasks.map(subTask => subTask.id);
-
-    //     if (isCurrentlyOpen) {
-    //         const subTaskIdsToRemove = new Set(subTaskIds);
-    //         const newTasks = allTasks.filter((task) => !subTaskIdsToRemove.has(task.id));
-
-    //         setAllTasks(newTasks);
-
-    //     } else {
-    //         const newSubTasks = subtasks.map((item) => ({
-    //             ...item,
-    //             due_date: "", 
-    //             priority: "",
-    //             completed_date: null, 
-    //             subtasks: [], 
-    //             created_at: "", 
-    //             user_id: 0
-    //         }));
-
-    //         setAllTasks((prevTasks) => {
-    //             const newTasks = [...prevTasks];
-    //             const index = newTasks.findIndex(task => task.id === id);
-                
-    //             if (index !== -1) {
-    //                 newTasks.splice(index + 1, 0, ...newSubTasks);
-    //             }
-    //             return newTasks;
-    //         });
-    //     }
-    // }
-
-    const handleSubTask = (
-        e: React.MouseEvent<HTMLButtonElement, MouseEvent>, 
-        id: number, 
-        subtasks: SubTask[]
-    ) => {
+    const handleSubTask = (e: React.MouseEvent<HTMLButtonElement>, id: number, subtasks: SubTask[]) => {
         e.stopPropagation();
         const isCurrentlyOpen = openSubTask.includes(id);
 
-        setOpenSubTask((prev) => 
-            isCurrentlyOpen ? prev.filter((prevId) => prevId !== id) : [...prev, id]
+        setOpenSubTask((prev) =>
+            isCurrentlyOpen
+            ? prev.filter((taskId) => taskId !== id)
+            : [...prev, id]
         );
 
+        const subTaskIds = new Set(subtasks.map((subtask) => subtask.id));
+
         setAllTasks((prevTasks) => {
-            const subTaskIds = subtasks.map(subTask => subTask.id);
-            const subTaskIdsToRemove = new Set(subTaskIds);
-
             if (isCurrentlyOpen) {
-                return prevTasks.filter((task) => !subTaskIdsToRemove.has(task.id));
-            } else {
-                const alreadyInserted = prevTasks.some(task => subTaskIdsToRemove.has(task.id));
-                if (alreadyInserted) {
-                    return prevTasks;
-                }
-                const newSubTasks = subtasks.map((item) => ({
-                    ...item,
-                    due_date: "", 
-                    priority: "",
-                    completed_date: null, 
-                    subtasks: [], 
-                    created_at: "", 
-                    user_id: 0
-                }));
+                return prevTasks.filter((task) => !subTaskIds.has(task.id));
+            }
 
-                const index = prevTasks.findIndex(task => task.id === id);
-                if (index !== -1) {
-                    return [
-                        ...prevTasks.slice(0, index + 1),
-                        ...newSubTasks,
-                        ...prevTasks.slice(index + 1)
-                    ];
-                }
+            const alreadyInserted = prevTasks.some((task) => subTaskIds.has(task.id));
+
+            if (alreadyInserted) {
                 return prevTasks;
             }
+
+            const newSubTasks = subtasks.map((item) => ({
+                ...item,
+                due_date: "",
+                priority: "",
+                completed_date: null,
+                subtask: [],
+                created_at: "",
+                user_id: 0,
+            }));
+
+            const newTasks = [...prevTasks];
+            const index = newTasks.findIndex((task) => task.id === id);
+            if (index !== -1) {
+                newTasks.splice(index + 1, 0, ...newSubTasks);
+            }
+
+            return newTasks;
         });
     };
 

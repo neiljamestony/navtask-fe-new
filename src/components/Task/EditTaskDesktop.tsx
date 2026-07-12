@@ -36,7 +36,7 @@ export default function EditTaskDesktop() {
         attachmentId: [],
         user_id: 0,
         attachments: [],
-        subtasks: []
+        subtask: []
     })
     const [loading, setLoading] = useState(false);
     const [fetchingTask, setFetchingTask] = useState(false);
@@ -174,7 +174,7 @@ export default function EditTaskDesktop() {
 
     const handleSubmit = async () => {
         setLoading(true);
-        const hasEmptySubtask = task.subtasks.some((item) => item.title.trim() === "");
+        const hasEmptySubtask = task.subtask.some((item) => item.title.trim() === "");
         if(hasEmptySubtask){
             setLoading(false);
         }else{
@@ -211,10 +211,10 @@ export default function EditTaskDesktop() {
     }
 
     const handleNewSubTask = () => {
-        const subTaskNumber = task.subtasks.length + 1;
+        const subTaskNumber = task.subtask.length + 1;
         setTask((prev) => ({
             ...prev,
-            subtasks: [...prev.subtasks, { title: "Subtask" + " " + subTaskNumber , status: "not-done" }]
+            subtask: [...prev.subtask, { title: "Subtask" + " " + subTaskNumber , status: "not-done" }]
         }))
     }
 
@@ -242,15 +242,15 @@ export default function EditTaskDesktop() {
     const handleSubTaskChange = (index: number, field: string, value: string) => {
         setTask((prev) => ({
             ...prev,
-            subtasks: prev.subtasks?.map((item, i) => i === index ? {...item, [field]: value} : item)
+            subtask: prev.subtask?.map((item, i) => i === index ? {...item, [field]: value} : item)
         }))
     }
 
     const handleRemoveSubTask = (key: number) => {
-        const newSubTasks = task.subtasks?.filter((_, index) => index !== key);
+        const newSubTasks = task.subtask?.filter((_, index) => index !== key);
         setTask((prev) => ({
             ...prev,
-            subtasks: newSubTasks
+            subtask: newSubTasks
         }))
     }
 
@@ -288,9 +288,9 @@ export default function EditTaskDesktop() {
     useEffect(() => {
         if (!task) return;
 
-        const hasSubtasks = task.subtasks && task.subtasks.length > 0;
+        const hasSubtasks = task.subtask && task.subtask.length > 0;
         const completed = hasSubtasks 
-            ? task.subtasks.every(subtask => subtask.status === "done") 
+            ? task.subtask.every(subtask => subtask.status === "done") 
             : false;
 
         setSubTasksCompleted(completed);
@@ -319,7 +319,7 @@ export default function EditTaskDesktop() {
                 setTask((prev) => ({...prev}));
             }
         }
-    },[task.subtasks])
+    },[task.subtask])
 
     useEffect(() => {
         let timer: any = "";
@@ -375,8 +375,8 @@ export default function EditTaskDesktop() {
                                         sx={{ height: 750,
                                             border: 'none', 
                                             borderRadius: 4, 
-                                            overflowY: task.title !== "" && task?.subtasks.length > 0 || task.attachments !== null ? 'scroll' : 'none', 
-                                            paddingBottom: task?.subtasks.length > 0 ? 5 : 0
+                                            overflowY: task.title !== "" && task?.subtask.length > 0 || task.attachments !== null ? 'scroll' : 'none', 
+                                            paddingBottom: task?.subtask.length > 0 ? 5 : 0
                                         }}>
                                         <Container maxWidth="md" sx={{ paddingTop: 5 }}>
                                             <Stack spacing={2}>
@@ -408,7 +408,7 @@ export default function EditTaskDesktop() {
                                                             value={task.status}
                                                             >
                                                             {status.map((option) => (
-                                                                <MenuItem key={option.value} value={option.value} disabled={option.value === "completed" && task.subtasks.length > 0 && !subtasksCompleted}>
+                                                                <MenuItem key={option.value} value={option.value} disabled={option.value === "completed" && task.subtask.length > 0 && !subtasksCompleted}>
                                                                     {option.label}
                                                                 </MenuItem>
                                                             ))}
@@ -607,12 +607,12 @@ export default function EditTaskDesktop() {
                                                     <Grid size={12}>
                                                         <Box sx={{ display: "flex", justifyContent: "space-between"}}>
                                                             <Typography sx={{ fontFamily: "Roboto", fontSize: 16, fontWeight: 'bold' }}>Subtask</Typography>
-                                                            <Button color="primary" type="button" variant="outlined" sx={{ textTransform: "none", backgroundColor: '#fff', borderRadius: 6 }} startIcon={<Add/>} disabled={task.subtasks.length === 10 || task.status === 'completed'} onClick={handleNewSubTask}>New Subtask</Button>
+                                                            <Button color="primary" type="button" variant="outlined" sx={{ textTransform: "none", backgroundColor: '#fff', borderRadius: 6 }} startIcon={<Add/>} disabled={task.subtask.length === 10 || task.status === 'completed'} onClick={handleNewSubTask}>New Subtask</Button>
                                                         </Box>
                                                     </Grid>
                                                 </Grid>
                                                     {
-                                                        task.subtasks?.length > 0 && (
+                                                        task.subtask?.length > 0 && (
                                                             <Grid container spacing={2}>
                                                                 <Grid size={8}>
                                                                     <Typography variant="body2" sx={{ color: 'grey.600' }}>Title</Typography>
@@ -624,9 +624,9 @@ export default function EditTaskDesktop() {
                                                         )
                                                     }
                                                     {
-                                                        task.subtasks?.length > 0 && (
+                                                        task.subtask?.length > 0 && (
                                                             <>
-                                                                {task.subtasks.map((subTask, key) => (
+                                                                {task.subtask.map((subTask, key) => (
                                                                     <Grid container key={key} spacing={2}>
                                                                         <Grid size={8}>
                                                                             <TextField 
@@ -675,7 +675,7 @@ export default function EditTaskDesktop() {
                                         }}>
                                         <Button type="button" onClick={() => navigate("/")} variant="outlined" sx={{ backgroundColor: '#fff', borderRadius: 6, textTransform: 'none'}} disabled={loading}>Cancel</Button>
                                         
-                                        {(task?.subtasks?.length > 0 && subtasksCompleted && task.status !== "completed") ? (
+                                        {(task?.subtask?.length > 0 && subtasksCompleted && task.status !== "completed") ? (
                                             <Button 
                                                 type="button" 
                                                 variant="contained" 

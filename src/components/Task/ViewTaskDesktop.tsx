@@ -15,12 +15,14 @@ import Done from '../../assets/Icons/Done.svg';
 import NotDone from '../../assets/Icons/Not Done.svg';
 import dayjs from "dayjs";
 import DeleteItems from "../Todo/DeleteItems";
+import { limitText } from "../../utils/utils";
 
 export default function ViewTaskDesktop(){
     const { id } = useParams();
     const [fetchingTask, setFetchingTask] = useState(false)
     const navigate = useNavigate();
     const [deleteItem, setDeleteItem] = useState(false)
+    const [itemDeletionLoader, setItemDeletionLoader] = useState(false)
     const [task, setTask] = useState<UTask>({
         completed_date: null,
         created_at: "",
@@ -33,7 +35,7 @@ export default function ViewTaskDesktop(){
         attachmentId: [],
         user_id: 0,
         attachments: [],
-        subtasks: []
+        subtask: []
     })
     
     const fetch = async () => {
@@ -75,11 +77,14 @@ export default function ViewTaskDesktop(){
     }
 
     const handleDeleteItem = async (ids: string[] | []) => {
+        setItemDeletionLoader(true)
         const result = await removeTask(ids);
         if(result?.status === 200){
+            setItemDeletionLoader(false)
             setDeleteItem(false)
             navigate("/");
         }else{
+            setItemDeletionLoader(false)
             toast.error(result?.msg)
         }
     }
@@ -96,7 +101,7 @@ export default function ViewTaskDesktop(){
                         </>
                     ): (
                         <>
-                            <DeleteItems close={() => setDeleteItem(false)} proceed={handleDeleteItem} open={deleteItem} ids={[task.id.toString()]}/>
+                            <DeleteItems loading={itemDeletionLoader} close={() => setDeleteItem(false)} proceed={handleDeleteItem} open={deleteItem} ids={[task.id.toString()]}/>
                             <Box sx={{ display: "flex", justifyContent: "start", alignItems: 'center', gap: 2 }}>
                             <Button type="button" onClick={() => navigate("/")} startIcon={<ArrowBackIosNewRounded/>}>
                                     <Typography sx={{ fontFamily: "Roboto", fontWeight: 'bold', textTransform: 'none' }}>Back</Typography>
@@ -129,17 +134,9 @@ export default function ViewTaskDesktop(){
                                         {
                                             task.attachments && task.attachments.map((item, key) => (
                                                 <Box key={key} sx={{ height: 200 }}>
-                                                    <Box>
-                                                        {
-                                                            item.type.startsWith("image/") ? (
-                                                                <Box sx={{ display: 'block' }}>
-                                                                    <img src={item.url} alt={item.name + "icon"} height={100} width={100}/>
-                                                                    <Link href={item.url}><Typography sx={{ fontSize: 14 }}>{item.name}</Typography></Link>
-                                                                </Box>
-                                                            ): (
-                                                                <Link href={item.url}><Typography sx={{ fontSize: 14 }}>{item.name}</Typography></Link>
-                                                            )
-                                                        }
+                                                    <Box sx={{ display: 'block' }}>
+                                                        <img src={item.url} alt={item.name + "icon"} height={100} width={100}/>
+                                                        <Link href={item.url}><Typography sx={{ fontSize: 14 }}>{limitText(item.name)}</Typography></Link>
                                                     </Box>
                                                 </Box>
                                             ))
@@ -149,10 +146,10 @@ export default function ViewTaskDesktop(){
                                     <Stack spacing={2}>
                                         <Typography variant="h6">Subtask</Typography>
                                         {
-                                            task.subtasks.length > 0 && (
+                                            task.subtask.length > 0 && (
                                             <>
                                                 {
-                                                    task.subtasks.map((subTask, key) => (
+                                                    task.subtask.map((subTask, key) => (
                                                         <Grid container spacing={2}key={key}>
                                                             <Grid size={2}>
                                                                 <Typography variant="body2" sx={{ fontSize: 14, fontWeight: "regular" }}>{subTask.title}</Typography>

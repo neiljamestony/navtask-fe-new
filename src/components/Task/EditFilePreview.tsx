@@ -3,6 +3,7 @@ import { HighlightOffRounded } from '@mui/icons-material'
 import FilePreview from "./FilePreview";
 
 import type { AttachmentItem } from "../../typescript/interface";
+import { limitText } from "../../utils/utils";
 
 interface Attachment {
     attachment: AttachmentItem | null;
@@ -44,7 +45,7 @@ export default function EditFilePreview({ attachment, removeFile } : Attachment)
                     )}
 
                     <Typography sx={{ fontFamily: "Roboto", fontSize: 13, textDecoration: "underline", color: "#62C6FF", cursor: "pointer" }} onClick={() => handleFileDownload(attachment?.url ?? "")}>
-                        {attachment?.name}
+                        {limitText(attachment?.name)}
                     </Typography>
                     <Typography variant="caption" sx={{ display: 'block', fontFamily: 'Roboto', fontSize: 12, color: 'grey.600' }}>
                         {(Number(attachment?.size) / 1024).toFixed(1)} KB

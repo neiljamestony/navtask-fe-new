@@ -12,7 +12,7 @@ import UploadIcon from '../../assets/Icons/Upload.svg';
 import type { ITask } from '../../typescript/interface';
 import { createTask } from '../../api/task/task';
 import toast from 'react-hot-toast';
-import { validFileTypes } from '../../utils/utils';
+import { limitText, validFileTypes } from '../../utils/utils';
 
 import { useDropzone } from 'react-dropzone'
 
@@ -35,7 +35,7 @@ export default function NewTaskDesktop() {
         due_date: "",
         description: "",
         attachments: [],
-        subTasks: []
+        subTask: []
     })
 
     const {getRootProps, getInputProps} = useDropzone({
@@ -58,7 +58,7 @@ export default function NewTaskDesktop() {
             const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
             const oversizedFiles = acceptedFiles.filter(file => file.size > MAX_FILE_SIZE);
             const validFiles = acceptedFiles.filter(file => file.size <= MAX_FILE_SIZE);
-            const fileNames = acceptedFiles.map(file => file.name);
+            const fileNames = acceptedFiles.map(file => limitText(file.name));
             setUploadedFileNames(fileNames);
 
             if (oversizedFiles.length > 0) {
@@ -151,7 +151,7 @@ export default function NewTaskDesktop() {
 
     const handleSubmit = async () => {
         setLoading(true);
-        const hasEmptySubtask = task.subTasks.some((item) => item.title.trim() === "");
+        const hasEmptySubtask = task.subTask.some((item) => item.title.trim() === "");
         if(hasEmptySubtask){
             setLoading(false);
         }else{
@@ -187,25 +187,25 @@ export default function NewTaskDesktop() {
     }
 
     const handleNewSubTask = () => {
-        const subTaskNumber = task.subTasks.length + 1;
+        const subTaskNumber = task.subTask.length + 1;
         setTask((prev) => ({
             ...prev,
-            subTasks: [...prev.subTasks, { title: "Subtask" + " " + subTaskNumber, status: "not-done" }]
+            subTask: [...prev.subTask, { title: "Subtask" + " " + subTaskNumber, status: "not-done" }]
         }))
     }
 
     const handleSubTaskChange = (index: number, field: string, value: string) => {
         setTask((prev) => ({
             ...prev,
-            subTasks: prev.subTasks.map((item, i) => i === index ? {...item, [field]: value} : item)
+            subTask: prev.subTask.map((item, i) => i === index ? {...item, [field]: value} : item)
         }))
     }
 
     const handleRemoveSubTask = (key: number) => {
-        const newSubTasks = task.subTasks.filter((_, index) => index !== key);
+        const newSubTasks = task.subTask.filter((_, index) => index !== key);
         setTask((prev) => ({
             ...prev,
-            subTasks: newSubTasks
+            subTask: newSubTasks
         }))
     }
 
@@ -244,8 +244,8 @@ export default function NewTaskDesktop() {
                 height: 750, 
                 border: 'none', 
                 borderRadius: 4,
-                overflowY: task?.subTasks.length > 0 || task.attachments !== null ? 'scroll' : 'none', 
-                paddingBottom: task?.subTasks.length > 0 ? 5 : 0
+                overflowY: task?.subTask.length > 0 || task.attachments !== null ? 'scroll' : 'none', 
+                paddingBottom: task?.subTask.length > 0 ? 5 : 0
             }}>
                 <Container maxWidth="md" sx={{ paddingTop: 5 }}>
                     <Grid container spacing={2}>
@@ -452,11 +452,11 @@ export default function NewTaskDesktop() {
                         <Grid size={12}>
                             <Box sx={{ display: "flex", justifyContent: "space-between"}}>
                                 <Typography sx={{ fontFamily: "Roboto", fontSize: 16, fontWeight: 'bold' }}>Subtask</Typography>
-                                <Button color="primary" type="button" variant="outlined" sx={{ textTransform: "none", backgroundColor: '#fff', borderRadius: 6 }} startIcon={<Add/>} disabled={task.subTasks.length === 10} onClick={handleNewSubTask}>New Subtask</Button>
+                                <Button color="primary" type="button" variant="outlined" sx={{ textTransform: "none", backgroundColor: '#fff', borderRadius: 6 }} startIcon={<Add/>} disabled={task.subTask.length === 10} onClick={handleNewSubTask}>New Subtask</Button>
                             </Box>
                         </Grid>
                         {
-                            task.subTasks.length > 0 && (
+                            task.subTask.length > 0 && (
                                 <>
                                     <Grid size={8}>
                                         <Typography variant="body2" sx={{ color: 'grey.600' }}>Title</Typography>
@@ -464,7 +464,7 @@ export default function NewTaskDesktop() {
                                     <Grid size={4}>
                                         <Typography variant="body2" sx={{ color: 'grey.600' }}>Status</Typography>
                                     </Grid>
-                                    {task.subTasks.map((subTask, key) => (
+                                    {task.subTask.map((subTask, key) => (
                                         <Fragment key={key}>
                                             <Grid size={8}>
                                                 <TextField 

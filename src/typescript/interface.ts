@@ -22,7 +22,7 @@ export type ITask = {
     title?: string;
     due_date?: Dayjs | string;
     attachments: File[] | [];
-    subTasks: SubTask[] | []
+    subTask: SubTask[] | []
 }
 
 export type SubTask = {
@@ -53,5 +53,5 @@ export type UTask = {
     attachmentId: number[] | [];
     user_id: number;
     attachments: IFile[] | [];
-    subtasks: SubTask[] | []
+    subtask: SubTask[] | []
 }

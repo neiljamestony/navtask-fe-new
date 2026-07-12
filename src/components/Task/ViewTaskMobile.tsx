@@ -17,12 +17,14 @@ import dayjs from "dayjs";
 import DeleteItems from "../Todo/DeleteItems";
 
 import { MobileAppBar } from "../MobileAppBar";
+import { limitText } from "../../utils/utils";
 
 export default function ViewTaskMobile(){
     const { id } = useParams();
     const [fetchingTask, setFetchingTask] = useState(false)
     const navigate = useNavigate();
     const [deleteItem, setDeleteItem] = useState(false)
+    const [itemDeletionLoading, setItemDeletionLoader] = useState(false)
     const [task, setTask] = useState<UTask>({
         completed_date: null,
         created_at: "",
@@ -35,7 +37,7 @@ export default function ViewTaskMobile(){
         attachmentId: [],
         user_id: 0,
         attachments: [],
-        subtasks: []
+        subtask: []
     })
     
     const fetch = async () => {
@@ -77,11 +79,14 @@ export default function ViewTaskMobile(){
     }
 
     const handleDeleteItem = async (ids: string[] | []) => {
+        setItemDeletionLoader(true)
         const result = await removeTask(ids);
         if(result?.status === 200){
+            setItemDeletionLoader(false)
             setDeleteItem(false)
             navigate("/");
         }else{
+            setItemDeletionLoader(false)
             toast.error(result?.msg)
         }
     }
@@ -114,7 +119,7 @@ export default function ViewTaskMobile(){
                                 </Box>
                             ): (
                                 <>
-                                    <DeleteItems close={() => setDeleteItem(false)} proceed={handleDeleteItem} open={deleteItem} ids={[task.id.toString()]}/>
+                                    <DeleteItems loading={itemDeletionLoading} close={() => setDeleteItem(false)} proceed={handleDeleteItem} open={deleteItem} ids={[task.id.toString()]}/>
                                     <Box sx={{ padding: 2, paddingBottom: 10 }}>
                                         <Box sx={{ display: "flex", justifyContent: "start", alignItems: 'center', gap: 2 }}>
                                             <Button type="button" onClick={() => navigate("/")} startIcon={<ArrowBackIosNewRounded/>}>
@@ -144,16 +149,10 @@ export default function ViewTaskMobile(){
                                                 {
                                                     task.attachments && task.attachments.map((item, key) => (
                                                         <Box key={key}>
-                                                            {
-                                                                item.type.startsWith("image/") ? (
-                                                                    <Box sx={{ display: 'block' }}>
-                                                                        <img src={item.url} alt={item.name + "icon"} height={100} width={100}/>
-                                                                        <Link href={item.url}><Typography sx={{ fontSize: 14 }}>{item.name}</Typography></Link>
-                                                                    </Box>
-                                                                ): (
-                                                                    <Link href={item.url}><Typography sx={{ fontSize: 14 }}>{item.name}</Typography></Link>
-                                                                )
-                                                            }
+                                                            <Box sx={{ display: 'block' }}>
+                                                                <img src={item.url} alt={item.name + "icon"} height={100} width={100}/>
+                                                                <Link href={item.url}><Typography sx={{ fontSize: 14 }}>{limitText(item.name)}</Typography></Link>
+                                                            </Box>
                                                         </Box>
                                                     ))
                                                 }
@@ -162,10 +161,10 @@ export default function ViewTaskMobile(){
                                                 <Stack spacing={2}>
                                                     <Typography sx={{ fontSize: 18, fontWeight: 'bold' }}>Subtask</Typography>
                                                     {
-                                                        task.subtasks.length > 0 && (
+                                                        task.subtask.length > 0 && (
                                                         <>
                                                             {
-                                                                task.subtasks.map((subTask, key) => (
+                                                                task.subtask.map((subTask, key) => (
                                                                     <Box key={key} sx={{ display: "flex", justifyContent: 'space-between', alignItems: 'center'}}>
                                                                         <Typography variant="body2" sx={{ fontSize: 15, fontWeight: "regular" }}>{subTask.title}</Typography>
                                                                         <Box sx={{ display: "flex", alignItems: 'center', width: '100%%', gap: 1 }}>
