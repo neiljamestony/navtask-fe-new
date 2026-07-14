@@ -2,7 +2,8 @@ import axios from 'axios'
 import type { ITask, UTask } from '../../typescript/interface';
 import dayjs from 'dayjs';
 
-const apiUrl = import.meta.env.VITE_API_URL;
+const env = import.meta.env.VITE_NODE_ENV;
+const apiUrl = env === "local" ? import.meta.env.VITE_API_URL : import.meta.env.VITE_PROD_API_URL;
 
 export const getTasks = async () => {
     const body = {}

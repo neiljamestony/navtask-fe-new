@@ -192,6 +192,9 @@ export default function EditTaskDesktop() {
                     toast.error(result?.msg);
                 }
                 setLoading(false);
+            }else if(result?.status === 500){
+                toast.error("Something went wrong, please try again later.");
+                setLoading(false);
             }else{
                 toast.error(result?.msg);
                 setLoading(false);

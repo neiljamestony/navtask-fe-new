@@ -1,7 +1,9 @@
 import axios from "axios"
 import type { IAuth } from "../../typescript/interface";
 
-const apiUrl = import.meta.env.VITE_API_URL;
+const env = import.meta.env.VITE_NODE_ENV;
+const apiUrl = env === "local" ? import.meta.env.VITE_API_URL : import.meta.env.VITE_PROD_API_URL;
+
 
 export const registration = async (formData: IAuth) => {
     try {

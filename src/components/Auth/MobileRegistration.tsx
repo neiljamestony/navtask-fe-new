@@ -62,6 +62,9 @@ export default function MobileRegistration() {
                 navigate("/login");
                 setErrors(result?.errors)
                 setLoading(false)
+            }else if(result?.status === 500){
+                toast.error("Something went wrong, please try again later.");
+                setLoading(false);
             }else{
                 toast.error(result?.msg);
                 setLoading(false)

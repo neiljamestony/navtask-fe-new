@@ -167,9 +167,12 @@ export default function NewTaskDesktop() {
                     toast.error(result?.msg);
                 }
                 setLoading(false);
-            }if(result.status === 401){
+            }else if(result.status === 401){
                 toast.error("Session expired, please login again.");
                 navigate("/login")
+            }else if(result?.status === 500){
+                toast.error("Something went wrong, please try again later.");
+                setLoading(false);
             }
         }
     }

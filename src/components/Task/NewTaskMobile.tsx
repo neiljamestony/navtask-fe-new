@@ -183,6 +183,9 @@ export default function NewTaskMobile() {
             }else if(result.status === 401){
                 toast.error("Session expired, please login again.");
                 navigate("/login")
+            }else if(result?.status === 500){
+                toast.error("Something went wrong, please try again later.");
+                setLoading(false);
             }
         }
     }

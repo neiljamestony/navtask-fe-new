@@ -51,6 +51,9 @@ export default function DesktopLogin() {
                 toast.error(result?.msg);
             }
             setLoading(false);
+        }else if(result?.status === 500){
+            toast.error("Something went wrong, please try again later.");
+            setLoading(false);
         }
     }
 

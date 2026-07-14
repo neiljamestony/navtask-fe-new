@@ -10,7 +10,7 @@ import { setAuthData } from '../../reducer/AuthSlice';
 import LogoHeader from '../../assets/Logo Header.svg';
 import Avatar from '../../assets/Icons/Avatar.svg';
 import Home from '../../assets/Icons/Home.svg';
-import SignOut from '../../assets/Icons/SignOut.svg';
+import SignOut from '../../assets/Icons/Signout.svg';
 
 
 // Component

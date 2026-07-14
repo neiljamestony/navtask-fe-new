@@ -36,6 +36,7 @@ export default function MobileLogin() {
     const handleSubmit = async (formData: IAuth) => {
         setLoading(true);
         const result = await login(formData);
+        console.log(result)
         if(result?.status === 200){
             dispatch(setAuthData({...result?.data}))
             navigate("/");
@@ -47,6 +48,9 @@ export default function MobileLogin() {
             }else{
                 toast.error(result?.msg);
             }
+            setLoading(false);
+        }else if(result?.status === 500){
+            toast.error("Something went wrong, please try again later.");
             setLoading(false);
         }
     }
