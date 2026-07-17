@@ -21,7 +21,7 @@ export default function MobileDeleteItems({ proceed, open, close, ids, loading }
                 margin: 1,
                 marginBox: 0,
                 width: '100%',
-                marginBottom: 8
+                marginBottom: 10
             },
             '& .MuiDialog-container': {
                 alignItems: 'flex-end',

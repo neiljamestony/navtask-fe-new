@@ -26,7 +26,7 @@ export default function MobileSignOut({ open, handleCancel }: { open: boolean, h
                 margin: 1,
                 marginBox: 0,
                 width: '100%',
-                marginBottom: 8
+                marginBottom: 10
             },
             '& .MuiDialog-container': {
                 alignItems: 'flex-end',
