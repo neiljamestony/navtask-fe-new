@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import { Box, Typography, Stack, CircularProgress, IconButton, Badge, Grid, Menu, MenuItem, Chip, AppBar, Toolbar, List, ListItem, ListItemText, Divider, Checkbox } from '@mui/material'
+import { Box, Typography, Stack, IconButton, Badge, Grid, Menu, MenuItem, Chip, AppBar, Toolbar, List, ListItem, ListItemText, Divider, Checkbox, Skeleton } from '@mui/material'
 import { Add, ArrowRightOutlined, Circle } from '@mui/icons-material'
 import dayjs from 'dayjs';
 import { getTasks, removeTask } from '../../api/task/task';
@@ -27,6 +27,7 @@ import NotDone from '../../assets/Icons/Not Done.svg';
 import Attachment from '../../assets/Icons/attachment.svg'
 import Sort from '../../assets/Icons/Sort.svg'
 import DueDate from '../../assets/Icons/Due Date.svg'
+import FetchingTaskLoader from '../../assets/loader.svg'
 
 import { MobileAppBar } from '../MobileAppBar';
 import FilterDropdownDialog from '../Dialog/Mobile/FilterDropdown';
@@ -341,7 +342,6 @@ export default function MobileTodo() {
             toast.error("Error fetching tasks, please reload the page.");
             setFetchingTasks(false)
         }
-        
     }
 
     const handleSelectionChange = (id: string) => {
@@ -657,8 +657,11 @@ export default function MobileTodo() {
                 <Stack spacing={2}>
                     {
                         fetchingTasks ? (
-                            <Box sx={{ height: 400, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                <Typography sx={{ fontFamily: "Roboto", fontWeight: 'bold'}}><CircularProgress size={30} color="inherit"/> Fetching tasks ... </Typography>
+                            <Box sx={{ height: 500, width: "100%", display: "block", alignItems: 'center', textAlign: 'center'}}>
+                                <Box sx={{ display: "flex", justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
+                                    <img src={FetchingTaskLoader} height={500} width={400} alt="fetching-task-loader"/>
+                                </Box>
+                                <Typography sx={{ fontSize: 25 }}>Fetching Tasks ...</Typography>
                             </Box>
                         ): (
                             <>

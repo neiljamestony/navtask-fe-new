@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import { Box, Typography, Card, Button, Paper, Stack, CircularProgress, IconButton, Badge, Grid, Link, Menu, MenuItem, Chip } from '@mui/material'
+import { Box, Typography, Card, Button, Paper, Stack, IconButton, Badge, Grid, Link, Menu, MenuItem, Chip } from '@mui/material'
 import { Add, ArrowRightOutlined } from '@mui/icons-material'
 import dayjs from 'dayjs';
 import { getTasks, removeTask } from '../../api/task/task';
@@ -26,6 +26,7 @@ import ExpandSubTaskInActive from '../../assets/Icons/Accordion_supress.svg'
 import Done from '../../assets/Icons/Done.svg';
 import NotDone from '../../assets/Icons/Not Done.svg';
 import Attachment from '../../assets/Icons/attachment.svg'
+import FetchingTaskLoader from '../../assets/loader.svg';
 
 export const prioritiesIcons = {
     low: {
@@ -633,8 +634,10 @@ export default function DesktopTodo() {
                     {
                         fetchingTasks ? (
                             <Paper sx={{ height: 400, width: '100%', borderRadius: 5, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2 }}>
-                                <CircularProgress size={30} color="inherit"/>
-                                <Typography sx={{ fontFamily: "Roboto", fontWeight: 'bold'}}>Fetching tasks ...</Typography>
+                                <Box sx={{ display: "flex", justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
+                                    <img src={FetchingTaskLoader} height={500} width={400} alt="fetching-task-loader"/>
+                                </Box>
+                                <Typography sx={{ fontSize: 25 }}>Fetching Tasks ...</Typography>
                             </Paper>
                         ): (
                             <>

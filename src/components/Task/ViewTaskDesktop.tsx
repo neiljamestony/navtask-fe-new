@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import type { ReactNode } from 'react'
 import { useParams, useNavigate } from "react-router-dom"
-import { Box, Button, Typography, Paper, CircularProgress, IconButton, Divider, Stack, Grid, Link } from "@mui/material";
+import { Box, Button, Typography, Paper, IconButton, Divider, Stack, Grid, Link } from "@mui/material";
 import { ArrowBackIosNewRounded } from "@mui/icons-material";
 import { getTask } from "../../api/task/task";
 import toast from "react-hot-toast";
@@ -16,6 +16,7 @@ import NotDone from '../../assets/Icons/Not Done.svg';
 import dayjs from "dayjs";
 import DeleteItems from "../Todo/DeleteItems";
 import { limitText } from "../../utils/utils";
+import FetchingTaskLoader from '../../assets/loader.svg';
 
 export default function ViewTaskDesktop(){
     const { id } = useParams();
@@ -109,9 +110,11 @@ export default function ViewTaskDesktop(){
                                 <Typography sx={{ fontFamily: "Roboto", fontWeight: 'bold' }}>View Task</Typography>
                             </Box>
                             <Paper variant="outlined" sx={{ height: 830, border: 'none', borderRadius: 4, padding: 5 }}>
-                                {fetchingTask && <Box sx={{ display: "flex", justifyContent: 'center', alignItems: 'center', gap: 2 }}>
-                                    <CircularProgress size={30} color="inherit"/>
-                                    <Typography sx={{ fontSize: 18 }}>Fetching data ...</Typography>
+                                {fetchingTask && <Box sx={{ height: 500, width: "100%", display: "block", alignItems: 'center', textAlign: 'center'}}>
+                                    <Box sx={{ display: "flex", justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
+                                        <img src={FetchingTaskLoader} height={500} width={400} alt="fetching-task-loader"/>
+                                    </Box>
+                                    <Typography sx={{ fontSize: 25 }}>Fetching Task ...</Typography>
                                 </Box>}
                                 <Stack spacing={2}>
                                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignitems: "center"}}>

@@ -13,6 +13,7 @@ import Delete from '../../assets/Icons/Delete_active.svg';
 import Edit from '../../assets/Icons/Edit.svg';
 import Done from '../../assets/Icons/Done.svg';
 import NotDone from '../../assets/Icons/Not Done.svg';
+import FetchingTaskLoader from '../../assets/loader.svg';
 import dayjs from "dayjs";
 import DeleteItems from "../Todo/DeleteItems";
 
@@ -128,9 +129,11 @@ export default function ViewTaskMobile(){
                                             <Typography sx={{ fontFamily: "Roboto", fontWeight: 'bold' }}>View Task</Typography>
                                         </Box>
                                         <Box sx={{ padding: 2 }}>
-                                            {fetchingTask && <Box sx={{ display: "flex", justifyContent: 'center', alignItems: 'center'}}>
-                                                <CircularProgress size={30} color="inherit"/>
-                                                <Typography variant="body1">fetching data ...</Typography>
+                                            {fetchingTask && <Box sx={{ height: 500, width: "100%", display: "block", alignItems: 'center', textAlign: 'center'}}>
+                                                <Box sx={{ display: "flex", justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
+                                                    <img src={FetchingTaskLoader} height={500} width={400} alt="fetching-task-loader"/>
+                                                </Box>
+                                                <Typography sx={{ fontSize: 25 }}>Fetching Task ...</Typography>
                                             </Box>}
                                             <Stack spacing={2}>
                                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignitems: "center"}}>

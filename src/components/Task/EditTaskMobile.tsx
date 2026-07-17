@@ -20,6 +20,7 @@ import { limitText, validFileTypes } from '../../utils/utils';
 import DeleteSubTask from '../Todo/DeleteSubTask';
 import DropdownDialog from '../Dialog/Mobile/Dropdown';
 import { MobileAppBar } from '../MobileAppBar';
+import FetchingTaskLoader from '../../assets/loader.svg';
 
 import Suppress from '../../assets/Icons/Accordion_supress.svg'
 
@@ -379,9 +380,11 @@ export default function EditTaskMobile() {
             </AppBar>
             {
                 fetchingTask ? (
-                   <Box sx={{ display: "flex", justifyContent: 'center', alignItems: 'center', height: 750, width: "100%", gap: 2 }}>
-                        <CircularProgress size={30} color="inherit"/>
-                        <Typography variant="body1">Fetching Task ...</Typography>
+                   <Box sx={{ height: 500, width: "100%", display: "block", alignItems: 'center', textAlign: 'center'}}>
+                        <Box sx={{ display: "flex", justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
+                            <img src={FetchingTaskLoader} height={500} width={400} alt="fetching-task-loader"/>
+                        </Box>
+                        <Typography sx={{ fontSize: 25 }}>Fetching Task ...</Typography>
                     </Box>
                 ): (
                     <>

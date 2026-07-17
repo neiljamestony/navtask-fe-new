@@ -19,6 +19,7 @@ import EditFilePreview from './EditFilePreview';
 import DeleteIcon from '../../assets/Icons/Delete_active.svg'
 import DeleteSubTaskDesktop from '../Todo/DeleteSubTaskDesktop';
 import { validFileTypes } from '../../utils/utils';
+import FetchingTaskLoader from '../../assets/loader.svg'
 
 dayjs.extend(customParseFormat);
 
@@ -351,9 +352,11 @@ export default function EditTaskDesktop() {
         <Box sx={{ padding: 2 }}>
             {
                 fetchingTask ? (
-                    <Box sx={{ display: "flex", justifyContent: 'center', alignItems: 'center', height: 750, width: "100%", gap: 2 }}>
-                        <CircularProgress size={30} color="inherit"/>
-                        <Typography variant="body1" sx={{ fontSize: 20, fontWeight: 'bold' }}>Fetching Task ...</Typography>
+                    <Box sx={{ height: 500, width: "100%", display: "block", alignItems: 'center', textAlign: 'center'}}>
+                        <Box sx={{ display: "flex", justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
+                            <img src={FetchingTaskLoader} height={500} width={400} alt="fetching-task-loader"/>
+                        </Box>
+                        <Typography sx={{ fontSize: 25 }}>Fetching Task ...</Typography>
                     </Box>
                 ): (
                     <>
