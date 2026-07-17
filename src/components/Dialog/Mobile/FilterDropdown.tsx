@@ -33,7 +33,7 @@ export default function FilterDropdownDialog({ open, proceed, priorities, status
                 marginTop: '64px',
                 margin: 1,
                 width: '100%',
-                marginBottom: 8
+                marginBottom: 10
             },
             '& .MuiDialog-container': {
                 alignItems: 'flex-end',
