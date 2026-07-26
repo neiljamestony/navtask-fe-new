@@ -36,7 +36,6 @@ export default function MobileLogin() {
     const handleSubmit = async (formData: IAuth) => {
         setLoading(true);
         const result = await login(formData);
-        console.log(result)
         if(result?.status === 200){
             dispatch(setAuthData({...result?.data}))
             navigate("/");
