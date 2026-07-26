@@ -8,6 +8,9 @@ import { useDispatch } from 'react-redux';
 import { setAuthData } from '../../reducer/AuthSlice';
 import { isAuthenticated } from '../../api/auth/auth';
 
+const env = import.meta.env.VITE_NODE_ENV;
+const apiUrl = env === "local" ? import.meta.env.VITE_API_URL : import.meta.env.VITE_PROD_API_URL;
+
 export default function SocialMediaAuth() {
     const [googleLoading, setGoogleLoading] = useState(false)
     const { pathname } = useLocation();
@@ -18,12 +21,12 @@ export default function SocialMediaAuth() {
     const status = searchParams.get("status");
     const handleGoogleLogin = async () => {
         setGoogleLoading(true)
-        window.location.href = `http://localhost:3000/auth/google?state=${pathname}`;
+        window.location.href = `${apiUrl}/auth/google?state=${pathname}`;
     }
 
     const handleFacebookLogin = async () => {
         setFacebookLoading(true)
-        window.location.href = `http://localhost:3000/auth/facebook?state=${pathname}`;
+        window.location.href = `${apiUrl}/auth/facebook?state=${pathname}`;
     }
 
     const check = async () => {
