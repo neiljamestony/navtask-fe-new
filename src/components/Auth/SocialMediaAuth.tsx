@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react'
-import {Divider, Button} from '@mui/material'
-import FacebookIcon from '../../assets/Icons/Facebook.svg';
-import GoogleIcon from '../../assets/Icons/Google.svg';
+import { Divider, Button } from '@mui/material'
 import { useSearchParams, useLocation, useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast'
 import { useDispatch } from 'react-redux';
 import { setAuthData } from '../../reducer/AuthSlice';
 import { isAuthenticated } from '../../api/auth/auth';
+import toast from 'react-hot-toast'
+
+// ICONS
+import FacebookIcon from '../../assets/Icons/Facebook.svg';
+import GoogleIcon from '../../assets/Icons/Google.svg';
 
 const env = import.meta.env.VITE_NODE_ENV;
 const apiUrl = env === "local" ? import.meta.env.VITE_API_URL : import.meta.env.VITE_PROD_API_URL;
@@ -14,11 +16,12 @@ const apiUrl = env === "local" ? import.meta.env.VITE_API_URL : import.meta.env.
 export default function SocialMediaAuth() {
     const [googleLoading, setGoogleLoading] = useState(false)
     const { pathname } = useLocation();
-    const navigate = useNavigate();
     const [facebookLoading, setFacebookLoading] = useState(false)
     const [searchParams] = useSearchParams();
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const status = searchParams.get("status");
+
     const handleGoogleLogin = async () => {
         setGoogleLoading(true)
         window.location.href = `${apiUrl}/auth/google?state=${pathname}`;
@@ -28,6 +31,21 @@ export default function SocialMediaAuth() {
         setFacebookLoading(true)
         window.location.href = `${apiUrl}/auth/facebook?state=${pathname}`;
     }
+
+    const buttons = [
+        {
+            name: "facebook",
+            icon: FacebookIcon,
+            action: handleFacebookLogin,
+            loader: facebookLoading
+        },
+        {
+            name: "google",
+            icon: GoogleIcon,
+            action: handleGoogleLogin,
+            loader: googleLoading
+        },
+    ]
 
     const check = async () => {
         if(status === "DATA_EXISTS"){
@@ -77,8 +95,11 @@ export default function SocialMediaAuth() {
     return (
         <>
             <Divider>OR</Divider>
-            <Button type="button" color="inherit" variant="outlined" startIcon={<img src={GoogleIcon} height={15} width={15} alt="google-icon"/>} onClick={handleGoogleLogin}>{googleLoading ? "Loading ..." : "Continue with Google"}</Button>
-            <Button type="button" color="inherit" variant="outlined" startIcon={<img src={FacebookIcon} height={15} width={15} alt="fecebook-icon"/>} onClick={handleFacebookLogin}>{facebookLoading ? "Loading ..." : "Continue with Facebook"}</Button>
+            {
+                buttons.map((button, key) => {
+                    return <Button key={key} type="button" color="inherit" variant="outlined" startIcon={<img src={button.icon} height={15} width={15} alt={`${button.name}-icon`}/>} sx={{ textTransform: 'none', fontSize: 15 }} onClick={button.action}>{button.loader ? "Loading ..." : `Continue with ${button.name}`}</Button>
+                })
+            }
         </>    
     )
 }

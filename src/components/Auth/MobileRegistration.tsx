@@ -10,6 +10,7 @@ import { setAuthStatus } from '../../reducer/AuthSlice'
 import { useDispatch } from 'react-redux'
 import ShowIcon from '../../assets/Icons/Show.svg';
 import HideIcon from '../../assets/Icons/Hide.svg';
+import { MobileCreateAccountLabel, PasswordRequirements } from '../Styles/Auth/Auth'
 
 export default function MobileRegistration() {
     const [formData, setFormData] = useState<IAuth>({
@@ -27,6 +28,7 @@ export default function MobileRegistration() {
     const hasMinLength = formData.password.length >= 8;
     const hasNumberOrSymbol = regex.test(formData.password);
     const passwordStrength = !containsNameOrEmail && hasMinLength && hasNumberOrSymbol ? "Strong" : "Weak";
+
     const passwordRequirements = [
         {
             icon: containsNameOrEmail ? <Circle sx={{ fontSize: 11, color: 'black' }}/> : <Check sx={{ fontSize: 15 }} color="primary"/>,
@@ -37,7 +39,7 @@ export default function MobileRegistration() {
             text: "Atleast 8 characters",
         },
         {
-            icon: hasNumberOrSymbol ? <Check sx={{ fontSize: 15 }} color="primary"/> : <Circle sx={{ fontSize: 11, color: 'black' }}/>,
+            icon: hasNumberOrSymbol ? <Check sx={{ fontSize: 18 }} color="primary"/> : <Circle sx={{ fontSize: 11, color: 'black' }}/>,
             text: "Contains a number or symbol",
         }
     ]
@@ -84,17 +86,17 @@ export default function MobileRegistration() {
                         }}>
                        
                         <Stack spacing={2}>
-                            <Box sx={{ fontFamily: "Roboto", fontSize: 34, fontWeight: 'bold', textAlign: 'left' }}>Create an account</Box>
+                            <Typography sx={MobileCreateAccountLabel}>Create an account</Typography>
                             <TextField 
                                 name="username"
-                                 error={errors.length > 0 && errors.filter((error) => error.key === "username").length > 0} 
-                                 helperText={errors.length > 0 && errors.filter((error) => error.key === "username").length > 0 ? errors.filter((error) => error.key === "username")[0].error : ""} 
-                                 value={formData.username} 
-                                 type="text" 
-                                 size="small" 
-                                 label="Username"
-                                 fullWidth
-                                 onChange={handleChange}/>
+                                error={errors.length > 0 && errors.filter((error) => error.key === "username").length > 0} 
+                                helperText={errors.length > 0 && errors.filter((error) => error.key === "username").length > 0 ? errors.filter((error) => error.key === "username")[0].error : ""} 
+                                value={formData.username} 
+                                type="text" 
+                                size="small" 
+                                label="Username"
+                                fullWidth
+                                onChange={handleChange}/>
                             <TextField 
                                 name="password"
                                 value={formData.password} 
@@ -138,7 +140,7 @@ export default function MobileRegistration() {
                                                     {value.icon}
                                                 </ListItemIcon>
                                                 <ListItemText>
-                                                    <Box sx={{ fontSize: 12, fontFamily: "Roboto" }}>{value.text}</Box>
+                                                    <Box sx={PasswordRequirements}>{value.text}</Box>
                                                 </ListItemText>
                                             </ListItem>
                                         </List>

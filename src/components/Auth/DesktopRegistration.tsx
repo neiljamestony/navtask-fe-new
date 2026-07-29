@@ -9,10 +9,13 @@ import SocialMediaAuth from './SocialMediaAuth'
 import { setAuthStatus } from '../../reducer/AuthSlice'
 import { useDispatch } from 'react-redux'
 
-import WallPaper from '../../assets/Wallpaper.svg';
+// ICONS
 import BrandAndLogo from '../../assets/Brand and logo.svg';
 import ShowIcon from '../../assets/Icons/Show.svg';
 import HideIcon from '../../assets/Icons/Hide.svg';
+
+// STYLES
+import { DesktopContainer, DesktopLogoContainer, ExistingAccountlabel, FormContainer, SpanLink } from '../Styles/Auth/Auth'
 
 export default function DesktopRegistration() {
     const [formData, setFormData] = useState<IAuth>({
@@ -80,14 +83,14 @@ export default function DesktopRegistration() {
     return (
         <Grid container>
             <Grid size={6}>
-                <Box sx={{ backgroundImage: `url(${WallPaper})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', height: "100vh", width: '100%' }}>
-                    <Box sx={{ display: "flex", justifyContent: 'center', alignItems: 'center', height: "100vh"}}>
+                <Box sx={DesktopContainer}>
+                    <Box sx={DesktopLogoContainer}>
                         <img src={BrandAndLogo} alt="brand-and-logo" height={100} width="100%"/>
                     </Box>
                 </Box>
             </Grid>
             <Grid size={6}>
-                <Box sx={{ display: "flex", justifyContent: 'center', alignItems: 'center', textAlign: 'center', height: "100vh" }}>
+                <Box sx={FormContainer}>
                     <Card variant="outlined" sx={{ height: 600, width: 400}}>
                         <form onSubmit={(e) => {
                             e.preventDefault();
@@ -148,7 +151,7 @@ export default function DesktopRegistration() {
                                         }
                                     </Box>
                                     <Button variant="contained" type="submit" color="primary" disabled={loading}>{loading ? <CircularProgress size={30} color="inherit"/> : "Submit"}</Button>
-                                        <Typography variant="caption" sx={{ fontFamily: 'Roboto', fontSize: 20, fontWeight: 'medium' }}>Already have an account? <Link to='/login'><span style={{ fontFamily: "Roboto", fontWeight: "bold", color: "#1976d2"}}>Sign in</span></Link></Typography>
+                                        <Typography variant="caption" sx={ExistingAccountlabel}>Already have an account? <Link to='/login'><span style={SpanLink}>Sign in</span></Link></Typography>
                                     <SocialMediaAuth/>
                                 </Stack>
                             </CardContent>      

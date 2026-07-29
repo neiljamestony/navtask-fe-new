@@ -11,10 +11,12 @@ import { setAuthStatus, setAuthData } from '../../reducer/AuthSlice'
 import { useDispatch } from 'react-redux'
 
 // ICONS
-import WallPaper from '../../assets/Wallpaper.svg';
 import BrandAndLogo from '../../assets/Brand and logo.svg';
 import ShowIcon from '../../assets/Icons/Show.svg';
 import HideIcon from '../../assets/Icons/Hide.svg';
+
+// STYLES
+import { DesktopContainer, DesktopLogoContainer, FormContainer, FormContainerStatusText } from '../Styles/Auth/Auth'
 
 export default function DesktopLogin() {
     const [formData, setFormData] = useState({
@@ -60,20 +62,20 @@ export default function DesktopLogin() {
     return (
         <Grid container>
             <Grid size={6}>
-                <Box sx={{ backgroundImage: `url(${WallPaper})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', height: "100vh", width: '100%' }}>
-                    <Box sx={{ display: "flex", justifyContent: 'center', alignItems: 'center', height: "100vh"}}>
+                <Box sx={DesktopContainer}>
+                    <Box sx={DesktopLogoContainer}>
                         <img src={BrandAndLogo} alt="brand-and-logo" height={100} width="100%"/>
                     </Box>
                 </Box>
             </Grid>
             <Grid size={6}>
-                <Box sx={{ display: "flex", justifyContent: 'center', alignItems: 'center', textAlign: 'center', height: "100vh"}}>
+                <Box sx={FormContainer}>
                     <Card variant="outlined" sx={{ height: authStatus === "Success!" ? 550 : 500, width: 400}}>
                         <form onSubmit={(e) => {
                                 e.preventDefault();
                                 handleSubmit(formData)
                             }}>
-                            <CardHeader title={<Box sx={{ fontFamily: "Roboto", fontSize: 34, fontWeight: 'bold' }}>{authStatus === "Success!" ? "Account successfully created. Sign in to continue" : "Sign in"}</Box>}/>
+                            <CardHeader title={<Box sx={FormContainerStatusText}>{authStatus === "Success!" ? "Account successfully created. Sign in to continue" : "Sign in"}</Box>}/>
                             <CardContent>
                                 <Stack spacing={2}>
                                     <TextField name="username" error={errors.length > 0 && errors.filter((error) => error.key === "username").length > 0 } helperText={errors.length > 0 && errors.filter((error) => error.key === "username").length > 0 ? errors.filter((error) => error.key === "username")[0].error : ""} value={formData.username} type="text" size="small" label="Username" onChange={handleChange}/>

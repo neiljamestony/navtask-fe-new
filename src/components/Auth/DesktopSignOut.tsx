@@ -2,6 +2,7 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, 
 import { logout } from '../../api/auth/auth'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
+import { DesktopSignOutDialog } from '../Styles/Auth/Auth';
 
 export default function DesktopSignOut({ open, handleCancel }: { open: boolean, handleCancel: () => void }) {
     const navigate = useNavigate();
@@ -17,15 +18,11 @@ export default function DesktopSignOut({ open, handleCancel }: { open: boolean, 
     }
 
     return (
-        <Dialog open={open} sx={{
-            '& .MuiDialog-paper': {
-            borderRadius: '20px',
-            },
-        }}>
+        <Dialog open={open} sx={DesktopSignOutDialog}>
             <DialogTitle>Sign out</DialogTitle>
             <DialogContent>
-                <Typography sx={{ fontFamily: "Roboto" }}>Are you sure you want to sign out?</Typography>
-                <Typography sx={{ fontFamily: "Roboto" }}>All unsaved changes will be lost.</Typography>
+                <Typography>Are you sure you want to sign out?</Typography>
+                <Typography>All unsaved changes will be lost.</Typography>
             </DialogContent>
             <DialogActions>
                 <Button type="button" variant="text" onClick={handleCancel} sx={{ textTransform: 'none', color: 'black' }} disabled={loading}>Cancel</Button>

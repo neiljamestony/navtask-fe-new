@@ -12,6 +12,7 @@ import { useDispatch } from 'react-redux'
 
 import ShowIcon from '../../assets/Icons/Show.svg';
 import HideIcon from '../../assets/Icons/Hide.svg';
+import { DesktopLogoContainer, ExistingAccountlabel, MobileCreateAccountLabel, MobileForm, SpanLink } from '../Styles/Auth/Auth'
 
 export default function MobileLogin() {
     const [formData, setFormData] = useState({
@@ -57,13 +58,13 @@ export default function MobileLogin() {
     return (
         <Grid container>
             <Grid size={12}>
-                <Box sx={{ display: "flex", justifyContent: 'center', alignItems: 'center', textAlign: 'center', height: "100vh"}}>
-                    <form style={{ height: '80%', width: '100%', margin: 30 }} onSubmit={(e) => {
+                <Box sx={DesktopLogoContainer}>
+                    <form style={MobileForm} onSubmit={(e) => {
                         e.preventDefault();
                         handleSubmit(formData)
                     }}>
                         <Stack spacing={2}>
-                            <Box sx={{ fontFamily: "Roboto", fontSize: 34, fontWeight: 'bold', textAlign: 'left' }}>{authStatus === "Success!" ? "Account successfully created. Sign in to continue" : "Sign in"}</Box>
+                            <Box sx={MobileCreateAccountLabel}>{authStatus === "Success!" ? "Account successfully created. Sign in to continue" : "Sign in"}</Box>
                             <TextField name="username" error={errors.length > 0 && errors.filter((error) => error.key === "username").length > 0 } helperText={errors.length > 0 && errors.filter((error) => error.key === "username").length > 0 ? errors.filter((error) => error.key === "username")[0].error : ""} value={formData.username} type="text" size="small" label="Username" onChange={handleChange}/>
                             <TextField 
                                 name="password" 
@@ -91,7 +92,7 @@ export default function MobileLogin() {
                             }}
                             />
                             <Button variant="contained" type="submit" color="primary" disabled={loading}>{loading ? <CircularProgress size={30} color="inherit"/> : "Submit"}</Button>
-                            <Typography variant="caption" sx={{ fontFamily: 'Roboto', fontSize: 20, fontWeight: 'medium' }}>Don't have an account? <Link to='/register'><span style={{ fontFamily: "Roboto", fontWeight: "bold", color: "#1976d2"}}>Sign up</span></Link></Typography>
+                            <Typography variant="caption" sx={ExistingAccountlabel}>Don't have an account? <Link to='/register'><span style={SpanLink}>Sign up</span></Link></Typography>
                             <SocialMediaAuth/>
                         </Stack>       
                     </form>

@@ -23,6 +23,7 @@ import { MobileAppBar } from '../MobileAppBar';
 import FetchingTaskLoader from '../../assets/loader.svg';
 
 import Suppress from '../../assets/Icons/Accordion_supress.svg'
+import { AllSubTaskTitle, DatePickerContainer, DropFilesTitle, EditTaskSaveButton, EditTaskTitle, FetchingTaskImageContainer, FetchingTaskMobile, MarkAsCompletedButton, MarkAsCompletedContainer, MarkAsCompletedSubContainer, MobileAppBarContainer, MobileNoDataContainer, MobileSubTaskContainer, MobileSubTaskTitleField, NewTaskMobileAppBar, NewTaskMobileAttachmentContainer, NewTaskMobileAttachmentImageContainer, NewTaskMobileAttachmentPreviewContainer, NewTaskMobileAttachmentSubContainer, NewTaskMobileAttachmentUploader, NewTaskMobileAttachmentUploaderContainer, NewTaskMobileDescriptionField, NewTaskMobileDividerContainer, NewTaskMobileDueDateDialog, NewTaskMobileDueDateField, NewTaskMobileFormContainer, NewTaskMobileStatusFieldsContainer, NewTaskMobileStatusFieldsContainerAlignment, NewTaskMobileTitleField, NewTaskMobileToolBar, SubTaskMobileButton, SubTaskMobileContainer, SubTaskMobileTitle, TitleStatusContainer, ViewTaskAppBarMobileBackButton, ViewTaskTitle } from '../Styles/Task/Task';
 
 dayjs.extend(customParseFormat);
 
@@ -366,22 +367,22 @@ export default function EditTaskMobile() {
 
     return (
         <Box sx={{ padding: 2 }}>
-            <AppBar position="fixed" color="inherit" sx={{ top: 0, bottom: "auto" }}>
-                <Toolbar sx={{ display: "flex", alignItems: 'center', gap: 1 }}>
+            <AppBar position="fixed" color="inherit" sx={NewTaskMobileAppBar}>
+                <Toolbar sx={NewTaskMobileToolBar}>
                     <Button type="button" onClick={() => navigate("/")} startIcon={<ArrowBackIosNewRounded/>}>
-                        <Typography sx={{ fontFamily: "Roboto", fontWeight: 'bold', textTransform: 'none', color: '#027CEC', fontSize: 14 }}>Back</Typography>
+                        <Typography sx={ViewTaskAppBarMobileBackButton}>Back</Typography>
                     </Button>
-                    <Box sx={{ display: "flex", justifyContent: 'center', alignItems: 'center' }}>
+                    <Box sx={NewTaskMobileDividerContainer}>
                         <Divider orientation="vertical" flexItem sx={{ height: 25 }}/>
                     </Box>
-                    <Typography sx={{ fontSize: 14, fontWeight: 'bold', color: 'grey.600' }}>View Task</Typography>
-                    <Typography sx={{ fontSize: 14, fontWeight: 'bold' }}>/ Edit</Typography>
+                    <Typography sx={EditTaskTitle}>View Task</Typography>
+                    <Typography sx={ViewTaskTitle}>/ Edit</Typography>
                 </Toolbar>
             </AppBar>
             {
                 fetchingTask ? (
-                   <Box sx={{ height: 500, width: "100%", display: "block", alignItems: 'center', textAlign: 'center'}}>
-                        <Box sx={{ display: "flex", justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
+                   <Box sx={FetchingTaskMobile}>
+                        <Box sx={FetchingTaskImageContainer}>
                             <img src={FetchingTaskLoader} height={500} width={400} alt="fetching-task-loader"/>
                         </Box>
                         <Typography sx={{ fontSize: 25 }}>Fetching Task ...</Typography>
@@ -391,7 +392,7 @@ export default function EditTaskMobile() {
                         {
                             !task || !task.title ? (
                                 <>
-                                     <Box sx={{ display: "flex", justifyContent: 'center', alignItems: 'center', height: '60vh' }}>
+                                     <Box sx={MobileNoDataContainer}>
                                         <Typography sx={{ fontSize: 20 , fontWeight: 'bold' }}>No data found</Typography>
                                     </Box>
                                 </>
@@ -406,10 +407,10 @@ export default function EditTaskMobile() {
                                         defaultValue={task.status}
                                         options={dropdownDialogTitle === "priority" ? priorities : status}/>
                                     <Box sx={{ paddingBottom: task?.subtask.length > 0 ? 5 : 0 }}>
-                                        <Container maxWidth="md" sx={{ paddingTop: 10, paddingBottom: 5 }}>
+                                        <Container maxWidth="md" sx={NewTaskMobileFormContainer}>
                                             <Stack spacing={2}>
-                                                <Box sx={{ display: "flex", justifyContent: 'center', alignItems: 'center', gap: 2 }}>
-                                                    <Box sx={{ flexGrow: 1, display: "flex", alignItems: 'center', gap: 1 }}>
+                                                <Box sx={NewTaskMobileStatusFieldsContainer}>
+                                                    <Box sx={NewTaskMobileStatusFieldsContainerAlignment}>
                                                         <TextField
                                                             label="Priority"
                                                             size="small"
@@ -479,14 +480,9 @@ export default function EditTaskMobile() {
                                                     rows={4}
                                                     fullWidth
                                                     value={task.title}
-                                                    sx={{  
-                                                        '& .MuiInputBase-root': {
-                                                            fontSize: '20px',
-                                                            fontWeight: 'bold'
-                                                        },
-                                                    }}
+                                                    sx={NewTaskMobileTitleField}
                                                 />
-                                                <Box sx={{ display: "flex", alignItems: 'center', gap: 2 }}>
+                                                <Box sx={DatePickerContainer}>
                                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                                         <DatePicker
                                                             label="Date Created"
@@ -514,17 +510,7 @@ export default function EditTaskMobile() {
                                                                     size: 'small',
                                                                     error: errors.length > 0 && errors.filter((error) => error.key === "due_date").length > 0,
                                                                     helperText: errors.length > 0 && errors.filter((error) => error.key === "due_date").length > 0 ? errors.filter((error) => error.key === "due_date")[0].error : "",
-                                                                    sx: {
-                                                                        '& .MuiInputLabel-root.Mui-error': {
-                                                                            color: '#CA0061',
-                                                                        },
-                                                                        '& .MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline': {
-                                                                            borderColor: '#CA0061',
-                                                                        },
-                                                                        '& .MuiFormHelperText-root.Mui-error': {
-                                                                            color: '#CA0061',
-                                                                        },
-                                                                    },
+                                                                    sx: NewTaskMobileDueDateField,
                                                                 },
                                                                 mobilePaper: {
                                                                     sx: {
@@ -532,21 +518,11 @@ export default function EditTaskMobile() {
                                                                     }
                                                                 },
                                                                 dialog: {
-                                                                    sx: {
-                                                                        '& .MuiDialog-container': {
-                                                                            alignItems: 'flex-end',
-                                                                        },
-                                                                        '& .MuiDialog-paper': {
-                                                                            margin: 0,
-                                                                            maxWidth: '80%',
-                                                                            width: '100%',
-                                                                            marginBottom: 10
-                                                                        },
-                                                                    },
+                                                                    sx: NewTaskMobileDueDateDialog,
                                                                     slotProps: {
                                                                         backdrop: {
                                                                             sx: {
-                                                                                height: '93.5vh'
+                                                                                height: '94.5vh'
                                                                             }
                                                                         }
                                                                     }
@@ -563,20 +539,7 @@ export default function EditTaskMobile() {
                                                     multiline
                                                     rows={4}
                                                     fullWidth
-                                                     sx={{
-                                                        '& .MuiInputBase-root': {
-                                                            fontSize: '14px',
-                                                        },
-                                                        '& .MuiInputLabel-root.Mui-error': {
-                                                            color: '#CA0061', 
-                                                        },
-                                                        '& .MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline': {
-                                                            borderColor: '#CA0061',
-                                                        },
-                                                        '& .MuiFormHelperText-root.Mui-error': {
-                                                            color: '#CA0061',
-                                                        },
-                                                    }}
+                                                    sx={NewTaskMobileDescriptionField}
                                                     slotProps={{
                                                         htmlInput: { maxLength: 300 }
                                                     }}
@@ -590,38 +553,25 @@ export default function EditTaskMobile() {
                                                     <Box {...getRootProps()}>
                                                         <input {...getInputProps()} />              
                                                         <Box sx={{ 
-                                                            position: "relative", 
-                                                            minHeight: 100, 
-                                                            height: "auto", 
-                                                            width: "100%", 
-                                                            border: "2px", 
-                                                            borderStyle: 'dashed', 
-                                                            borderRadius: 2, 
+                                                            ...NewTaskMobileAttachmentContainer,
                                                             borderColor: fileError ? '#CA0061' : 'grey.300', 
                                                         }}>
                                                             <Box sx={{ display: "flex", justifyContent: "center" }}>
                                                                 <Box sx={{
-                                                                    position: "absolute",
-                                                                    top: -9,
-                                                                    left: 12,
-                                                                    backgroundColor: "#fff",
-                                                                    px: 1,
-                                                                    fontSize: 12,
-                                                                    fontFamily: "Roboto",
-                                                                    fontWeight: "bold",
+                                                                    ...NewTaskMobileAttachmentSubContainer,
                                                                     color: fileError ? "#CA0061" : "text.secondary"
                                                                 }}>Attachments</Box>
                                                                 {
                                                                     uploading ? (
-                                                                    <Box sx={{ marginTop: 3, width: "50%", minHeight: "15vh" }}>
-                                                                        <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
+                                                                    <Box sx={NewTaskMobileAttachmentUploader}>
+                                                                        <Box sx={NewTaskMobileAttachmentUploaderContainer}>
                                                                             <Typography sx={{ fontSize: 14, marginBottom: 1 }}>{uploadedFileNames.toString()}</Typography>
                                                                         </Box>
                                                                         <LinearProgress variant="determinate" value={progress} aria-label="Export data"/>
                                                                     </Box>
-                                                                    ):(<Box sx={{ display: "flex", justifyContent:"center", alignItems: "center", paddingTop: 4, paddingBottom: 3 }}>
+                                                                    ):(<Box sx={{...NewTaskMobileAttachmentImageContainer, paddingTop: 4 }}>
                                                                         <Box><img src={UploadIcon} alt="upload-icon" height={30} width="100%"/></Box>
-                                                                        <Box sx={{ fontFamily: "Roboto", fontSize: 14, color: fileError ? "#CA0061" : "#272D32" }}> 
+                                                                        <Box sx={{ ...DropFilesTitle, color: fileError ? "#CA0061" : "#272D32" }}> 
                                                                             Drop files to attach, or 
                                                                             <span style={{ color: fileError ? "#CA0061" : "#027CEC", cursor: "pointer" }} onClick={handleBrowsFileClick}> browse</span>.
                                                                         </Box>
@@ -630,7 +580,7 @@ export default function EditTaskMobile() {
                                                                 }
                                                             </Box>
                                                             {
-                                                                !uploading && <Box sx={{ display: "flex", flexWrap: 'wrap', alignItems: "center", paddingBottom: 2, gap: 2 }}>
+                                                                !uploading && <Box sx={NewTaskMobileAttachmentPreviewContainer}>
                                                                     {
                                                                         task.attachments && task.attachments.map((file, key) => (
                                                                             <EditFilePreview key={key} attachment={file} removeFile={(e: React.MouseEvent<HTMLButtonElement>) => handleRemoveFile(e, key)}/>
@@ -643,15 +593,18 @@ export default function EditTaskMobile() {
                                                     {fileError !== null && <Box sx={{ color: '#CA0061', fontSize: 14, marginTop: 1, fontWeight: 'bold' }}>{fileError.msg}</Box>}
                                                 </Box>
                                                 <Divider/>
-                                                <Box sx={{ display: "flex", justifyContent: "space-between"}}>
-                                                    <Typography sx={{ fontFamily: "Roboto", fontSize: 16, fontWeight: 'bold' }}>Subtask</Typography>
-                                                    <Button color="primary" type="button" variant="outlined" sx={{ textTransform: "none", backgroundColor: '#fff', borderRadius: 6 }} startIcon={<Add/>} disabled={task.subtask.length === 10 || task.status === 'completed'} onClick={handleNewSubTask}>New Subtask</Button>
+                                                <Box sx={SubTaskMobileContainer}>
+                                                    <Typography sx={SubTaskMobileTitle}>Subtask</Typography>
+                                                    <Button color="primary" type="button" variant="outlined" sx={SubTaskMobileButton} startIcon={<Add/>} disabled={task.subtask.length === 10 || task.status === 'completed'} onClick={handleNewSubTask}>New Subtask</Button>
                                                 </Box>
                                                 {
                                                     task.subtask?.length > 0 && (
-                                                        <Box sx={{ display: "flex", justifyContent: 'space-evenly', alignItems: 'center' }}>
-                                                            <Typography variant="body2" sx={{ color: 'grey.600' }}>Title</Typography>
-                                                            <Typography variant="body2" sx={{ color: 'grey.600' }}>Status</Typography>
+                                                        <Box sx={TitleStatusContainer}>
+                                                            {
+                                                                ["Title", "Status", ""].map((item, key) => {
+                                                                    return <Typography key={key} variant="body2" sx={{ color: 'grey.600' }}>{item}</Typography>
+                                                                })
+                                                            }
                                                         </Box>
                                                     )
                                                 }
@@ -659,7 +612,7 @@ export default function EditTaskMobile() {
                                                     task.subtask?.length > 0 && (
                                                         <>
                                                             {task.subtask.map((subTask, key) => (
-                                                                <Box key={key} sx={{ display: "flex", justifyContent: 'center', alignItems: 'center', gap: 2 }}>
+                                                                <Box key={key} sx={MobileSubTaskContainer}>
                                                                     <IconButton size="medium" sx={{ top: 10 }} onClick={() => handleOpenSubTaskDeletionModal(subTask.title, key)}><img src={DeleteIcon} alt="delete-icon" height={20} width="100%"/></IconButton>
                                                                     <TextField 
                                                                     type="text" 
@@ -670,20 +623,7 @@ export default function EditTaskMobile() {
                                                                     id="subtask-title"
                                                                     size="medium"
                                                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleSubTaskChange(key, "title", e.target.value)}
-                                                                    sx={{  
-                                                                        '& .MuiInputBase-root': {
-                                                                            fontSize: '14px',
-                                                                        },
-                                                                        '& .MuiInputLabel-root.Mui-error': {
-                                                                            color: '#CA0061',
-                                                                        },
-                                                                        '& .MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline': {
-                                                                            borderColor: '#CA0061',
-                                                                        },
-                                                                        '& .MuiFormHelperText-root.Mui-error': {
-                                                                            color: '#CA0061',
-                                                                        },
-                                                                    }}
+                                                                    sx={MobileSubTaskTitleField}
                                                                     fullWidth/>
                                                                     <FormControlLabel 
                                                                         control={<Switch checked={subTask.status === "done"} 
@@ -704,20 +644,15 @@ export default function EditTaskMobile() {
                                                 { (task?.subtask?.length > 0 && subtasksCompleted && task.status !== "completed") && ( 
                                                     <>
                                                         <Divider/>
-                                                        <Box sx={{ display: "flex", justifyContent: 'center', alignItems: 'center' }}>
-                                                            <Box sx={{ display: "block", alignItems: 'center', width: '100%', textAlign: 'center' }}>
-                                                                    <Typography sx={{ fontSize: 14, mb: 2 }}>All subtasks are <span style={{ fontWeight: 'bold' }}>done</span></Typography>
+                                                        <Box sx={MarkAsCompletedContainer}>
+                                                            <Box sx={MarkAsCompletedSubContainer}>
+                                                                    <Typography sx={AllSubTaskTitle}>All subtasks are <span style={{ fontWeight: 'bold' }}>done</span></Typography>
                                                                     <Button 
                                                                         type="button" 
                                                                         variant="contained" 
                                                                         color="primary"
                                                                         fullWidth
-                                                                        sx={{ 
-                                                                            fontFamily: "Roboto", 
-                                                                            fontWeight: 'bold', 
-                                                                            textTransform: 'none', 
-                                                                            borderRadius: 6
-                                                                        }} 
+                                                                        sx={MarkAsCompletedButton} 
                                                                         onClick={handleMarkAsComplete} disabled={fetchingTask}>Mark as Complete</Button>
                                                             </Box>
                                                         </Box>
@@ -727,17 +662,12 @@ export default function EditTaskMobile() {
                                         </Container>
                                     </Box>
                                     <MobileAppBar>
-                                        <Box sx={{ flexGrow: 1, display: "flex", alignItems: 'center', justifyContent: 'center', marginLeft: 5 }}>
+                                        <Box sx={MobileAppBarContainer}>
                                             <Button 
                                                 type="button" 
                                                 variant="contained" 
                                                 color="primary" 
-                                                sx={{ 
-                                                    fontFamily: "Roboto", 
-                                                    fontWeight: 'bold', 
-                                                    textTransform: 'none', 
-                                                    borderRadius: 6
-                                                }} 
+                                                sx={EditTaskSaveButton} 
                                                 onClick={handleSubmit} disabled={loading || fetchingTask}>
                                                 {loading ? 
                                                     <CircularProgress size={30} color="inherit"/> 
