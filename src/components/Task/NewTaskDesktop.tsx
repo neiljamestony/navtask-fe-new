@@ -272,13 +272,11 @@ export default function NewTaskDesktop() {
                                 select
                                 label="Status"
                                 fullWidth
-                                error={task.status === "completed" || task.status === "cancelled"}
-                                helperText={task.status === "completed" || task.status === "cancelled" ? "Invalid status value" : ""}
                                 defaultValue={task.status}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTask((prev) => ({...prev, status: e.target.value}))}
                                 >
                                 {status.map((option) => (
-                                    <MenuItem key={option.value} value={option.value} disabled={option.value === "completed" || option.value === "cancelled"}>
+                                    <MenuItem key={option.value} value={option.value}>
                                     {option.label}
                                     </MenuItem>
                                 ))}

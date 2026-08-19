@@ -97,7 +97,7 @@ export default function SocialMediaAuth() {
             <Divider>OR</Divider>
             {
                 buttons.map((button, key) => {
-                    return <Button key={key} type="button" color="inherit" variant="outlined" startIcon={<img src={button.icon} height={15} width={15} alt={`${button.name}-icon`}/>} sx={{ textTransform: 'none', fontSize: 15 }} onClick={button.action}>{button.loader ? "Loading ..." : `Continue with ${button.name}`}</Button>
+                    return <Button key={key} type="button" color="inherit" variant="outlined" disabled startIcon={<img src={button.icon} height={15} width={15} alt={`${button.name}-icon`}/>} sx={{ textTransform: 'none', fontSize: 15 }} onClick={button.action}>{button.loader ? "Loading ..." : `Continue with ${button.name}`}</Button>
                 })
             }
         </>    
