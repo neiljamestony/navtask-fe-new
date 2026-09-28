@@ -40,7 +40,6 @@ export default function EditTaskDesktop() {
     const [fetchingTask, setFetchingTask] = useState(false);
     const [fileError, setFileError] = useState<{error: boolean, msg: string} | null>(null);
     const [subtasksCompleted, setSubTasksCompleted] = useState(false)
-    const inputRef = useRef<HTMLInputElement | null>(null);
     const [uploading, setUploadingStatus] = useState(false)
     const [progress, setProgress] = React.useState(0);
     const [errors, setErrors] = useState<{key: string, error: string}[] | []>([]);
