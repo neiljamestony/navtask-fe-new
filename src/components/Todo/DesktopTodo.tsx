@@ -508,7 +508,7 @@ export default function DesktopTodo() {
                                             />
                                             ))}
                                         </Box>
-                                        </Box>
+                                    </Box>
                                 ): (
                                     <>
                                         {
