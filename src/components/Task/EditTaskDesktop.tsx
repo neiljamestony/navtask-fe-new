@@ -20,6 +20,7 @@ import DeleteIcon from '../../assets/Icons/Delete_active.svg'
 import DeleteSubTaskDesktop from '../Todo/DeleteSubTaskDesktop';
 import { validFileTypes } from '../../utils/utils';
 import FetchingTaskLoader from '../../assets/loader.svg'
+import { ChevronLeft, Trash } from 'lucide-react';
 
 dayjs.extend(customParseFormat);
 
@@ -168,10 +169,6 @@ export default function EditTaskDesktop() {
             label: "Done"
         },
     ]
-    
-    const handleBrowsFileClick = () => {
-        inputRef.current?.click();
-    }
 
     const handleSubmit = async () => {
         setLoading(true);
@@ -349,382 +346,560 @@ export default function EditTaskDesktop() {
     }, [uploading]);
 
     return (
-        <Box sx={{ padding: 2 }}>
-            {
-                fetchingTask ? (
-                    <Box sx={{ height: 500, width: "100%", display: "block", alignItems: 'center', textAlign: 'center'}}>
-                        <Box sx={{ display: "flex", justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
-                            <img src={FetchingTaskLoader} height={500} width={400} alt="fetching-task-loader"/>
-                        </Box>
-                        <Typography sx={{ fontSize: 25 }}>Fetching Task ...</Typography>
+        <Box
+            sx={{
+                minHeight: "100%",
+                display: "flex",
+                flexDirection: "column",
+                bgcolor: "#f6f8fb",
+                p: { xs: 1.5, md: 3 },
+            }}
+        >
+            {fetchingTask ? (
+            <Box
+                sx={{
+                flex: 1,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                textAlign: "center",
+                }}
+            >
+                <Box
+                component="img"
+                src={FetchingTaskLoader}
+                alt=""
+                sx={{ width: { xs: 220, sm: 320 }, maxWidth: "100%" }}
+                />
+                <Typography variant="h6" sx={{ mt: 2, fontWeight: 600 }}>
+                Loading task…
+                </Typography>
+            </Box>
+            ) : !task ? (
+            <Box
+                sx={{
+                flex: 1,
+                display: "grid",
+                placeItems: "center",
+                }}
+            >
+                <Typography variant="h6" color="text.secondary">
+                No task found
+                </Typography>
+            </Box>
+            ) : (
+            <>
+                <DeleteSubTaskDesktop
+                open={openDeleteSubtask}
+                proceed={handleRemoveSubTask}
+                close={handleCancelSubTaskDeletionModal}
+                subtaskTitle={subTaskToDelete.name}
+                itemToDelete={subTaskToDelete.key}
+                />
+
+                {/* Header stays outside the scrolling form */}
+                <Box
+                sx={{
+                    width: "100%",
+                    maxWidth: 1000,
+                    mx: "auto",
+                    mb: 2,
+                    flexShrink: 0,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1.5,
+                }}
+                >
+                <IconButton
+                    size='small'
+                    aria-label="Back to tasks"
+                    onClick={() => navigate("/")}
+                >
+                    <ChevronLeft size={20} />
+                </IconButton>
+
+                <Box>
+                    <Typography variant="h5" sx={{ fontWeight: 700, lineHeight: 1.2 }}>
+                    Edit task
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                    Update task details, schedule, attachments, and subtasks.
+                    </Typography>
+                </Box>
+                </Box>
+
+                {/* Card fills available height. Only its content area scrolls. */}
+                <Paper
+                elevation={0}
+                sx={{
+                    width: "100%",
+                    maxWidth: 1000,
+                    mx: "auto",
+                    flex: 1,
+                    display: "flex",
+                    flexDirection: "column",
+                    border: "1px solid",
+                    borderColor: "#e3e8ef",
+                    borderRadius: 3,
+                    overflow: "hidden",
+                }}
+                >
+                <Box
+                    sx={{
+                    flex: 1,
+                    p: { xs: 2, sm: 3, md: 4 },
+                    }}
+                >
+                    <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+                    {/* Task details */}
+                    <Box>
+                        <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>Task details</Typography>
+                        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                            Priority is fixed after creation. You can update the status and task information.
+                        </Typography>
+
+                        <Grid container spacing={2}>
+                            <Grid size={{ xs: 12, sm: 6 }}>
+                                <TextField
+                                select
+                                label="Priority"
+                                value={task.priority}
+                                fullWidth
+                                disabled
+                                >
+                                {priorities.map((option) => (
+                                    <MenuItem key={option.value} value={option.value}>
+                                    {option.label}
+                                    </MenuItem>
+                                ))}
+                                </TextField>
+                            </Grid>
+
+                            <Grid size={{ xs: 12, sm: 6 }}>
+                                <TextField
+                                select
+                                label="Status"
+                                value={task.status}
+                                fullWidth
+                                onChange={handleStatusChange}
+                                >
+                                {status.map((option) => (
+                                    <MenuItem
+                                    key={option.value}
+                                    value={option.value}
+                                    disabled={
+                                        option.value === "completed" &&
+                                        task.subtask.length > 0 &&
+                                        !subtasksCompleted
+                                    }
+                                    >
+                                    {option.label}
+                                    </MenuItem>
+                                ))}
+                                </TextField>
+                            </Grid>
+
+                            {task.status === "completed" && (
+                                <Grid size={{ xs: 12, sm: 6 }}>
+                                <TextField
+                                    label="Completion date"
+                                    value={
+                                    task.completed_date
+                                        ? dayjs(task.completed_date).format("MM/DD/YYYY")
+                                        : dayjs().format("MM/DD/YYYY")
+                                    }
+                                    disabled
+                                    fullWidth
+                                />
+                                </Grid>
+                            )}
+                            <Grid size={12}>
+                                <TextField
+                                label="Title"
+                                name="title"
+                                value={task.title}
+                                onChange={handleTextChange}
+                                multiline
+                                minRows={2}
+                                maxRows={4}
+                                fullWidth
+                                error={errors.some((error) => error.key === "title")}
+                                helperText={
+                                    errors.find((error) => error.key === "title")?.error ?? ""
+                                }
+                                sx={{
+                                    "& .MuiInputBase-input": {
+                                    fontSize: 18,
+                                    fontWeight: 600,
+                                    },
+                                }}
+                                />
+                            </Grid>
+                        </Grid>
                     </Box>
-                ): (
-                    <>
-                        {
-                            !task || !task.title ? (
-                               <Box sx={{ display: "flex", justifyContent: 'center', alignItems: 'center', height: '60vh' }}>
-                                    <Typography sx={{ fontSize: 20 , fontWeight: 'bold' }}>No data found</Typography>
-                                </Box>
-                            ) : (
-                                <>
-                                    <DeleteSubTaskDesktop open={openDeleteSubtask} proceed={handleRemoveSubTask} close={handleCancelSubTaskDeletionModal} subtaskTitle={subTaskToDelete.name} itemToDelete={subTaskToDelete.key}/>
-                                    <Box sx={{ display: "flex", justifyContent: "start", alignItems: 'center', gap: 2 }}>
-                                        <Button type="button" onClick={() => navigate("/")} startIcon={<ArrowBackIosNewRounded/>}>
-                                            <Typography sx={{ fontFamily: "Roboto", fontWeight: 'bold', textTransform: 'none' }}>Back</Typography>
-                                        </Button>
-                                        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 1}}>
-                                            <Typography sx={{ fontFamily: "Roboto", fontWeight: 'bold', color: "grey.600" }}>View Task /</Typography>
-                                            <Typography sx={{ fontFamily: "Roboto", fontWeight: 'bold' }}>Edit</Typography>
-                                        </Box>
-                                    </Box>
-                                    <Paper variant="outlined" 
-                                        sx={{ height: 750,
-                                            border: 'none', 
-                                            borderRadius: 4, 
-                                            overflowY: task.title !== "" && task?.subtask.length > 0 || task.attachments !== null ? 'scroll' : 'none', 
-                                            paddingBottom: task?.subtask.length > 0 ? 5 : 0
-                                        }}>
-                                        <Container maxWidth="md" sx={{ paddingTop: 5 }}>
-                                            <Stack spacing={2}>
-                                                <Grid container spacing={2}>
-                                                    <Grid size={3}>
-                                                        <TextField
-                                                            select
-                                                            label="Priority"
-                                                            defaultValue={task.priority}
-                                                            fullWidth
-                                                            disabled
-                                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTask((prev) => ({...prev, priority: e.target.value}))}
-                                                            value={task.priority}
-                                                            >
-                                                            {priorities.map((option) => (
-                                                                <MenuItem key={option.value} value={option.value}>
-                                                                {option.label}
-                                                                </MenuItem>
-                                                            ))}
-                                                        </TextField>
-                                                    </Grid>
-                                                    <Grid size={3}>
-                                                        <TextField
-                                                            select
-                                                            label="Status"
-                                                            fullWidth
-                                                            defaultValue={task.status}
-                                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleStatusChange(e)}
-                                                            value={task.status}
-                                                            >
-                                                            {status.map((option) => (
-                                                                <MenuItem key={option.value} value={option.value} disabled={option.value === "completed" && task.subtask.length > 0 && !subtasksCompleted}>
-                                                                    {option.label}
-                                                                </MenuItem>
-                                                            ))}
-                                                        </TextField>
-                                                    </Grid>
-                                                    {task.status === "completed" && (
-                                                        <Grid size={3}>
-                                                            <TextField
-                                                                label="Completion Date"
-                                                                value={task.completed_date ? dayjs(task.completed_date).format("MM/DD/YYYY") : dayjs().format("MM/DD/YYYY")}
-                                                                disabled
-                                                                fullWidth
-                                                                sx={{
-                                                                    '& .MuiInputBase-root': {
-                                                                        fontSize: 16,
-                                                                    },
-                                                                }}
-                                                            />
-                                                        </Grid>
-                                                        )}
-                                                </Grid>
-                                                <Grid container>
-                                                    <Grid size={12}>
-                                                        <TextField
-                                                            id="outlined-multiline-flexible"
-                                                            label="Title"
-                                                            multiline
-                                                            disabled
-                                                            rows={4}
-                                                            fullWidth
-                                                            value={task.title}
-                                                            sx={{  
-                                                                '& .MuiInputBase-root': {
-                                                                    fontSize: '20px',
-                                                                    fontWeight: 'bold'
-                                                                },
-                                                                '& .MuiInputLabel-root.Mui-error': {
-                                                                    color: '#CA0061', 
-                                                                },
-                                                                '& .MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline': {
-                                                                    borderColor: '#CA0061',
-                                                                },
-                                                                '& .MuiFormHelperText-root.Mui-error': {
-                                                                    color: '#CA0061',
-                                                                },
-                                                            }}
-                                                        />
-                                                    </Grid>
-                                                </Grid>
-                                                <Grid container spacing={2}>
-                                                    <Grid size={6}>
-                                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                            <DemoContainer components={['DatePicker', 'DatePicker']}>
-                                                                <DatePicker
-                                                                    label="Date Created"
-                                                                    value={task.due_date ? dayjs(task.created_at) : null}
-                                                                    disabled
-                                                                    slotProps={{
-                                                                        textField: {
-                                                                            fullWidth: true,
-                                                                        },
-                                                                    }}
-                                                                />
-                                                            </DemoContainer>
-                                                        </LocalizationProvider>
-                                                    </Grid>
-                                                    <Grid size={6}>
-                                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                            <DemoContainer components={['DatePicker', 'DatePicker']}>
-                                                                <DatePicker
-                                                                    label="Due Date"
-                                                                    value={task.due_date ? dayjs(task.due_date) : null}
-                                                                    onChange={(newValue) => setTask((prev) => ({
-                                                                        ...prev,
-                                                                        due_date: dayjs(newValue).format("YYYY-MM-DD")
-                                                                    }))}
-                                                                    slotProps={{
-                                                                        textField: {
-                                                                            fullWidth: true,
-                                                                            error: errors.length > 0 && errors.filter((error) => error.key === "due_date").length > 0,
-                                                                            helperText: errors.length > 0 && errors.filter((error) => error.key === "due_date").length > 0 ? errors.filter((error) => error.key === "due_date")[0].error : "",
-                                                                            sx: {
-                                                                                '& .MuiInputLabel-root.Mui-error': {
-                                                                                    color: '#CA0061',
-                                                                                },
-                                                                                '& .MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline': {
-                                                                                    borderColor: '#CA0061',
-                                                                                },
-                                                                                '& .MuiFormHelperText-root.Mui-error': {
-                                                                                    color: '#CA0061',
-                                                                                },
-                                                                            },
-                                                                        },
-                                                                    }}
-                                                                />
-                                                            </DemoContainer>
-                                                        </LocalizationProvider>
-                                                    </Grid>
-                                                </Grid>
-                                                <Grid container>
-                                                    <Grid size={12}>
-                                                        <TextField
-                                                            id="outlined-multiline-flexible"
-                                                            label="Details(Optional)"
-                                                            name="description"
-                                                            multiline
-                                                            rows={4}
-                                                            sx={{
-                                                                '& .MuiInputLabel-root.Mui-error': {
-                                                                    color: '#CA0061', 
-                                                                },
-                                                                '& .MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline': {
-                                                                    borderColor: '#CA0061',
-                                                                },
-                                                                '& .MuiFormHelperText-root.Mui-error': {
-                                                                    color: '#CA0061',
-                                                                },
-                                                            }}
-                                                            slotProps={{
-                                                                htmlInput: { maxLength: 300 }
-                                                            }}
-                                                            error={errors.length > 0 && errors.filter((error) => error.key === "description").length > 0 } 
-                                                            helperText={errors.length > 0 && errors.filter((error) => error.key === "description").length > 0 ? errors.filter((error) => error.key === "description")[0].error : ""}
-                                                            value={task.description}
-                                                            fullWidth
-                                                            onChange={handleTextChange}
-                                                        />
-                                                    </Grid>
-                                                </Grid>
-                                                <Grid container>
-                                                    <Grid size={12}>
-                                                        <Box {...getRootProps()}>
-                                                            <input {...getInputProps()} />              
-                                                            <Box sx={{ 
-                                                                position: "relative", 
-                                                                minHeight: 100, 
-                                                                height: "auto", 
-                                                                width: "100%", 
-                                                                border: "2px", 
-                                                                borderStyle: 'dashed', 
-                                                                borderRadius: 2, 
-                                                                borderColor: fileError ? '#CA0061' : 'grey.300', 
-                                                            }}>
-                                                                <Box sx={{   display: "flex", justifyContent: "center"}}>
-                                                                    <Box sx={{
-                                                                        position: "absolute",
-                                                                        top: -9,
-                                                                        left: 12,
-                                                                        backgroundColor: "#fff",
-                                                                        px: 1,
-                                                                        fontSize: 12,
-                                                                        fontFamily: "Roboto",
-                                                                        fontWeight: "bold",
-                                                                        color: fileError ? "#CA0061" : "text.secondary"
-                                                                    }}>Attachments</Box>
-                                                                    {
-                                                                        uploading ? (
-                                                                        <Box sx={{ marginTop: 3, width: "50%", minHeight: "10vh", textAlign: 'center' }}>
-                                                                            <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
-                                                                                <Typography sx={{ fontSize: 14, marginBottom: 1 }}>{uploadedFileNames.toString()}</Typography>
-                                                                            </Box>
-                                                                            <LinearProgress variant="determinate" value={progress} aria-label="Export data"/>
-                                                                        </Box>
-                                                                        ): (
-                                                                            <Box sx={{ display: "flex", justifyContent:"center", alignItems: "center", paddingTop: 4 }}>
-                                                                                <Box><img src={UploadIcon} alt="upload-icon" height={30} width="100%"/></Box>
-                                                                                <Box sx={{ fontFamily: "Roboto", fontSize: 14, color: fileError ? "#CA0061" : "#272D32" }}> 
-                                                                                    Drop files to attach, or 
-                                                                                    <span style={{ color: fileError ? "#CA0061" : "#027CEC", cursor: "pointer" }} onClick={handleBrowsFileClick}> browse</span>.
-                                                                                </Box>
-                                                                            </Box>
-                                                                        )
-                                                                    }
-                                                                </Box>
-                                                                {
-                                                                    !uploading && 
-                                                                    <Box sx={{ display: "flex", justifyContent: "flex-start", alignItems: "center", paddingLeft: 3, paddingBottom: 2, gap: 2 }}>
-                                                                        {
-                                                                            task.attachments && task.attachments.map((file, key) => (
-                                                                                <EditFilePreview key={key} attachment={file} removeFile={(e: React.MouseEvent<HTMLButtonElement>) => handleRemoveFile(e, key)}/>
-                                                                            ))
-                                                                        }
-                                                                    </Box>
-                                                                }
-                                                            </Box>
-                                                        </Box>
-                                                        {fileError !== null && <Box sx={{ color: '#CA0061', fontSize: 14, marginTop: 1, fontWeight: 'bold' }}>{fileError.msg}</Box>}
-                                                    </Grid>
-                                                </Grid>
-                                                <Grid container>
-                                                    <Grid size={12}>
-                                                        <Divider/>
-                                                    </Grid>
-                                                </Grid>
-                                                <Grid container>
-                                                    <Grid size={12}>
-                                                        <Box sx={{ display: "flex", justifyContent: "space-between"}}>
-                                                            <Typography sx={{ fontFamily: "Roboto", fontSize: 16, fontWeight: 'bold' }}>Subtask</Typography>
-                                                            <Button color="primary" type="button" variant="outlined" sx={{ textTransform: "none", backgroundColor: '#fff', borderRadius: 6 }} startIcon={<Add/>} disabled={task.subtask.length === 10 || task.status === 'completed'} onClick={handleNewSubTask}>New Subtask</Button>
-                                                        </Box>
-                                                    </Grid>
-                                                </Grid>
-                                                    {
-                                                        task.subtask?.length > 0 && (
-                                                            <Grid container spacing={2}>
-                                                                <Grid size={8}>
-                                                                    <Typography variant="body2" sx={{ color: 'grey.600' }}>Title</Typography>
-                                                                </Grid>
-                                                                <Grid size={4}>
-                                                                    <Typography variant="body2" sx={{ color: 'grey.600' }}>Status</Typography>
-                                                                </Grid>
-                                                            </Grid>
-                                                        )
-                                                    }
-                                                    {
-                                                        task.subtask?.length > 0 && (
-                                                            <>
-                                                                {task.subtask.map((subTask, key) => (
-                                                                    <Grid container key={key} spacing={2}>
-                                                                        <Grid size={8}>
-                                                                            <TextField 
-                                                                            type="text" 
-                                                                            label="Title" 
-                                                                            value={subTask.title}
-                                                                            error={!subTask.title.trim()}
-                                                                            helperText={!subTask.title.trim() && "Must not be empty"}
-                                                                            id="subtask-title" onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleSubTaskChange(key, "title", e.target.value)} fullWidth/>
-                                                                        </Grid>
-                                                                        <Grid size={3}>
-                                                                            <TextField
-                                                                                select
-                                                                                label="Status"
-                                                                                value={subTask.status}
-                                                                                fullWidth
-                                                                                defaultValue="Not Done"
-                                                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleSubTaskChange(key, "status", e.target.value)}
-                                                                                >
-                                                                                {subTasksDropdown.map((option, key) => (
-                                                                                    <MenuItem key={key} value={option.value}>
-                                                                                    {option.label}
-                                                                                    </MenuItem>
-                                                                                ))}
-                                                                            </TextField>
-                                                                        </Grid>
-                                                                        <Grid size={1}>
-                                                                            <IconButton size="medium" sx={{ top: 10 }} onClick={() => handleOpenSubTaskDeletionModal(subTask.title, key)}><img src={DeleteIcon} alt="delete-icon" height={20} width="100%"/></IconButton>
-                                                                        </Grid>
-                                                                    </Grid>
-                                                                ))}
-                                                            </>
-                                                        )
-                                                    }
-                                            </Stack>
-                                        </Container>
-                                    </Paper>
-                                    <Box sx={{ 
-                                            display: "flex",
-                                            justifyContent: "flex-end", 
-                                            bottom: 5,
-                                            right: 0,
-                                            p: 4,
-                                            gap: 2,
-                                            position: "fixed"
-                                        }}>
-                                        <Button type="button" onClick={() => navigate("/")} variant="outlined" sx={{ backgroundColor: '#fff', borderRadius: 6, textTransform: 'none'}} disabled={loading}>Cancel</Button>
-                                        
-                                        {(task?.subtask?.length > 0 && subtasksCompleted && task.status !== "completed") ? (
-                                            <Button 
-                                                type="button" 
-                                                variant="contained" 
-                                                color="primary" 
-                                                sx={{ 
-                                                    fontFamily: "Roboto", 
-                                                    fontWeight: 'bold', 
-                                                    textTransform: 'none', 
-                                                    borderRadius: 6 
-                                                }} 
-                                                onClick={handleMarkAsComplete} 
-                                                disabled={loading || fetchingTask}
-                                            >
-                                                {loading ? (
-                                                    <CircularProgress size={30} color="inherit"/> 
-                                                ) : (
-                                                    "Mark as Complete"
-                                                )}
-                                            </Button>
-                                        ):(
-                                            <Button 
-                                                type="button" 
-                                                variant="contained" 
-                                                color="primary" 
-                                                sx={{ 
-                                                    fontFamily: "Roboto", 
-                                                    fontWeight: 'bold', 
-                                                    textTransform: 'none', 
-                                                    borderRadius: 6 
-                                                }} 
-                                                onClick={handleSubmit} disabled={loading || fetchingTask}>
-                                                {loading ? 
-                                                    <CircularProgress size={30} color="inherit"/> 
-                                                :"Save"}</Button>
-                                            )
-                                        }
-                                    </Box>
-                                </>
-                            )
+
+                    <Divider />
+
+                    {/* Schedule */}
+                    <Box>
+                        <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>Schedule</Typography>
+                        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                            Review the dates associated with this task.
+                        </Typography>
+
+                        <Grid container spacing={2}>
+                            <Grid size={{ xs: 12, sm: 6 }}>
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DatePicker
+                                    label="Date created"
+                                    value={task.created_at ? dayjs(task.created_at) : null}
+                                    disabled
+                                    slotProps={{ textField: { fullWidth: true } }}
+                                />
+                                </LocalizationProvider>
+                            </Grid>
+                            <Grid size={{ xs: 12, sm: 6 }}>
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DatePicker
+                                    label="Due date"
+                                    value={task.due_date ? dayjs(task.due_date) : null}
+                                    onChange={(newValue) =>
+                                    setTask((prev) => ({
+                                        ...prev,
+                                        due_date: newValue
+                                        ? dayjs(newValue).format("YYYY-MM-DD")
+                                        : "",
+                                    }))
+                                    }
+                                    slotProps={{
+                                    textField: {
+                                        fullWidth: true,
+                                        error: errors.some((error) => error.key === "due_date"),
+                                        helperText:
+                                        errors.find((error) => error.key === "due_date")
+                                            ?.error ?? "",
+                                    },
+                                    }}
+                                />
+                                </LocalizationProvider>
+                            </Grid>
+                        </Grid>
+                    </Box>
+                    <Divider />
+                    {/* Description */}
+                    <Box>
+                        <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>Description</Typography>
+                        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                            Add context or instructions for this task.
+                        </Typography>
+                        <TextField
+                        label="Description (optional)"
+                        name="description"
+                        value={task.description}
+                        onChange={handleTextChange}
+                        multiline
+                        rows={4}
+                        fullWidth
+                        slotProps={{ htmlInput: { maxLength: 300 } }}
+                        error={errors.some((error) => error.key === "description")}
+                        helperText={
+                            errors.find((error) => error.key === "description")?.error ??
+                            `${task.description?.length ?? 0}/300`
                         }
-                    </>
-                )
-            }
+                        />
+                    </Box>
+                    <Divider />
+                    {/* Attachments */}
+                    <Box>
+                        <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+                        Attachments
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                        Add up to 5 files, with a maximum size of 10 MB per file.
+                        </Typography>
+                        <Box
+                            {...getRootProps()}
+                            sx={{
+                                p: 2,
+                                border: "1.5px dashed",
+                                borderColor: fileError ? "error.main" : "#cbd5e1",
+                                borderRadius: 2,
+                                bgcolor: "#fafcff",
+                                cursor: uploading ? "default" : "pointer",
+                                transition: "background-color 150ms ease, border-color 150ms ease",
+                                "&:hover": {
+                                borderColor: fileError ? "error.main" : "primary.main",
+                                bgcolor: "#f3f8ff",
+                                },
+                            }}
+                            >
+                        <input {...getInputProps()} />
+
+                        {uploading ? (
+                            <Box sx={{ maxWidth: 440, mx: "auto", py: 1, textAlign: "center" }}>
+                            <Typography variant="body2" sx={{ mb: 1 }}>
+                                Uploading {uploadedFileNames.join(", ")}
+                            </Typography>
+                            <LinearProgress
+                                variant="determinate"
+                                value={progress}
+                                aria-label="Upload progress"
+                            />
+                            </Box>
+                        ) : (
+                            <Box
+                            sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                gap: 1.5,
+                                py: 1,
+                            }}
+                            >
+                            <Box
+                                component="img"
+                                src={UploadIcon}
+                                alt=""
+                                sx={{ width: 32, height: 32, objectFit: "contain" }}
+                            />
+                            <Typography variant="body2">
+                                <Box component="span" sx={{ color: "primary.main", fontWeight: 700 }}>
+                                Browse files
+                                </Box>{" "}
+                                or drag and drop them here
+                            </Typography>
+                            </Box>
+                        )}
+
+                        {!uploading && task.attachments.length > 0 && (
+                            <Box
+                            sx={{
+                                display: "flex",
+                                flexWrap: "wrap",
+                                gap: 1.5,
+                                mt: 2,
+                            }}
+                            >
+                            {task.attachments.map((file, key) => (
+                                <EditFilePreview
+                                key={`${file.name}-${key}`}
+                                attachment={file}
+                                removeFile={(e: React.MouseEvent<HTMLButtonElement>) =>
+                                    handleRemoveFile(e, key)
+                                }
+                                />
+                            ))}
+                            </Box>
+                        )}
+                        </Box>
+
+                        {fileError && (
+                        <Typography variant="caption" color="error" sx={{ display: "block", mt: 1 }}>
+                            {fileError.msg}
+                        </Typography>
+                        )}
+                    </Box>
+                    <Divider />
+                    {/* Subtasks */}
+                    <Box>
+                        <Box
+                            sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                                gap: 2,
+                                mb: 2,
+                            }}>
+                            <Box>
+                                <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+                                Subtasks
+                                </Typography>
+                                <Typography variant="body2" color="text.secondary">
+                                {task.subtask.length} of 10 steps
+                                </Typography>
+                            </Box>
+
+                            <Button
+                                type="button"
+                                variant="outlined"
+                                startIcon={<Add />}
+                                disabled={task.subtask.length >= 10 || task.status === "completed"}
+                                onClick={handleNewSubTask}
+                                sx={{ textTransform: "none", borderRadius: 2, flexShrink: 0 }}
+                            >
+                                Add subtask
+                            </Button>
+                        </Box>
+                        {task.subtask.length === 0 ? (
+                        <Box
+                            sx={{
+                                p: 2.5,
+                                border: "1px dashed",
+                                borderColor: "divider",
+                                borderRadius: 2,
+                                bgcolor: "#fafcff",
+                                textAlign: "center",
+                            }}>
+                            <Typography variant="body2" color="text.secondary">No subtasks added yet.</Typography>
+                        </Box>
+                        ) : (
+                            <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+                                {task.subtask.map((subTask, key) => {
+                                    const isDone = subTask.status === "done";
+                                    return (
+                                    <Box
+                                        key={key}
+                                        sx={{
+                                            display: "grid",
+                                            gridTemplateColumns: {
+                                                xs: "32px minmax(0, 1fr) 36px",
+                                                sm: "36px minmax(0, 1fr) 150px 36px",
+                                            },
+                                            gap: 1.25,
+                                            alignItems: "center",
+                                            p: 1.25,
+                                            border: "1px solid",
+                                            borderColor: "divider",
+                                            borderRadius: 2,
+                                            bgcolor: isDone ? "rgba(46, 125, 50, 0.035)" : "background.paper",
+                                            transition: "border-color 150ms ease, background-color 150ms ease",
+                                            "&:hover": { borderColor: "primary.light" },
+                                        }}>
+                                        <Box
+                                            sx={{
+                                                width: 30,
+                                                height: 30,
+                                                display: "grid",
+                                                placeItems: "center",
+                                                borderRadius: "50%",
+                                                bgcolor: isDone ? "success.light" : "grey.100",
+                                                color: isDone ? "success.dark" : "text.secondary",
+                                                fontSize: 13,
+                                                fontWeight: 700,
+                                            }}>{key + 1}
+                                        </Box>
+
+                                        <TextField
+                                            label="Subtask"
+                                            value={subTask.title}
+                                            onChange={(e) =>
+                                                handleSubTaskChange(key, "title", e.target.value)
+                                            }
+                                            error={!subTask.title.trim()}
+                                            helperText={!subTask.title.trim() ? "Title is required" : ""}
+                                            fullWidth
+                                            size="small"
+                                            variant="standard"
+                                            slotProps={{ input: { disableUnderline: true } }}
+                                            sx={{
+                                                "& .MuiInputBase-root": {
+                                                px: 1.25,
+                                                py: 0.75,
+                                                borderRadius: 1.5,
+                                                bgcolor: "grey.50",
+                                                },
+                                                "& .MuiInputLabel-root": { display: "none" },
+                                            }}
+                                        />
+
+                                        <TextField
+                                            select
+                                            label="Status"
+                                            value={subTask.status}
+                                            onChange={(e) =>
+                                                handleSubTaskChange(key, "status", e.target.value)
+                                            }
+                                            fullWidth
+                                            size="small"
+                                            sx={{
+                                                gridColumn: { xs: "2", sm: "auto" },
+                                                gridRow: { xs: "2", sm: "auto" },
+                                            }}
+                                        >
+                                        {subTasksDropdown.map((option) => (
+                                            <MenuItem key={option.value} value={option.value}>
+                                                <Typography variant="body2" sx={{ fontSize: 13 }}>{option.label}</Typography>
+                                            </MenuItem>
+                                        ))}
+                                        </TextField>
+
+                                        <IconButton
+                                            size="small"
+                                            aria-label={`Delete ${subTask.title}`}
+                                            onClick={() =>
+                                                handleOpenSubTaskDeletionModal(subTask.title, key)
+                                            }
+                                            sx={{
+                                                gridColumn: { xs: "3", sm: "4" },
+                                                gridRow: { xs: "1", sm: "auto" },
+                                                color: "text.secondary",
+                                                "&:hover": {
+                                                color: "error.main",
+                                                bgcolor: "error.lighter",
+                                                },
+                                            }}>
+                                            <Trash size={17} />
+                                        </IconButton>
+                                    </Box>
+                                    );
+                                })}
+                                </Box>
+                                )}
+                            </Box>
+                        </Box>
+                    </Box>
+
+                    {/* Actions stay visible; only the form above scrolls */}
+                    <Box
+                        sx={{
+                        flexShrink: 0,
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        gap: 1.5,
+                        px: { xs: 2, sm: 3, md: 4 },
+                        py: 2,
+                        borderTop: "1px solid",
+                        borderColor: "divider",
+                        bgcolor: "#fff",
+                        }}>
+                        <Button
+                            type="button"
+                            variant="outlined"
+                            onClick={() => navigate("/")}
+                            disabled={loading}
+                            sx={{ textTransform: "none", borderRadius: 2, px: 3 }}
+                        >Cancel</Button>
+
+                        {task.subtask.length > 0 && subtasksCompleted && task.status !== "completed" ? (
+                            <Button
+                                type="button"
+                                variant="contained"
+                                onClick={handleMarkAsComplete}
+                                disabled={loading || fetchingTask}
+                                sx={{ textTransform: "none", borderRadius: 2, px: 3, fontWeight: 700 }}
+                            >
+                                Mark as complete
+                            </Button>
+                            ) : (
+                            <Button
+                                type="button"
+                                variant="contained"
+                                onClick={handleSubmit}
+                                disabled={loading || fetchingTask}
+                                sx={{ textTransform: "none", borderRadius: 2, px: 3, fontWeight: 700 }}
+                            >
+                                {loading ? (
+                                <CircularProgress size={22} color="inherit" />
+                                ) : (
+                                "Save changes"
+                                )}
+                            </Button>
+                        )}
+                    </Box>
+                </Paper>
+            </>
+            )}
         </Box>
-    )
+    );
 }

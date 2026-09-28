@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useMemo } from 'react'
-import { Box, Typography, Card, Button, Paper, Stack, IconButton, Badge, Grid, Link, Menu, MenuItem, Chip } from '@mui/material'
-import { Add, ArrowRightOutlined } from '@mui/icons-material'
+import { useState, useEffect, useMemo } from 'react'
+import { Box, Typography, Card, Button, Paper, Stack, IconButton, Badge, Grid, Chip, Divider } from '@mui/material'
+import { Add } from '@mui/icons-material'
 import dayjs from 'dayjs';
 import { getTasks, removeTask } from '../../api/task/task';
 import { useNavigate } from 'react-router-dom';
@@ -8,68 +8,78 @@ import type { GridRowSelectionModel, GridColumnVisibilityModel, GridRowParams, G
 import { GRID_CHECKBOX_SELECTION_COL_DEF, DataGrid  } from '@mui/x-data-grid';
 import toast from 'react-hot-toast';
 import DeleteItems from './DeleteItems';
+import { useSelector, useDispatch } from 'react-redux';
+import { setFilteredPriorityItems, setFilteredStatusItems } from '../../reducer/DashboardSlice';
+import { Eye, CopyCheck, SlidersHorizontal, SquarePen, ShieldCheck, ShieldOff, ShieldEllipsis, ShieldLock, Flag } from 'lucide-react'
 
 // ICONS
-import FilterIcon from '../../assets/Icons/Filter.svg';
-import Low from '../../assets/Icons/Low_table.svg';
-import High from '../../assets/Icons/High_table.svg';
-import Critical from '../../assets/Icons/Critical_table.svg';
-import NotStarted from '../../assets/Icons/Not Started.svg';
-import Cancelled from '../../assets/Icons/Cancelled.svg';
-import Completed from '../../assets/Icons/Complete.svg';
-import InProgress from '../../assets/Icons/In Progress.svg';
-import Edit from '../../assets/Icons/Edit.svg';
 import DeleteActive from '../../assets/Icons/Delete_active.svg';
 import DeleteInactive from '../../assets/Icons/Delete_inactive.svg';
-import ExpandSubTaskActive from '../../assets/Icons/Accordion_expand.svg'
-import ExpandSubTaskInActive from '../../assets/Icons/Accordion_supress.svg'
-import Done from '../../assets/Icons/Done.svg';
-import NotDone from '../../assets/Icons/Not Done.svg';
 import Attachment from '../../assets/Icons/attachment.svg'
 import FetchingTaskLoader from '../../assets/loader.svg';
+import NoTaskFound from '../../assets/Icons/no-task-found.png';
+import Filters from './Filters/Filters';
 
 export const prioritiesIcons = {
     low: {
-        icon: <img src={Low} alt="low-icon" height={20} width="100%"/>,
-        label: "Low"
+        icon: <Flag size={14} color="#2563EB"/>,
+        label: "Low",
+        bgColor: "rgba(37, 99, 235, 0.12)",
+        color: "#2563EB"
     },
     high: {
-        icon: <img src={High} alt="low-icon" height={20} width="100%"/>,
-        label: "High"
+        icon: <Flag size={14} color="#EA580C"/>,
+        label: "High",
+        bgColor: "rgba(234, 88, 12, 0.12)",
+        color: "#EA580C"
     },
     critical: {
-        icon: <img src={Critical} alt="low-icon" height={20} width="100%"/>,
-        label: "Critical"
+        icon: <Flag size={14} color="#DC2626"/>,
+        label: "Critical",
+        bgColor: "rgba(220, 38, 38, 0.12)",
+        color: "#DC2626"
     },
 }
 
 export const statusIcons = {
     "not-started": {
-        icon: <img src={NotStarted} alt="not-started-icon" height={15} width={15}/>,
-        label: "Not Started"
+        icon: <ShieldLock size={14} color="#64748B"/>,
+        label: "Not Started",
+        bgColor: "rgba(100, 116, 139, 0.12)",
+        color: "#64748B"
     },
     "in-progress": {
-        icon: <img src={InProgress} alt="in-progress-icon" height={15} width={15}/>,
-        label: "In Progress"
+        icon: <ShieldEllipsis size={14} color="#2563EB"/>,
+        label: "In Progress",
+        bgColor: "rgba(37, 99, 235, 0.12)",
+        color: "#2563EB"
     },
     "completed": {
-        icon: <img src={Completed} alt="completed-icon" height={15} width={15}/>,
-        label: "Completed"
+        icon: <ShieldCheck size={14} color="#16A34A"/>,
+        label: "Completed",
+        bgColor: "rgba(22, 163, 74, 0.12)",
+        color: "#16A34A"
     },
     "cancelled": {
-        icon: <img src={Cancelled} alt="cancelled-icon" height={15} width={15}/>,
-        label: "Cancelled"
+        icon: <ShieldOff size={14} color="#DC2626"/>,
+        label: "Cancelled",
+        bgColor: "rgba(220, 38, 38, 0.12)",
+        color: "#DC2626"
     },
 }
 
 export const subTaskStatusIcons = {
     "not-done": {
-        icon: <img src={NotDone} alt="not-started-icon" height={11} width="100%"/>,
-        label: "Not Done"
+        icon: <ShieldOff size={14} color="#DC2626"/>,
+        label: "Not Done",
+        bgColor: "rgba(220, 38, 38, 0.12)",
+        color: "#DC2626"
     },
     "done": {
-        icon: <img src={Done} alt="not-started-icon" height={11} width="100%"/>,
-        label: "Done"
+        icon: <ShieldCheck size={14} color="#16A34A"/>,
+        label: "Done",
+        bgColor: "rgba(22, 163, 74, 0.12)",
+        color: "#16A34A"
     }
 }
 
@@ -93,18 +103,18 @@ interface Task {
 
 export default function DesktopTodo() {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { filteredPriorityItems, filteredStatusItems } = useSelector((state: any) => state.dashboard);
     const [allTasks, setAllTasks] = useState<Task[] | []>([]);
     const [fetchingTasks, setFetchingTasks] = useState(false);
     const [ids, setIds] = useState<string[] | []>([])
     const [openSubTask, setOpenSubTask] = useState<number[]>([])
+    const [openFilters, setOpenFilters] = useState(false)
     const [deleteItem, setDeleteItem] = useState(false)
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [priorityEl, setPriorityEl] = useState<null | HTMLElement>(null);
     const [statusEl, setStatusEl] = useState<null | HTMLElement>(null);
-    const [filteredPriorityItems, setFilteredPriorityItems] = useState<string>("")
-    const [filteredStatusItems, setFilteredStatusItems] = useState<string>("")
     const [loadingitemRemoval, setitemRemoval] = useState(false)
-    const isMenuOpen = Boolean(anchorEl);
     const [rowSelectioChangeModel, setRowSelectionChangeModel] = useState<GridRowSelectionModel>({
         type: 'include',
         ids: new Set()
@@ -112,19 +122,6 @@ export default function DesktopTodo() {
     const [columnVisibilityModel, setColumnVisibilityModel] = useState<GridColumnVisibilityModel>({
         id: false
     })
-
-    const priorityStatusItems = [
-        {
-            value: 'priority',
-            name: 'Priority',
-            action: (e: null | HTMLElement) => setPriorityEl(e)
-        },
-        {
-            value: 'status',
-            name: 'Status',
-            action: (e: null | HTMLElement) => setStatusEl(e)
-        },
-    ]
 
     const statusMenuItems = [
         {
@@ -218,86 +215,9 @@ export default function DesktopTodo() {
         }
     }
 
-    const handleFilterPriorityItems = (item: string) => setFilteredPriorityItems((prev) => prev === item ? "" : item)
+    const handleFilterPriorityItems = (item: string) => dispatch(setFilteredPriorityItems(filteredPriorityItems === item ? "" : item))
 
-    const handleFilterStatusItems = (item: string) => setFilteredStatusItems((prev) => prev === item ? "" : item)
-
-    const renderPriorityStatusMenu = (
-        <Menu
-            anchorEl={anchorEl}
-            anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-            }}
-            id='priority-status-menu'
-            keepMounted
-            transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-            }}
-            sx={{
-                marginTop: 5,
-                borderRadius: 20
-            }}
-            slotProps={{
-                paper: {
-                    sx: {
-                        width: 150,
-                        maxWidth: '100%'
-                    },
-                },
-            }}
-            open={isMenuOpen}
-            onClose={() => setAnchorEl(null)}
-            >
-            {
-                priorityStatusItems.map((item, key) => {
-                    return <MenuItem key={key} onClick={(e: React.MouseEvent<HTMLElement>) => item.action(e.currentTarget)} value={item.value} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: 14 }}>
-                        <Box sx={{ flexGrow: 1 }}>{item.name}</Box>
-                        <ArrowRightOutlined/>
-                    </MenuItem>
-                })
-            }
-        </Menu>
-    );
-
-    const renderMenu = (items: {value: string, name: string, close: () => void, action: (name: string) => void }[], type: string) => {
-        return <Menu
-            anchorEl={anchorEl}
-            anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-            }}
-            id={type + '- menu'}
-            keepMounted
-            transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-            }}
-            sx={{
-                marginTop: 5,
-                borderRadius: 20,
-                marginLeft: 20
-            }}
-            slotProps={{
-                paper: {
-                    sx: {
-                        width: 150,
-                        maxWidth: '100%'
-                    },
-                },
-            }}
-            open={type === "status" ? Boolean(statusEl) : Boolean(priorityEl)}
-            onClose={() => items.forEach((item) => item.close())}>
-            {
-                items.map((item, key) => {
-                    return <MenuItem key={key} onClick={() => item.action(item.name)} value={item.value} sx={{ textAlign: 'left', fontSize: 14 }}>
-                        {item.name}
-                    </MenuItem>
-                })
-            }
-        </Menu>
-    }
+    const handleFilterStatusItems = (item: string) => dispatch(setFilteredStatusItems(filteredStatusItems === item ? "" : item))
 
     const columns: GridColDef[] = [
         {
@@ -326,26 +246,13 @@ export default function DesktopTodo() {
             ),
         },
         { field: 'id', headerName: ""},
-        { field: 'title', headerName: 'Title', width: 530, 
+        { field: 'title', headerName: 'Title', width: openFilters ? 430 : 230, 
             renderCell: (params) => {
-                const id = params.row.id;
                 const due_date = params.row.due_date;
-                const subtasks = params.row.subtask;
                 const attachments = params.row.attachments;
                 return (
-                    <Box sx={{ display: "flex", alignItems: 'center', gap: 1 }}>
-                        {
-                            subtasks.length > 0 && due_date !== "" && <IconButton onClick={(e) => handleSubTask(e, id, subtasks)}>
-                                {openSubTask.includes(id) ? <img src={ExpandSubTaskActive} alt="close-subtask" height={8} width={8}/> : <img src={ExpandSubTaskInActive} alt="open-subtask" height={8} width={8}/> }
-                            </IconButton>
-                        }
-                        {
-                            due_date !== "" ? (
-                                <Link href={`/view-task/${id}`} color="inherit"><Typography variant="caption" sx={{ paddingLeft: due_date === "" ? 5 : 0, fontWeight: 'bold' }}>{params.row.title}</Typography></Link>
-                            ) : (
-                                <Typography variant="caption" sx={{ paddingLeft: due_date === "" ? 10 : 0, fontWeight: 'bold', paddingTop: due_date === "" ? 2 : 0 }}>{params.row.title}</Typography>
-                            )
-                        }
+                    <Box sx={{ display: "flex", alignItems: 'center', justifyContent: 'flex-start', gap: 1, marginTop: 2 }}>
+                        <Typography variant="caption" sx={{ paddingLeft: due_date === "" ? 10 : 0, fontWeight: 'bold', paddingTop: due_date === "" ? 2 : 0 }}>{params.row.title}</Typography>
                         {
                             due_date !== "" && attachments.length > 0 && <img src={Attachment} alt="attachment-icon" height={12} width={12}/>
                         }
@@ -414,7 +321,7 @@ export default function DesktopTodo() {
                 const p = prioritiesIcons[params.value as keyof typeof prioritiesIcons];
                 if(!p) return params.value;
                 return (
-                    <Box>{p.icon}</Box>
+                    <Chip icon={p && p.icon} label={p && p.label} sx={{ backgroundColor: p.bgColor, color: p.color, fontSize: 12 }}/>
                 )
             } 
         },
@@ -443,10 +350,9 @@ export default function DesktopTodo() {
                                     </>
                                    
                                 ): (
-                                    <>
-                                        <Box>{p.icon}</Box>
-                                        <Typography variant="caption">{p.label}</Typography>
-                                    </>
+                                    <Box>
+                                        <Chip icon={p && p.icon} label={p && p.label} sx={{ backgroundColor: p.bgColor, color: p.color, fontSize: 12 }}/>
+                                    </Box>
                                 )
                             }
                             
@@ -456,61 +362,21 @@ export default function DesktopTodo() {
                 
             } 
         },
-        { field: 'edit', headerName: '', width: 50, sortable: false, flex: 1,
+        { field: 'edit', headerName: 'Actions', width: 50, sortable: false, flex: 1,
             renderCell: (params) => {
                 return (
                     params.row.due_date !== "" && <Box sx={{ display: "flex", justifyContent: "center", alignItems: 'center', paddingTop: 1 }}>
                         <IconButton onClick={() => params.field === "edit" && navigate(`/edit-task/${params.row.id}`)}>
-                            <img src={Edit} alt="edit-icon" height={15} width="100%"/>
+                            <SquarePen size={20}/>
+                        </IconButton>
+                        <IconButton onClick={() => params.field === "edit" && navigate(`/view-task/${params.row.id}`)}>
+                            <Eye size={20}/>
                         </IconButton>
                     </Box>
                 )
             },
         },
     ];
-
-    const handleSubTask = (e: React.MouseEvent<HTMLButtonElement>, id: number, subtasks: SubTask[]) => {
-        e.stopPropagation();
-        const isCurrentlyOpen = openSubTask.includes(id);
-
-        setOpenSubTask((prev) =>
-            isCurrentlyOpen
-            ? prev.filter((taskId) => taskId !== id)
-            : [...prev, id]
-        );
-
-        const subTaskIds = new Set(subtasks.map((subtask) => subtask.id));
-
-        setAllTasks((prevTasks) => {
-            if (isCurrentlyOpen) {
-                return prevTasks.filter((task) => !subTaskIds.has(task.id));
-            }
-
-            const alreadyInserted = prevTasks.some((task) => subTaskIds.has(task.id));
-
-            if (alreadyInserted) {
-                return prevTasks;
-            }
-
-            const newSubTasks = subtasks.map((item) => ({
-                ...item,
-                due_date: "",
-                priority: "",
-                completed_date: null,
-                subtask: [],
-                created_at: "",
-                user_id: 0,
-            }));
-
-            const newTasks = [...prevTasks];
-            const index = newTasks.findIndex((task) => task.id === id);
-            if (index !== -1) {
-                newTasks.splice(index + 1, 0, ...newSubTasks);
-            }
-
-            return newTasks;
-        });
-    };
 
     const fetch = async () => {
         setFetchingTasks(true)
@@ -583,102 +449,90 @@ export default function DesktopTodo() {
     return (
         <>
             <DeleteItems loading={loadingitemRemoval} close={handleCancelDelete} proceed={handleDeleteItem} open={deleteItem} ids={ids}/>
-            <Box sx={{ padding: 2 }}>
-                <Stack spacing={2}>
-                    <Typography sx={{ fontFamily: "Roboto", fontWeight: 'bold'}}>To-do</Typography>
-                    <Card variant="outlined" sx={{ padding: 1, borderRadius: 5 }}>
-                        <Box sx={{ display: "flex", justifyContent: 'flex', alignItems: 'center'}}>
-                            <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
-                                <Button 
-                                        type="button" 
-                                        variant="outlined" 
-                                        sx={{ 
-                                            textTransform: 'none', 
-                                            backgroundColor: '#fff', 
-                                            color: 'black', 
-                                            borderColor: 'grey.300', 
-                                            borderRadius: 3 
-                                        }}
-                                        onClick={(e: React.MouseEvent<HTMLElement>) => setAnchorEl(e.currentTarget)}
-                                        startIcon={
-                                            <img src={FilterIcon} alt="filter-icon" height={15} width="100%"/>
-                                        }>Filter
-                                </Button>
-                                {
-                                    filteredPriorityItems.length > 0 && 
-                                        <Stack direction="row" spacing={1}>
-                                            <Chip
-                                                variant="outlined"
-                                                label={filteredPriorityItems}
-                                                onDelete={() => handleFilterPriorityItems(filteredPriorityItems)}
-                                            />
-                                    </Stack>
-                                }
-                                {
-                                    filteredStatusItems.length > 0 && 
-                                    <Stack direction="row" spacing={1}>
-                                        <Chip
-                                            variant="outlined"
-                                            label={filteredStatusItems}
-                                            onDelete={() => handleFilterStatusItems(filteredStatusItems)}
-                                        />
-                                    </Stack>
-                                }
-                            </Box>
-                            <Button type="button" variant="contained" sx={{ textTransform: 'none', borderRadius: 5 }} startIcon={<Add/>} onClick={() => navigate('/new-task')}>New Task</Button>
-                            {renderPriorityStatusMenu}
-                            {renderMenu(statusMenuItems, 'status')}
-                            {renderMenu(priorityMenuItems, 'priority')}
+            <Stack spacing={2}>
+                <Card variant="outlined" sx={{ padding: 2, borderRadius: 5, height: "93vh" }}>
+                    <Box sx={{ display: "flex", justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
+                        <Box sx={{ display: "flex", justifyContent: 'center', alignItems: 'start', gap: 1 }}>
+                            <CopyCheck size={20}/>
+                            <Typography sx={{ fontSize: 14 }}>Tasks</Typography>
                         </Box>
-                    </Card>
-                    {
-                        fetchingTasks ? (
-                            <Paper sx={{ height: 400, width: '100%', borderRadius: 5, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2 }}>
-                                <Box sx={{ display: "flex", justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
-                                    <img src={FetchingTaskLoader} height={500} width={400} alt="fetching-task-loader"/>
-                                </Box>
-                                <Typography sx={{ fontSize: 25 }}>Fetching Tasks ...</Typography>
-                            </Paper>
-                        ): (
-                            <>
-                                {
-                                    !displayedTasks.length ? (
-                                        <Paper sx={{ height: 400, width: '100%', borderRadius: 5, display: 'flex', justifyContent: 'center', alignItems: 'center',  }}>
-                                            <Typography sx={{ fontSize: 14, fontWeight: 'bold'}}>No data found</Typography>
-                                        </Paper>
-                                    ): (
-                                        <Paper sx={{ height: "100%", width: '100%', borderRadius: 5 }}>
-                                            <DataGrid
-                                                rows={displayedTasks}
-                                                columns={columns}
-                                                hideFooterPagination
-                                                hideFooterSelectedRowCount
-                                                disableColumnResize
-                                                disableRowSelectionOnClick
-                                                isRowSelectable={(params: GridRowParams) => params.row.due_date !== ""}
-                                                rowSelectionModel={rowSelectioChangeModel}
-                                                onRowSelectionModelChange={handleSelectionChange}
-                                                columnVisibilityModel={columnVisibilityModel}
-                                                onColumnVisibilityModelChange={(newModel: GridColumnVisibilityModel) => setColumnVisibilityModel(newModel)}
-                                                checkboxSelection
-                                                sx={{ 
-                                                    borderRadius: 5,
-                                                    '& .MuiCheckbox-root.Mui-checked': {
-                                                        color: '#62C6FF', 
-                                                    },
-                                                        '& .MuiDataGrid-row .MuiDataGrid-cellCheckbox .Mui-disabled': {
-                                                        display: 'none',
-                                                    }
-                                                }}
-                                            />
-                                        </Paper>
-                                    )
-                                }
-                            </>
-                        )
-                    }
-                </Stack>
-            </Box>
+                        <Button type="button" variant="contained" sx={{ textTransform: 'none', borderRadius: 3, backgroundColor: 'black' }} startIcon={<Add/>} onClick={() => navigate('/new-task')}>Create</Button>
+                    </Box>
+                    <Divider sx={{ marginBottom: 2}}/>
+                    <Grid container spacing={1}>
+                        <Grid size={openFilters ? 2 : 0}>
+                            {openFilters && <Filters priorityMenuItems={priorityMenuItems} statusMenuItems={statusMenuItems} />}
+                        </Grid>
+                        <Grid size={openFilters ? 10 : 12}>
+                            <Box sx={{ display: "flex", justifyContent: 'flex-start', alignItems: 'center', gap: 1, marginBottom: 2 }}>
+                                <Button 
+                                    type="button" 
+                                    variant="outlined" 
+                                    sx={{ 
+                                        textTransform: 'none', 
+                                        backgroundColor: '#fff', 
+                                        color: 'black', 
+                                        borderColor: 'grey.300', 
+                                        borderRadius: 3 
+                                    }}
+                                    onClick={() => setOpenFilters(!openFilters)}
+                                    startIcon={
+                                        <SlidersHorizontal size={15}/>
+                                    }>{openFilters ? "Hide Filters" : "Show Filters"}
+                                </Button>
+                            </Box>
+                            {
+                                fetchingTasks ? (
+                                    <Box sx={{ borderRadius: 5, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2 }}>
+                                        <Box sx={{ display: "flex", justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
+                                            <img src={FetchingTaskLoader} height={500} width={400} alt="fetching-task-loader"/>
+                                        </Box>
+                                        <Typography sx={{ fontSize: 25 }}>Fetching Tasks ...</Typography>
+                                    </Box>
+                                ): (
+                                    <>
+                                        {
+                                            !displayedTasks.length ? (
+                                                <Box sx={{ display: "flex", justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: 2 }}>
+                                                    <img src={NoTaskFound} alt="No tasks found" height={100} width={100}/>
+                                                    <Typography sx={{ fontSize: 14, fontWeight: 'bold'}}>No data found</Typography>
+                                                </Box>
+                                            ): (
+                                                <Paper sx={{ height: "81vh", width: '100%', borderRadius: 5 }}>
+                                                    <DataGrid
+                                                        rows={displayedTasks}
+                                                        columns={columns}
+                                                        hideFooterPagination
+                                                        hideFooterSelectedRowCount
+                                                        disableColumnResize
+                                                        disableRowSelectionOnClick
+                                                        isRowSelectable={(params: GridRowParams) => params.row.due_date !== ""}
+                                                        rowSelectionModel={rowSelectioChangeModel}
+                                                        onRowSelectionModelChange={handleSelectionChange}
+                                                        columnVisibilityModel={columnVisibilityModel}
+                                                        onColumnVisibilityModelChange={(newModel: GridColumnVisibilityModel) => setColumnVisibilityModel(newModel)}
+                                                        checkboxSelection
+                                                        sx={{ 
+                                                            borderRadius: 5,
+                                                            '& .MuiCheckbox-root.Mui-checked': {
+                                                                color: '#62C6FF', 
+                                                            },
+                                                                '& .MuiDataGrid-row .MuiDataGrid-cellCheckbox .Mui-disabled': {
+                                                                display: 'none',
+                                                            },
+                                                            minHeight: '80vh'
+                                                        }}
+                                                    />
+                                                </Paper>
+                                            )
+                                        }
+                                    </>
+                                )
+                            }
+                        </Grid>
+                    </Grid>
+                </Card>
+            </Stack>
         </>
     )
 }
