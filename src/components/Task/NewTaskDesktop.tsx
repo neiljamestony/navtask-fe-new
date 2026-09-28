@@ -14,9 +14,7 @@ import toast from 'react-hot-toast';
 import { limitText, validFileTypes } from '../../utils/utils';
 
 import { useDropzone } from 'react-dropzone'
-import { ChevronLeft, Plus } from 'lucide-react';
-
-import DeleteIcon from '../../assets/Icons/Delete_active.svg'
+import { ChevronLeft, Plus, Trash } from 'lucide-react';
 
 dayjs.extend(customParseFormat);
 export default function NewTaskDesktop() {
@@ -561,61 +559,107 @@ export default function NewTaskDesktop() {
                 </Box>
               </Grid>
             ) : (
-              task.subTask.map((subTask, key) => (
-                <Grid size={12} key={key}>
-                  <Box
-                    sx={{
-                      display: "grid",
-                      gridTemplateColumns: { xs: "1fr", sm: "minmax(0, 1fr) 170px 44px" },
-                      gap: 1.5,
-                      alignItems: "start",
-                      p: 1.5,
-                      border: "1px solid",
-                      borderColor: "divider",
-                      borderRadius: 2,
-                    }}
-                  >
-                    <TextField
-                      label={`Subtask ${key + 1}`}
-                      value={subTask.title}
-                      error={!subTask.title.trim()}
-                      helperText={!subTask.title.trim() ? "Title is required" : ""}
-                      onChange={(e) =>
-                        handleSubTaskChange(key, "title", e.target.value)
-                      }
-                      fullWidth
-                    />
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 1, width: '100%' }}>
+              {task.subTask.map((subTask, key) => {
+                const isDone = subTask.status === "done";
 
-                    <TextField
-                      select
-                      label="Status"
-                      value={subTask.status}
-                      onChange={(e) =>
-                        handleSubTaskChange(key, "status", e.target.value)
-                      }
-                      fullWidth
-                    >
-                      {subTasksDropdown.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-
-                    <IconButton
-                      aria-label={`Remove subtask ${key + 1}`}
-                      onClick={() => handleRemoveSubTask(key)}
+                return (
+                  <Box key={key} sx={{ width: "100%", boxSizing: "border-box" }}>
+                    <Box
                       sx={{
-                        color: "error.main",
-                        border: "1px solid",
-                        borderColor: "divider",
-                      }}
-                    >
-                      <img src={DeleteIcon} alt="" height={18} width={18} />
-                    </IconButton>
+                        width: "100%",
+                        boxSizing: "border-box" }}>
+                        <Box
+                          sx={{
+                            display: "grid",
+                            gridTemplateColumns: {
+                              xs: "32px minmax(0, 1fr) 36px",
+                              sm: "36px minmax(0, 1fr) 150px 36px",
+                            },
+                            gap: 1.25,
+                            alignItems: "center",
+                            p: 1.25,
+                            border: "1px solid",
+                            borderColor: "divider",
+                            borderRadius: 2,
+                            bgcolor: isDone ? "rgba(46, 125, 50, 0.035)" : "background.paper",
+                            transition: "border-color 150ms ease, background-color 150ms ease",
+                            "&:hover": { borderColor: "primary.light" },
+                          }}>
+                        <Box
+                          sx={{
+                            width: 30,
+                            height: 30,
+                            display: "grid",
+                            placeItems: "center",
+                            borderRadius: "50%",
+                            bgcolor: isDone ? "success.light" : "grey.100",
+                            color: isDone ? "success.dark" : "text.secondary",
+                            fontSize: 13,
+                            fontWeight: 700,
+                          }}
+                        >
+                          {key + 1}
+                        </Box>
+
+                        <TextField
+                          label="Subtask"
+                          value={subTask.title}
+                          onChange={(e) =>
+                            handleSubTaskChange(key, "title", e.target.value)
+                          }
+                          error={!subTask.title.trim()}
+                          helperText={!subTask.title.trim() ? "Title is required" : ""}
+                          fullWidth
+                          size="small"
+                          variant="standard"
+                          slotProps={{ input: { disableUnderline: true } }}
+                          sx={{
+                            "& .MuiInputBase-root": {
+                              px: 1.25,
+                              py: 0.75,
+                              borderRadius: 1.5,
+                              bgcolor: "grey.50",
+                            },
+                            "& .MuiInputLabel-root": { display: "none" },
+                          }}
+                        />
+
+                        <TextField
+                          select
+                          label="Status"
+                          value={subTask.status}
+                          onChange={(e) =>
+                            handleSubTaskChange(key, "status", e.target.value)
+                          }
+                          fullWidth
+                          size="small"
+                          sx={{
+                            gridColumn: { xs: "2", sm: "auto" },
+                            gridRow: { xs: "2", sm: "auto" },
+                          }}
+                        >
+                          {subTasksDropdown.map((option) => (
+                            <MenuItem key={option.value} value={option.value}>
+                              <Typography variant="body2" sx={{ fontSize: 13 }}>
+                                {option.label}
+                              </Typography>
+                            </MenuItem>
+                          ))}
+                        </TextField>
+
+                        <IconButton
+                          size="small"
+                          aria-label={`Remove subtask ${key + 1}`}
+                          onClick={() => handleRemoveSubTask(key)}>
+                          <Trash size={20}/>
+                        </IconButton>
+                      </Box>
+                    </Box>
                   </Box>
-                </Grid>
-              ))
+                );
+              })}
+              </Box>
             )}
           </Grid>
         </Box>
