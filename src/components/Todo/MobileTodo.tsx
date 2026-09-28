@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import { Box, Typography, IconButton, Badge, Menu, MenuItem, Chip, AppBar, Toolbar, Checkbox, CircularProgress } from '@mui/material'
+import { Box, Typography, IconButton, Badge, Menu, MenuItem, Chip, AppBar, Toolbar, Checkbox } from '@mui/material'
 import { Add, ArrowRightOutlined, Circle } from '@mui/icons-material'
 import dayjs from 'dayjs';
 import { getTasks, removeTask } from '../../api/task/task';
@@ -20,6 +20,7 @@ import FilterDropdownDialog from '../Dialog/Mobile/FilterDropdown';
 import SortDropdownDialog from '../Dialog/Mobile/SortDropdown';
 import { ArrowDownUp, Funnel, Trash, TrashOff } from 'lucide-react';
 import { prioritiesIcons, statusIcons } from './DesktopTodo';
+import FetchingTask from '../NotFound/FetchingTask';
 
 export const subTaskStatusIcons = {
     "not-done": {
@@ -673,20 +674,17 @@ export default function MobileTodo() {
             >
             {fetchingTasks ? (
                 <Box
-                    role="status"
-                    aria-live="polite"
                     sx={{
-                        minHeight: 240,
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        gap: 1.5,
-                        color: "text.secondary",
+                    width: "100%",
+                    minHeight: "50dvh",
+                    boxSizing: "border-box",
+                    pt: "64px",
+                    px: 2,
+                    display: "flex",
+                    alignItems: "center",
                     }}
-                    >
-                    <CircularProgress size={28} />
-                    <Typography variant="body2">Loading tasks…</Typography>
+                >
+                    <FetchingTask />
                 </Box>
             ) : displayedTasks.length === 0 ? (
                 <Box
