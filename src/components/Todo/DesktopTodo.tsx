@@ -110,8 +110,6 @@ export default function DesktopTodo() {
     const [ids, setIds] = useState<string[] | []>([])
     const [openFilters, setOpenFilters] = useState(false)
     const [deleteItem, setDeleteItem] = useState(false)
-    const [priorityEl, setPriorityEl] = useState<null | HTMLElement>(null);
-    const [statusEl, setStatusEl] = useState<null | HTMLElement>(null);
     const [loadingitemRemoval, setitemRemoval] = useState(false)
     const [rowSelectioChangeModel, setRowSelectionChangeModel] = useState<GridRowSelectionModel>({
         type: 'include',

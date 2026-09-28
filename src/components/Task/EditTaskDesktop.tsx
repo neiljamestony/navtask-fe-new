@@ -1,26 +1,22 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Typography, Paper, Button, TextField, MenuItem, Grid, LinearProgress, Container, Divider, CircularProgress, IconButton, Stack } from '@mui/material'
-import { ArrowBackIosNewRounded, Add } from '@mui/icons-material'
+import { Box, Typography, Paper, Button, TextField, MenuItem, Grid, LinearProgress, Divider, CircularProgress, IconButton } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-import UploadIcon from '../../assets/Icons/Upload.svg';
 import { updateTask } from '../../api/task/task';
 import toast from 'react-hot-toast';
 import { getTask } from '../../api/task/task';
 import type { UTask } from '../../typescript/interface';
 import { useDropzone } from 'react-dropzone'
 import EditFilePreview from './EditFilePreview';
-import DeleteIcon from '../../assets/Icons/Delete_active.svg'
 import DeleteSubTaskDesktop from '../Todo/DeleteSubTaskDesktop';
 import { validFileTypes } from '../../utils/utils';
 import FetchingTaskLoader from '../../assets/loader.svg'
-import { ChevronLeft, Trash } from 'lucide-react';
+import { ChevronLeft, Plus, Trash, UploadIcon } from 'lucide-react';
 
 dayjs.extend(customParseFormat);
 
@@ -657,12 +653,7 @@ export default function EditTaskDesktop() {
                                 py: 1,
                             }}
                             >
-                            <Box
-                                component="img"
-                                src={UploadIcon}
-                                alt=""
-                                sx={{ width: 32, height: 32, objectFit: "contain" }}
-                            />
+                            <UploadIcon size={20} color="#9e9e9e"/>
                             <Typography variant="body2">
                                 <Box component="span" sx={{ color: "primary.main", fontWeight: 700 }}>
                                 Browse files
@@ -723,7 +714,7 @@ export default function EditTaskDesktop() {
                             <Button
                                 type="button"
                                 variant="outlined"
-                                startIcon={<Add />}
+                                startIcon={<Plus size={20} />}
                                 disabled={task.subtask.length >= 10 || task.status === "completed"}
                                 onClick={handleNewSubTask}
                                 sx={{ textTransform: "none", borderRadius: 2, flexShrink: 0 }}

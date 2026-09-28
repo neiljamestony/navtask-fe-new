@@ -6,8 +6,7 @@ import {
   DialogActions,
   DialogContent,
   IconButton,
-  Typography,
-  Stack
+  Typography
 } from "@mui/material";
 import { TriangleAlert, X } from "lucide-react";
 

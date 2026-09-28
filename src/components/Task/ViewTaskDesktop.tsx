@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
-import type { ReactNode } from 'react'
 import { useParams, useNavigate } from "react-router-dom"
-import { Box, Typography, Badge, IconButton, Divider, Stack, Grid, Button, Card, Avatar, CardHeader, CardContent, Chip, Tabs, Tab } from "@mui/material";
+import { Box, Typography, IconButton, Divider, Stack, Grid, Button, Card, Avatar, CardHeader, CardContent, Chip, Tabs, Tab } from "@mui/material";
 import { getTask } from "../../api/task/task";
 import toast from "react-hot-toast";
 import { prioritiesIcons, statusIcons } from "../Todo/DesktopTodo";
@@ -9,22 +8,12 @@ import { removeTask } from "../../api/task/task";
 import Subtask from "./Subtask";
 import Attachments from "./Attachments";
 import type { UTask } from "../../typescript/interface";
-//icons
-// import Delete from '../../assets/Icons/Delete_active.svg';
-// import Edit from '../../assets/Icons/Edit.svg';
-import Done from '../../assets/Icons/Done.svg';
-import NotDone from '../../assets/Icons/Not Done.svg';
 import dayjs from "dayjs";
 import DeleteItems from "../Todo/DeleteItems";
-import { limitText } from "../../utils/utils";
-import FetchingTaskLoader from '../../assets/loader.svg';
-
-
 import { ChevronLeft, CopyCheck, ListTodo, Edit, Trash, GripVertical } from 'lucide-react'
 
 export default function ViewTaskDesktop(){
     const { id } = useParams();
-    const [fetchingTask, setFetchingTask] = useState(false)
     const [tab, setTab] = useState(0);
     const navigate = useNavigate();
     const [deleteItem, setDeleteItem] = useState(false)
@@ -45,7 +34,6 @@ export default function ViewTaskDesktop(){
     })
     
     const fetch = async () => {
-        setFetchingTask(true)
         try{
             const taskId = id as string;
             const result = await getTask(taskId);
@@ -54,14 +42,11 @@ export default function ViewTaskDesktop(){
                 navigate("/login")
             }else if(!result.length){
                 setTask(task)
-                setFetchingTask(false)
             }
             setTask(result);
-            setFetchingTask(false)
             
         }catch(error: unknown){
             toast.error("Error fetching tasks, please reload the page.");
-            setFetchingTask(false)
         }
         
     }
