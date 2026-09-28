@@ -20,8 +20,6 @@ import type { RootState } from "../../store/store";
 import { setAuthStatus, setAuthData } from "../../reducer/AuthSlice";
 import SocialMediaAuth from "./SocialMediaAuth";
 import { Eye, EyeOff } from "lucide-react";
-import ShowIcon from "../../assets/Icons/Show.svg";
-import HideIcon from "../../assets/Icons/Hide.svg";
 
 export default function DesktopLogin() {
   const [formData, setFormData] = useState({ username: "", password: "" });

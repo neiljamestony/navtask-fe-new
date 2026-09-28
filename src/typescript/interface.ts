@@ -60,5 +60,4 @@ export type IFilterMenuItems = {
     value: string;
     name: string;
     action: (name: string) => void;
-    close: () => void;
 }

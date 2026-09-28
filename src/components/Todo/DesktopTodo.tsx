@@ -108,10 +108,8 @@ export default function DesktopTodo() {
     const [allTasks, setAllTasks] = useState<Task[] | []>([]);
     const [fetchingTasks, setFetchingTasks] = useState(false);
     const [ids, setIds] = useState<string[] | []>([])
-    const [openSubTask, setOpenSubTask] = useState<number[]>([])
     const [openFilters, setOpenFilters] = useState(false)
     const [deleteItem, setDeleteItem] = useState(false)
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [priorityEl, setPriorityEl] = useState<null | HTMLElement>(null);
     const [statusEl, setStatusEl] = useState<null | HTMLElement>(null);
     const [loadingitemRemoval, setitemRemoval] = useState(false)
@@ -127,32 +125,27 @@ export default function DesktopTodo() {
         {
             value: 'all-status',
             name: 'All',
-            action: (name: string) => handleFilterStatusItems(name),
-            close: () => setStatusEl(null)
+            action: (name: string) => handleFilterStatusItems(name)
         },
         {
             value: 'not-started',
             name: 'Not Started',
-            action: (name: string) => handleFilterStatusItems(name),
-            close: () => setStatusEl(null)
+            action: (name: string) => handleFilterStatusItems(name)
         },
         {
             value: 'in-progress',
             name: 'In Progress',
-            action: (name: string) => handleFilterStatusItems(name),
-            close: () => setStatusEl(null)
+            action: (name: string) => handleFilterStatusItems(name)
         },
         {
             value: 'completed',
             name: 'Completed',
-            action: (name: string) => handleFilterStatusItems(name),
-            close: () => setStatusEl(null)
+            action: (name: string) => handleFilterStatusItems(name)
         },
         {
             value: 'cancelled',
             name: 'Cancelled',
-            action: (name: string) => handleFilterStatusItems(name),
-            close: () => setStatusEl(null)
+            action: (name: string) => handleFilterStatusItems(name)
         }
     ]
 
@@ -160,26 +153,22 @@ export default function DesktopTodo() {
         {
             value: 'all-priority',
             name: 'All',
-            action: (name: string) => handleFilterPriorityItems(name),
-            close: () => setPriorityEl(null)
+            action: (name: string) => handleFilterPriorityItems(name)
         },
          {
             value: 'low',
             name: 'Low',
-            action: (name: string) => handleFilterPriorityItems(name),
-            close: () => setPriorityEl(null)
+            action: (name: string) => handleFilterPriorityItems(name)
         },
         {
             value: 'high',
             name: 'High',
-            action: (name: string) => handleFilterPriorityItems(name),
-            close: () => setPriorityEl(null)
+            action: (name: string) => handleFilterPriorityItems(name)
         },
         {
             value: 'critical',
             name: 'Critical',
-            action: (name: string) => handleFilterPriorityItems(name),
-            close: () => setPriorityEl(null)
+            action: (name: string) => handleFilterPriorityItems(name)
         }
     ]
 
@@ -425,7 +414,7 @@ export default function DesktopTodo() {
         
         return result
     
-    }, [allTasks, filteredPriorityItems, filteredStatusItems, openSubTask]);
+    }, [allTasks, filteredPriorityItems, filteredStatusItems]);
 
     const handleCancelDelete = () => {
         setDeleteItem(false)
