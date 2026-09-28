@@ -10,17 +10,15 @@ import type { IFile } from '../../typescript/interface';
 import { prioritiesDropdown, statusDropdown } from '../../utils/utils';
 
 // ICONS
-import FilterIcon from '../../assets/Icons/Filter.svg';
 import Done from '../../assets/Icons/Done.svg';
 import NotDone from '../../assets/Icons/Not Done.svg';
 import Attachment from '../../assets/Icons/attachment.svg'
-import Sort from '../../assets/Icons/Sort.svg'
 import DueDate from '../../assets/Icons/Due Date.svg'
 
 import { MobileAppBar } from '../MobileAppBar';
 import FilterDropdownDialog from '../Dialog/Mobile/FilterDropdown';
 import SortDropdownDialog from '../Dialog/Mobile/SortDropdown';
-import { Trash, TrashOff } from 'lucide-react';
+import { ArrowDownUp, Funnel, Trash, TrashOff } from 'lucide-react';
 import { prioritiesIcons, statusIcons } from './DesktopTodo';
 
 export const subTaskStatusIcons = {
@@ -578,33 +576,48 @@ export default function MobileTodo() {
                     </Typography>
 
                     <IconButton
-                    aria-label="Filter tasks"
-                    onClick={() => setOpenFilterDropdown((prev) => !prev)}
-                    sx={{ border: "1px solid", borderColor: "divider", borderRadius: 2 }}
-                    >
-                        <img src={FilterIcon} alt="" height={18} width={18} />
+                        aria-label="Filter tasks"
+                        onClick={() => setOpenFilterDropdown((prev) => !prev)}
+                        sx={{ border: "1px solid", borderColor: "divider", borderRadius: 2 }}
+                        >
+                        <Funnel size={20}/>
                     </IconButton>
 
                     <IconButton
-                    aria-label="Sort tasks"
-                    onClick={() => setOpenSort((prev) => !prev)}
-                    sx={{
-                        border: "1px solid",
-                        borderColor: "divider",
-                        borderRadius: 2,
-                    }}
-                    >
-                    <Badge
-                        variant="dot"
-                        invisible={selectedSortOption.sortTitle === "none"}
+                        aria-label={
+                            selectedSortOption.sortTitle === "none"
+                            ? "Sort tasks"
+                            : `Sort tasks by ${selectedSortOption.sortTitle}`
+                        }
+                        aria-pressed={selectedSortOption.sortTitle !== "none"}
+                        onClick={() => setOpenSort((prev) => !prev)}
                         sx={{
-                        "& .MuiBadge-badge": {
-                            bgcolor: "success.main",
-                        },
+                            border: "1px solid",
+                            borderColor:
+                            selectedSortOption.sortTitle !== "none" ? "primary.main" : "divider",
+                            borderRadius: 2,
+                            bgcolor:
+                            selectedSortOption.sortTitle !== "none" ? "primary.50" : "background.paper",
+                            color:
+                            selectedSortOption.sortTitle !== "none" ? "primary.main" : "text.secondary",
+                            "&:hover": {
+                            bgcolor:
+                                selectedSortOption.sortTitle !== "none" ? "primary.100" : "action.hover",
+                            },
                         }}
-                    >
-                        <img src={Sort} alt="" height={19} width={19} />
-                    </Badge>
+                        >
+                        <Badge
+                            variant="dot"
+                            invisible={selectedSortOption.sortTitle === "none"}
+                            sx={{
+                            "& .MuiBadge-badge": {
+                                bgcolor: "primary.main",
+                                boxShadow: "0 0 0 2px white",
+                            },
+                            }}
+                        >
+                            <ArrowDownUp size={20}/>
+                        </Badge>
                     </IconButton>
                 </Toolbar>
 
@@ -620,10 +633,10 @@ export default function MobileTodo() {
                     >
                     {filteredPriorityItems && (
                         <Chip
-                        size="small"
-                        label={`Priority: ${filteredPriorityItems}`}
-                        onDelete={handleRemoveFilterItem}
-                        variant="outlined"
+                            size="small"
+                            label={`Priority: ${filteredPriorityItems}`}
+                            onDelete={handleRemoveFilterItem}
+                            variant="outlined"
                         />
                     )}
                     {filteredStatusItems && (
@@ -660,20 +673,20 @@ export default function MobileTodo() {
             >
             {fetchingTasks ? (
                 <Box
-                role="status"
-                aria-live="polite"
-                sx={{
-                    minHeight: 240,
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: 1.5,
-                    color: "text.secondary",
-                }}
-                >
-                <CircularProgress size={28} />
-                <Typography variant="body2">Loading tasks…</Typography>
+                    role="status"
+                    aria-live="polite"
+                    sx={{
+                        minHeight: 240,
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: 1.5,
+                        color: "text.secondary",
+                    }}
+                    >
+                    <CircularProgress size={28} />
+                    <Typography variant="body2">Loading tasks…</Typography>
                 </Box>
             ) : displayedTasks.length === 0 ? (
                 <Box

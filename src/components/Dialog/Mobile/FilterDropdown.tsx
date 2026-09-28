@@ -1,120 +1,194 @@
-import { Dialog, FormControl, FormLabel, DialogContent, DialogActions, Button, Typography, Box, Stack, IconButton, Divider, RadioGroup, Radio, FormControlLabel } from '@mui/material'
-import { useEffect, useState } from 'react'
-import Close from '../../../assets/Icons/Close.svg';
+import { useEffect, useState } from "react";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  Divider,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  IconButton,
+  Radio,
+  RadioGroup,
+  Typography,
+} from "@mui/material";
+import { X } from "lucide-react";
 
-export default function FilterDropdownDialog({ open, proceed, priorities, status, close, selectedStatus, selectedPriority }: { open:boolean, proceed: (priority: string, status: string) => void, close: () => void, priorities: { value: string, label: string}[], status: { value: string, label: string}[], selectedStatus: string, selectedPriority: string }) {
-    const [priorityValue, setPriorityValue] = useState(selectedPriority)
-    const [statusValue, setStatusValue] = useState(selectedStatus)
+type FilterOption = {
+  value: string;
+  label: string;
+};
 
-    const handleClose = () => {
-        close()
-        setPriorityValue("")
-        setStatusValue("")
-    };
+type Props = {
+  open: boolean;
+  proceed: (priority: string, status: string) => void;
+  priorities: FilterOption[];
+  status: FilterOption[];
+  close: () => void;
+  selectedStatus: string;
+  selectedPriority: string;
+};
 
-    const handlePriorityChange = (e: React.ChangeEvent<HTMLInputElement>) => setPriorityValue(e.target.value)
-    const handleStatusChange = (e: React.ChangeEvent<HTMLInputElement>) => setStatusValue(e.target.value)
+export default function FilterDropdownDialog({
+  open,
+  proceed,
+  priorities,
+  status,
+  close,
+  selectedStatus,
+  selectedPriority,
+}: Props) {
+  const [priorityValue, setPriorityValue] = useState(selectedPriority);
+  const [statusValue, setStatusValue] = useState(selectedStatus);
 
-    const handleApply = () =>  {
-        proceed(priorityValue, statusValue)
-        close();
-    }
-    
-    useEffect(() => {
-        setStatusValue(selectedStatus)
-        setPriorityValue(selectedPriority)
-    }, [selectedStatus, selectedPriority])
+  useEffect(() => {
+    setPriorityValue(selectedPriority);
+    setStatusValue(selectedStatus);
+  }, [selectedPriority, selectedStatus, open]);
 
-    return (
-        <Dialog fullWidth maxWidth="xl" open={open} sx={{
-            '& .MuiDialog-paper': {
-                borderRadius: '20px',
-                boxShadow: 'none',
-                marginTop: '64px',
-                margin: 1,
-                width: '100%',
-                marginBottom: 10
-            },
-            '& .MuiDialog-container': {
-                alignItems: 'flex-end',
-            },
+  const handleApply = () => {
+    proceed(priorityValue, statusValue);
+    close();
+  };
+
+  const handleClear = () => {
+    setPriorityValue("");
+    setStatusValue("");
+  };
+
+  const renderOptions = (
+    title: string,
+    name: string,
+    options: FilterOption[],
+    value: string,
+    onChange: (value: string) => void
+  ) => (
+    <FormControl fullWidth>
+      <FormLabel
+        sx={{
+          mb: 1,
+          color: "text.primary",
+          fontSize: 14,
+          fontWeight: 700,
+          "&.Mui-focused": { color: "text.primary" },
         }}
-        slotProps={{
-            backdrop: {
-                sx: {
-                    height: '93.5vh',
-                    bottom: 'auto',
-                    top: 0,
-                }
-            }
-        }}>
-            <Box sx={{ display: "flex", alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
-                <Typography sx={{ fontSize: 16, fontWeight: 'bold', flexGrow: 1, paddingLeft: 4 }}>Filter Mobile</Typography>
-                <Box sx={{ display: "flex", justifyContent: "flex-end", m: 0, p: 1  }}>
-                    <IconButton onClick={handleClose}><img src={Close} alt="close-model" height={15} width={15}/></IconButton>
-                </Box>
-            </Box>
-            <Divider/>
-            <DialogContent sx={{ m: 0, p: 2 }}>
-                <Stack spacing={2}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 2 }}>
-                        <FormControl component="fieldset">
-                            <FormLabel component="legend" sx={{ fontSize: 14, mb: 1 }}>Priority</FormLabel>
-                            <RadioGroup 
-                                name="filter-priority-group" // Explicit unique form namespace mapping
-                                onChange={handlePriorityChange} 
-                                value={priorityValue}
-                            >
-                                {
-                                    priorities.map((option, key) => (
-                                        <FormControlLabel 
-                                            key={`priority-${key}`}
-                                            value={option.label} // FIX: Bind to programmatic value instead of UI label string
-                                            label={option.label} // Keeps client layout text clean
-                                            control={<Radio/>}
-                                            slotProps={{ 
-                                                typography: { 
-                                                    sx: { fontSize: 14 } 
-                                                } 
-                                            }}  
-                                        />
-                                    ))
-                                }
-                            </RadioGroup>
-                        </FormControl>
+      >
+        {title}
+      </FormLabel>
 
-                        {/* 2. Isolated Status Controller Block */}
-                        <FormControl component="fieldset">
-                            <FormLabel component="legend" sx={{ fontSize: 14, mb: 1 }}>Status</FormLabel>
-                            <RadioGroup 
-                                name="filter-status-group" // Explicit unique form namespace mapping
-                                onChange={handleStatusChange} 
-                                value={statusValue}
-                            >
-                                {
-                                    status.map((option, key) => (
-                                        <FormControlLabel 
-                                            key={`status-${key}`}
-                                            value={option.label} // FIX: Bind to programmatic value instead of UI label string
-                                            label={option.label} // Keeps client layout text clean
-                                            control={<Radio/>}
-                                            slotProps={{ 
-                                                typography: { 
-                                                    sx: { fontSize: 14 } 
-                                                } 
-                                            }}  
-                                        />
-                                    ))
-                                }
-                            </RadioGroup>
-                        </FormControl>
+      <RadioGroup
+        name={name}
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        sx={{ gap: 0.5 }}
+      >
+        {options.map((option) => (
+          <FormControlLabel
+            key={option.value}
+            value={option.label}
+            control={<Radio size="small" />}
+            label={option.label}
+            sx={{
+              mx: 0,
+              px: 1,
+              minHeight: 40,
+              borderRadius: 1.5,
+              bgcolor: value === option.label ? "action.selected" : "transparent",
+              "& .MuiFormControlLabel-label": { fontSize: 14 },
+            }}
+          />
+        ))}
+      </RadioGroup>
+    </FormControl>
+  );
 
-                    </Box>
-                </Stack>
-            </DialogContent>
-            <DialogActions>
-                <Button type="button" variant="contained" color="primary" fullWidth onClick={handleApply} sx={{ textTransform: 'none', borderRadius: 5 }}>Apply</Button>
-            </DialogActions>
-        </Dialog>
-    )
+  return (
+    <Dialog
+      fullWidth
+      maxWidth={false}
+      open={open}
+      onClose={close}
+      aria-labelledby="task-filter-title"
+      sx={{
+        "& .MuiDialog-container": { alignItems: "flex-end" },
+        "& .MuiDialog-paper": {
+          width: "100%",
+          maxWidth: 520,
+          maxHeight: "78dvh",
+          m: 1,
+          mb: 0,
+          borderRadius: "20px 20px 0 0",
+          overflow: "hidden",
+        },
+      }}
+    >
+      <Box sx={{ display: "flex", alignItems: "center", px: 2, py: 1.5 }}>
+        <Box sx={{ flex: 1 }}>
+          <Typography id="task-filter-title" variant="subtitle1" sx={{ fontWeight: 700 }}>
+            Filter tasks
+          </Typography>
+          <Typography variant="caption" color="text.secondary">
+            Choose a priority or status
+          </Typography>
+        </Box>
+
+        <IconButton aria-label="Close filters" onClick={close} size="small">
+          <X size={19} />
+        </IconButton>
+      </Box>
+
+      <Divider />
+
+      <DialogContent sx={{ p: 2, overflowY: "auto" }}>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 2.5 }}>
+          {renderOptions(
+            "Priority",
+            "filter-priority",
+            priorities,
+            priorityValue,
+            setPriorityValue
+          )}
+
+          <Divider />
+
+          {renderOptions(
+            "Status",
+            "filter-status",
+            status,
+            statusValue,
+            setStatusValue
+          )}
+        </Box>
+      </DialogContent>
+
+      <DialogActions
+        sx={{
+          p: 2,
+          pt: 1.5,
+          borderTop: "1px solid",
+          borderColor: "divider",
+          gap: 1,
+        }}
+      >
+        <Button
+          variant="outlined"
+          onClick={handleClear}
+          sx={{ minHeight: 42, borderRadius: 2, textTransform: "none" }}
+        >
+          Clear
+        </Button>
+
+        <Button
+          variant="contained"
+          fullWidth
+          onClick={handleApply}
+          sx={{ minHeight: 42, borderRadius: 2, textTransform: "none", fontWeight: 700 }}
+        >
+          Apply filters
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
 }

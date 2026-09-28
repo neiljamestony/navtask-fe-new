@@ -442,29 +442,29 @@ export default function EditTaskMobile() {
                 />
 
                 <DropdownDialog
-                open={openDropdownDialog}
-                close={() => setOpenDropdownDialog(false)}
-                proceed={
-                    dropdownDialogTitle === "priority"
-                    ? handleProceedPriority
-                    : handleProceedStatus
-                }
-                title={dropdownDialogTitle === "priority" ? "Select priority" : "Select status"}
-                defaultValue={
-                    dropdownDialogTitle === "priority" ? task.priority : task.status
-                }
-                options={dropdownDialogTitle === "priority" ? priorities : status}
+                    open={openDropdownDialog}
+                    close={() => setOpenDropdownDialog(false)}
+                    proceed={
+                        dropdownDialogTitle === "priority"
+                        ? handleProceedPriority
+                        : handleProceedStatus
+                    }
+                    title={dropdownDialogTitle === "priority" ? "Select priority" : "Select status"}
+                    defaultValue={
+                        dropdownDialogTitle === "priority" ? task.priority : task.status
+                    }
+                    options={dropdownDialogTitle === "priority" ? priorities : status}
                 />
 
                 <Box
-                component="main"
-                sx={{
-                    maxWidth: 640,
-                    mx: "auto",
-                    px: 2,
-                    pt: 10,
-                    pb: 3,
-                }}
+                    component="main"
+                    sx={{
+                        maxWidth: 640,
+                        mx: "auto",
+                        px: 2,
+                        pt: 10,
+                        pb: 3,
+                    }}
                 >
                     <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                         <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1.25 }}>
