@@ -22,6 +22,7 @@ import DropdownDialog from '../Dialog/Mobile/Dropdown';
 import { MobileAppBar } from '../MobileAppBar';
 import { prioritiesIcons, statusIcons } from '../Todo/DesktopTodo';
 import { CalendarDays, Save } from 'lucide-react';
+import FetchingTask from '../NotFound/FetchingTask';
 
 dayjs.extend(customParseFormat);
 
@@ -392,22 +393,19 @@ export default function EditTaskMobile() {
             </AppBar>
 
             {fetchingTask ? (
-            <Box
-                role="status"
-                aria-live="polite"
-                sx={{
-                minHeight: "100dvh",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                gap: 1.5,
-                color: "text.secondary",
-                }}
-            >
-                <CircularProgress size={28} />
-                <Typography variant="body2">Loading task…</Typography>
-            </Box>
+                <Box
+                    sx={{
+                    width: "100%",
+                    minHeight: "50dvh",
+                    boxSizing: "border-box",
+                    pt: "64px",
+                    px: 2,
+                    display: "flex",
+                    alignItems: "center",
+                    }}
+                >
+                    <FetchingTask />
+                </Box>
             ) : !task || !task.title ? (
             <Box
                 sx={{
