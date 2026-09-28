@@ -54,13 +54,47 @@ const ProtectedRoute = () => {
         }
     }, []);
 
-    if(authenticated === null){
-        return <Box sx={{ display: "flex", justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2  }}>
-                <CircularProgress color="inherit" size={40}/>
-                <Typography sx={{ fontSize: 30 }}>Redirecting ...</Typography>
+    if (authenticated === null) {
+        return (
+            <Box
+                role="status"
+                aria-live="polite"
+                sx={{
+                    minHeight: "100dvh",
+                    boxSizing: "border-box",
+                    display: "grid",
+                    placeItems: "center",
+                    bgcolor: "#f6f8fb",
+                    px: 2,
+                }}
+            >
+                <Box
+                    sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: 1.5,
+                    p: 4,
+                    border: "1px solid",
+                    borderColor: "divider",
+                    borderRadius: 3,
+                    bgcolor: "background.paper",
+                    boxShadow: "0 12px 32px rgba(15, 23, 42, 0.06)",
+                    }}
+                >
+                    <CircularProgress size={32} />
+
+                    <Box sx={{ textAlign: "center" }}>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+                        Checking your session
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                        Redirecting you shortly…
+                    </Typography>
+                    </Box>
+                </Box>
             </Box>
-        </Box>
+        );
     }
     return authenticated ? <Outlet/> : <Navigate to="/login"/>
 };
