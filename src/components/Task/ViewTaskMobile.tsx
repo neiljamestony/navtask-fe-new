@@ -15,7 +15,7 @@ import DeleteItems from "../Todo/DeleteItems";
 
 // COMPONENTS
 import { MobileAppBar } from "../MobileAppBar";
-import { ListTodo, Pencil, Trash } from "lucide-react";
+import { CalendarClock, CalendarDays, ListTodo, Pencil, Trash } from "lucide-react";
 import TaskNotFound from "../NotFound/TaskNotFound";
 import FetchingTask from "../NotFound/FetchingTask";
 
@@ -91,37 +91,56 @@ export default function ViewTaskMobile(){
     return (
         <>
             <AppBar
-            position="fixed"
-            color="inherit"
-            elevation={0}
-            sx={{
-                borderBottom: "1px solid",
-                borderColor: "divider",
-                bgcolor: "rgba(255,255,255,0.96)",
-                backdropFilter: "blur(12px)",
-            }}
-            >
-                <Toolbar sx={{ gap: 1 }}>
-                    <IconButton aria-label="Back to tasks" onClick={() => navigate("/")}>
-                    <ArrowBackIosNewRounded fontSize="small" />
+                position="fixed"
+                color="inherit"
+                elevation={0}
+                sx={{
+                    bgcolor: "rgba(255,255,255,0.94)",
+                    backdropFilter: "blur(12px)",
+                    borderBottom: "1px solid",
+                    borderColor: "divider",
+                }}
+                >
+                <Toolbar sx={{ minHeight: 64, gap: 1.5 }}>
+                    <IconButton
+                    aria-label="Back to tasks"
+                    onClick={() => navigate("/")}
+                    sx={{
+                        width: 38,
+                        height: 38,
+                        border: "1px solid",
+                        borderColor: "divider",
+                        borderRadius: 2,
+                        color: "text.primary",
+                    }}
+                    >
+                    <ArrowBackIosNewRounded sx={{ fontSize: 16 }} />
                     </IconButton>
 
                     <Box sx={{ minWidth: 0 }}>
-                        <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-                            Task details
-                        </Typography>
-                        {task.title && (
-                            <Typography
-                            variant="caption"
-                            color="text.secondary"
-                            sx={{ display: "block", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}
-                            >
-                            {task.title}
-                            </Typography>
-                        )}
+                    <Typography
+                        variant="caption"
+                        color="text.secondary"
+                        sx={{ display: "block", lineHeight: 1.2 }}
+                    >
+                        Tasks / Details
+                    </Typography>
+
+                    <Typography
+                        variant="subtitle1"
+                        sx={{
+                        fontWeight: 700,
+                        lineHeight: 1.4,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                        }}
+                    >
+                        {task.title || "Task details"}
+                    </Typography>
                     </Box>
                 </Toolbar>
-            </AppBar>
+                </AppBar>
 
             {fetchingTask ? (
                 <Box
@@ -206,12 +225,65 @@ export default function ViewTaskMobile(){
                                 {task.title}
                             </Typography>
 
-                            <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                                Created {task.created_at ? dayjs(task.created_at).format("D MMM YYYY") : "—"}
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary">
-                                Due {task.due_date ? dayjs(task.due_date).format("D MMM YYYY") : "No due date"}
-                            </Typography>
+                            <Box
+                                sx={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    gap: 1.5,
+                                    mt: 2,
+                                    p: 1.5,
+                                    border: "1px solid",
+                                    borderColor: "divider",
+                                    borderRadius: 2,
+                                    bgcolor: "background.paper",
+                                }}
+                                >
+                                {[
+                                    {
+                                    label: "Created",
+                                    value: task.created_at
+                                        ? dayjs(task.created_at).format("D MMM YYYY")
+                                        : "—",
+                                    icon: <CalendarDays size={16} />,
+                                    },
+                                    {
+                                    label: "Due date",
+                                    value: task.due_date
+                                        ? dayjs(task.due_date).format("D MMM YYYY")
+                                        : "Not set",
+                                    icon: <CalendarClock size={16} />,
+                                    },
+                                ].map((date) => (
+                                    <Box
+                                    key={date.label}
+                                    sx={{ display: "flex", alignItems: "center", gap: 1.25 }}
+                                    >
+                                    <Box
+                                        sx={{
+                                        width: 32,
+                                        height: 32,
+                                        flexShrink: 0,
+                                        display: "grid",
+                                        placeItems: "center",
+                                        borderRadius: 1.5,
+                                        bgcolor: "grey.100",
+                                        color: "text.secondary",
+                                        }}
+                                    >
+                                        {date.icon}
+                                    </Box>
+
+                                    <Box sx={{ minWidth: 0 }}>
+                                        <Typography variant="caption" color="text.secondary">
+                                        {date.label}
+                                        </Typography>
+                                        <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                                        {date.value}
+                                        </Typography>
+                                    </Box>
+                                    </Box>
+                                ))}
+                            </Box>
                         </Box>
 
                         {task.description && (
