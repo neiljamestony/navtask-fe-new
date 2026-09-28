@@ -1,54 +1,105 @@
-import { Dialog, DialogContent, DialogActions, Button, Typography, CircularProgress, Box, Stack, IconButton } from '@mui/material'
-import Alert from '../../assets/Icons/Alert.svg';
-import Close from '../../assets/Icons/Close.svg';
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogContent,
+  IconButton,
+  Typography,
+} from "@mui/material";
+import { TriangleAlert, X } from "lucide-react";
 
-export default function MobileDeleteItems({ proceed, open, close, ids, loading }: { proceed: (params: string[] | []) => void, open: boolean, close: () => void, ids: string[] | [], loading: boolean }) {
+type Props = {
+  proceed: (ids: string[]) => void;
+  open: boolean;
+  close: () => void;
+  ids: string[];
+  loading: boolean;
+};
 
-    const handleProceed = async () => {
-        proceed(ids)
-    }
+export default function MobileDeleteItems({
+  proceed,
+  open,
+  close,
+  ids,
+  loading,
+}: Props) {
+  const count = ids.length;
+  const itemLabel = count === 1 ? "task" : "tasks";
 
-    const handleClose = () => {
-        close();
-    }
-
-    return (
-        <Dialog fullWidth maxWidth="xl" open={open} sx={{
-            '& .MuiDialog-paper': {
-                borderRadius: '20px',
-                boxShadow: 'none',
-                marginTop: '64px',
-                margin: 1,
-                marginBox: 0,
-                width: '100%',
-                marginBottom: 10
-            },
-            '& .MuiDialog-container': {
-                alignItems: 'flex-end',
+  return (
+    <Dialog
+        fullWidth
+        maxWidth={false}
+        open={open}
+        onClose={loading ? undefined : close}
+        sx={{
+            "& .MuiDialog-container": { alignItems: "flex-end" },
+            "& .MuiDialog-paper": {
+            width: "100%",
+            maxWidth: 520,
+            m: 1,
+            mb: 5,
+            borderRadius: 5,
             },
         }}
-        slotProps={{
-            backdrop: {
-                sx: {
-                    height: '93.5vh',
-                    bottom: 'auto',
-                    top: 0,
-                }
-            }
-        }}>
-            <Box sx={{ display: "flex", justifyContent: "flex-end", m: 0, p: 1  }}>
-                <IconButton onClick={close}><img src={Close} alt="close-model" height={15} width={15}/></IconButton>
+        >
+        <Box sx={{ display: "flex", justifyContent: "flex-end", px: 1, pt: 1 }}>
+            <IconButton onClick={close} disabled={loading} size="small" aria-label="Close">
+            <X size={18} />
+            </IconButton>
+        </Box>
+
+        <DialogContent sx={{ px: 2.5, pt: 0, pb: 2 }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+            <Box
+                sx={{
+                width: 44,
+                height: 44,
+                flexShrink: 0,
+                display: "grid",
+                placeItems: "center",
+                borderRadius: 2,
+                bgcolor: "error.50",
+                color: "error.main",
+                }}
+            >
+                <TriangleAlert size={22} />
             </Box>
-            <DialogContent sx={{ m: 0, p: 0 }}>
-                <Stack spacing={2}>
-                    <Box><img src={Alert} alt="alert-icon" height={50} width="100%"/></Box>
-                    <Typography sx={{ fontFamily: "Roboto", textAlign: 'center', color: 'grey.600' }}><span style={{ color: '#62C6FF' }}>{ids.length}</span> {ids.length > 1 ? "Tasks" : "Task"} will be deleted.</Typography>
-                </Stack>
-            </DialogContent>
-            <DialogActions>
-                <Button type="button" variant="outlined" color="primary" fullWidth onClick={handleClose} sx={{ textTransform: 'none', borderRadius: 5 }} disabled={loading}>Cancel</Button>
-                <Button type="button" variant="contained" color="primary" fullWidth onClick={handleProceed} sx={{ textTransform: 'none', borderRadius: 5 }} disabled={loading}>{loading ? <CircularProgress color="inherit" size={30}/> : "Delete"}</Button>
-            </DialogActions>
+
+            <Box>
+                <Typography id="delete-tasks-title" variant="subtitle1" sx={{ fontWeight: 700 }}>
+                Delete {itemLabel}?
+                </Typography>
+                <Typography id="delete-tasks-description" variant="body2" color="text.secondary">
+                {count} {itemLabel} will be permanently deleted.
+                </Typography>
+            </Box>
+            </Box>
+        </DialogContent>
+
+        <Box sx={{ display: "flex", gap: 1, px: 2, pb: "calc(12px + env(safe-area-inset-bottom))" }}>
+            <Button
+            variant="outlined"
+            fullWidth
+            onClick={close}
+            disabled={loading}
+            sx={{ minHeight: 40, borderRadius: 2, textTransform: "none" }}
+            >
+            Cancel
+            </Button>
+
+            <Button
+            variant="contained"
+            color="error"
+            fullWidth
+            onClick={() => proceed(ids)}
+            disabled={loading || count === 0}
+            sx={{ minHeight: 40, borderRadius: 2, textTransform: "none", boxShadow: "none" }}
+            >
+            {loading ? <CircularProgress size={20} color="inherit" /> : "Delete"}
+            </Button>
+        </Box>
         </Dialog>
-    )
+  );
 }

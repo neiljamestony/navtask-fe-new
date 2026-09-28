@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
-import type { ReactNode } from 'react'
 import { useParams, useNavigate } from "react-router-dom"
-import { Box, Button, Typography, CircularProgress, IconButton, Divider, Stack, Grid, Link, AppBar, Toolbar } from "@mui/material";
+import { Box, Typography, IconButton, AppBar, Toolbar, Chip, Avatar } from "@mui/material";
 import { ArrowBackIosNewRounded } from "@mui/icons-material";
 import { getTask } from "../../api/task/task";
 import { prioritiesIcons, statusIcons } from "../Todo/DesktopTodo";
@@ -11,26 +10,21 @@ import { limitText } from "../../utils/utils";
 import toast from "react-hot-toast";
 
 //icons
-import Delete from '../../assets/Icons/Delete_active.svg';
-import Edit from '../../assets/Icons/Edit.svg';
-import Done from '../../assets/Icons/Done.svg';
-import NotDone from '../../assets/Icons/Not Done.svg';
-import FetchingTaskLoader from '../../assets/loader.svg';
 import dayjs from "dayjs";
 import DeleteItems from "../Todo/DeleteItems";
 
-
 // COMPONENTS
 import { MobileAppBar } from "../MobileAppBar";
-
-// STYLES
-import { FetchingMobileTaskContainer, FetchingTaskImageContainer, FetchingTaskMobile, MobileNoDataContainer, NewTaskMobileAppBar, NewTaskMobileToolBar, NoDataFound, ViewTaskAppBarMobileBackButton, ViewTaskAppBarTitle, ViewTaskAttachmentContainer, ViewTaskBackButton, ViewTaskContainer, ViewTaskHeaderContainer, ViewTaskMobileSubTaskStatusContainer, ViewTaskMobileSubtaskTitle, ViewTaskStatusContainer, ViewTaskStatusSubContainer, ViewTaskStatusTitleContainer, ViewTaskSubTaskContainer, ViewTaskSubTaskTitle, ViewTaskTitle } from "../Styles/Task/Task";
+import { ListTodo, Pencil, Trash } from "lucide-react";
+import TaskNotFound from "../NotFound/TaskNotFound";
+import FetchingTask from "../NotFound/FetchingTask";
 
 export default function ViewTaskMobile(){
     const { id } = useParams();
     const [fetchingTask, setFetchingTask] = useState(false)
     const navigate = useNavigate();
     const [deleteItem, setDeleteItem] = useState(false)
+    const [taskNotFound, setTaskNotFound] = useState(false)
     const [itemDeletionLoading, setItemDeletionLoader] = useState(false)
     const [task, setTask] = useState<UTask>({
         completed_date: null,
@@ -49,6 +43,7 @@ export default function ViewTaskMobile(){
     
     const fetch = async () => {
         setFetchingTask(true)
+        setTaskNotFound(false)
         try{
             const taskId = id as string;
             const result = await getTask(taskId);
@@ -63,10 +58,9 @@ export default function ViewTaskMobile(){
             setTask(result);
             setFetchingTask(false)
         }catch(error: unknown){
-            toast.error("Error fetching tasks, please reload the page.");
             setFetchingTask(false)
+            setTaskNotFound(true)
         }
-        
     }
 
     useEffect(() => {
@@ -81,10 +75,6 @@ export default function ViewTaskMobile(){
     const priority = prioritiesIcons[task?.priority as keyof typeof prioritiesIcons];
     const status = statusIcons[task?.status as keyof typeof statusIcons];
 
-    const StatusIcon = ({children, action}: {children: ReactNode, action?: () => void }) => {
-        return <IconButton size="medium" sx={{ p: 2 }} onClick={action}>{children}</IconButton>
-    }
-
     const handleDeleteItem = async (ids: string[] | []) => {
         setItemDeletionLoader(true)
         const result = await removeTask(ids);
@@ -98,112 +88,301 @@ export default function ViewTaskMobile(){
         }
     }
 
-    return(
+    return (
         <>
-            <AppBar position="fixed" color="inherit" sx={NewTaskMobileAppBar}>
-                <Toolbar sx={NewTaskMobileToolBar}>
-                    <Button type="button" onClick={() => navigate("/")} startIcon={<ArrowBackIosNewRounded/>}>
-                        <Typography sx={ViewTaskAppBarMobileBackButton}>Back</Typography>
-                    </Button>
-                    <Box sx={{ display: "flex", justifyContent: 'center', alignItems: 'center' }}>
-                        <Divider orientation="vertical" flexItem sx={{ height: 25 }}/>
+            <AppBar
+            position="fixed"
+            color="inherit"
+            elevation={0}
+            sx={{
+                borderBottom: "1px solid",
+                borderColor: "divider",
+                bgcolor: "rgba(255,255,255,0.96)",
+                backdropFilter: "blur(12px)",
+            }}
+            >
+                <Toolbar sx={{ gap: 1 }}>
+                    <IconButton aria-label="Back to tasks" onClick={() => navigate("/")}>
+                    <ArrowBackIosNewRounded fontSize="small" />
+                    </IconButton>
+
+                    <Box sx={{ minWidth: 0 }}>
+                        <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+                            Task details
+                        </Typography>
+                        {task.title && (
+                            <Typography
+                            variant="caption"
+                            color="text.secondary"
+                            sx={{ display: "block", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}
+                            >
+                            {task.title}
+                            </Typography>
+                        )}
                     </Box>
-                    <Typography sx={ViewTaskAppBarTitle}>View Task</Typography>
                 </Toolbar>
             </AppBar>
-            {
-                fetchingTask ? (
-                    <Box sx={FetchingMobileTaskContainer}>
-                        <CircularProgress size={30} color="inherit"/>
-                        <Typography variant="body1">fetching data ...</Typography>
-                    </Box>
-                ):(
-                    <>
-                        {
-                            !task || !task.title ? (
-                                <Box sx={MobileNoDataContainer}>
-                                    <Typography sx={NoDataFound}>No data found</Typography>
-                                </Box>
-                            ): (
-                                <>
-                                    <DeleteItems loading={itemDeletionLoading} close={() => setDeleteItem(false)} proceed={handleDeleteItem} open={deleteItem} ids={[task.id.toString()]}/>
-                                    <Box sx={ViewTaskContainer}>
-                                        <Box sx={ViewTaskHeaderContainer}>
-                                            <Button type="button" onClick={() => navigate("/")} startIcon={<ArrowBackIosNewRounded/>}>
-                                                <Typography sx={ViewTaskBackButton}>Back</Typography>
-                                            </Button>
-                                            <Typography sx={ViewTaskTitle}>View Task</Typography>
-                                        </Box>
-                                        <Box sx={{ padding: 2 }}>
-                                            {fetchingTask && <Box sx={FetchingTaskMobile}>
-                                                <Box sx={FetchingTaskImageContainer}>
-                                                    <img src={FetchingTaskLoader} height={500} width={400} alt="fetching-task-loader"/>
-                                                </Box>
-                                                <Typography sx={{ fontSize: 25 }}>Fetching Task ...</Typography>
-                                            </Box>}
-                                            <Stack spacing={2}>
-                                                <Box sx={ViewTaskStatusContainer}>
-                                                    <Box sx={ViewTaskStatusSubContainer}>
-                                                        <Box>{priority && priority.icon}</Box>
-                                                        <Box sx={ViewTaskStatusTitleContainer}>
-                                                            <Box>{status && status.icon}</Box>
-                                                            <Typography variant="caption">{status && status.label} {task.status === "completed" && task.completed_date !== null && `- ${dayjs(task.completed_date).format('D MMM YYYY')}`}</Typography>
-                                                        </Box>
-                                                    </Box>
-                                                </Box>
-                                                <Typography variant="h6">{task.title}</Typography>
-                                                <Typography variant="caption" sx={{ color: 'grey.600' }}>{dayjs(task.created_at).format("D MMM YYYY")} - {dayjs(task.due_date).format("D MMM YYYY")}</Typography>
-                                                <Typography variant="body2" sx={{ marginTop: 2, maxWidth: "100ch", wordWrap: 'break-word' }}>{task.description}</Typography>
-                                                <Box sx={ViewTaskAttachmentContainer}>
-                                                {
-                                                    task.attachments && task.attachments.map((item, key) => (
-                                                        <Box key={key}>
-                                                            <Box sx={{ display: 'block' }}>
-                                                                <img src={item.url} alt={item.name + "icon"} height={100} width={100}/>
-                                                                <Link href={item.url}><Typography sx={{ fontSize: 14 }}>{limitText(item.name)}</Typography></Link>
-                                                            </Box>
-                                                        </Box>
-                                                    ))
-                                                }
-                                                </Box>
-                                                <Divider/>
-                                                <Stack spacing={2}>
-                                                    <Typography sx={ViewTaskSubTaskTitle}>Subtask</Typography>
-                                                    {
-                                                        task.subtask.length > 0 && (
-                                                        <>
-                                                            {
-                                                                task.subtask.map((subTask, key) => (
-                                                                    <Box key={key} sx={ViewTaskSubTaskContainer}>
-                                                                        <Typography variant="body2" sx={ViewTaskMobileSubtaskTitle}>{subTask.title}</Typography>
-                                                                        <Box sx={ViewTaskMobileSubTaskStatusContainer}>
-                                                                            <Box><img src={subTask.status === "not-done" ? NotDone : Done} alt={subTask.status === "not-done" ? "not-done-icon" : "done-icon"} height={12} width="100%"/></Box>
-                                                                            <Typography variant="body2" sx={{ fontSize: 14, color: 'grey.600' }}>{subTask.status === "not-done" ? "Not Done" : "Done"}</Typography>
-                                                                        </Box>
-                                                                    </Box>
-                                                                ))
-                                                            }
-                                                        </>
-                                                        )
-                                                    }
-                                                </Stack>
-                                            </Stack>
-                                        </Box>
+
+            {fetchingTask ? (
+                <Box
+                    sx={{
+                    width: "100%",
+                    minHeight: "50dvh",
+                    boxSizing: "border-box",
+                    pt: "64px",
+                    px: 2,
+                    display: "flex",
+                    alignItems: "center",
+                    }}
+                >
+                    <FetchingTask />
+                </Box>
+            ) : taskNotFound ? (
+                <TaskNotFound/>
+            ) : (
+            <>
+                <DeleteItems
+                loading={itemDeletionLoading}
+                close={() => setDeleteItem(false)}
+                proceed={handleDeleteItem}
+                open={deleteItem}
+                ids={[task.id.toString()]}
+                />
+
+                <Box
+                    component="main"
+                    sx={{
+                        px: 2,
+                        pt: 10,
+                        pb: 12,
+                        bgcolor: "#f6f8fb",
+                        minHeight: "100dvh",
+                        boxSizing: "border-box",
+                    }}
+                >
+                    <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                        <Box
+                            sx={{
+                                p: 2,
+                                bgcolor: "background.paper",
+                                border: "1px solid",
+                                borderColor: "divider",
+                                borderRadius: 3,
+                            }}
+                        >
+                            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+                                {priority && (
+                                    <Chip
+                                        size="small"
+                                        icon={priority.icon}
+                                        label={priority.label}
+                                        sx={{
+                                        flexShrink: 0,
+                                        bgcolor: priority.bgColor,
+                                        color: priority.color,
+                                        fontSize: 11,
+                                        }}
+                                    />
+                                )}
+                                {status && (
+                                    <Chip
+                                        size="small"
+                                        icon={status.icon}
+                                        label={status.label}
+                                        sx={{
+                                        flexShrink: 0,
+                                        bgcolor: status.bgColor,
+                                        color: status.color,
+                                        fontSize: 11,
+                                        }}
+                                    />
+                                )}
+                            </Box>
+
+                            <Typography
+                                variant="h5"
+                                sx={{ mt: 2, fontWeight: 750, overflowWrap: "anywhere" }}
+                            >
+                                {task.title}
+                            </Typography>
+
+                            <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                                Created {task.created_at ? dayjs(task.created_at).format("D MMM YYYY") : "—"}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                                Due {task.due_date ? dayjs(task.due_date).format("D MMM YYYY") : "No due date"}
+                            </Typography>
+                        </Box>
+
+                        {task.description && (
+                        <Box
+                            sx={{
+                            p: 2,
+                            bgcolor: "background.paper",
+                            border: "1px solid",
+                            borderColor: "divider",
+                            borderRadius: 3,
+                            }}
+                        >
+                            <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.75 }}>
+                            Description
+                            </Typography>
+                            <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            sx={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere", lineHeight: 1.6 }}
+                            >
+                            {task.description}
+                            </Typography>
+                        </Box>
+                        )}
+
+                        {task.attachments && task.attachments.length > 0 && (
+                        <Box
+                            sx={{
+                            p: 2,
+                            bgcolor: "background.paper",
+                            border: "1px solid",
+                            borderColor: "divider",
+                            borderRadius: 3,
+                            }}
+                        >
+                            <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1.5 }}>
+                                Attachments ({task.attachments.length})
+                            </Typography>
+
+                            <Box
+                                sx={{
+                                    display: "grid",
+                                    gridTemplateColumns: "repeat(auto-fill, minmax(100px, 1fr))",
+                                    gap: 1.5,
+                                }}
+                            >
+                            {task.attachments.map((item, key) => (
+                                <Box key={`${item.name}-${key}`} sx={{ minWidth: 0 }}>
+                                {item.url && (
+                                    <Box
+                                    component="a"
+                                    href={item.url}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    sx={{ display: "block", color: "inherit", textDecoration: "none" }}
+                                    >
+                                    <Box
+                                        component="img"
+                                        src={item.url}
+                                        alt={item.name}
+                                        sx={{
+                                        width: "100%",
+                                        aspectRatio: "1",
+                                        display: "block",
+                                        objectFit: "cover",
+                                        borderRadius: 2,
+                                        bgcolor: "grey.100",
+                                        }}
+                                    />
+                                    <Typography
+                                        variant="caption"
+                                        title={item.name}
+                                        sx={{
+                                        display: "block",
+                                        mt: 0.75,
+                                        overflow: "hidden",
+                                        textOverflow: "ellipsis",
+                                        whiteSpace: "nowrap",
+                                        }}
+                                    >
+                                        {limitText(item.name)}
+                                    </Typography>
                                     </Box>
-                                    <MobileAppBar>
-                                        <Box sx={{ cursor: 'pointer' }} onClick={() => setDeleteItem(true)}> 
-                                            <Grid container spacing={3}>
-                                                <StatusIcon action={() => setDeleteItem(true)}><img src={Delete} alt="delete-task-icon" height={15} width="100%"/></StatusIcon>
-                                            </Grid>
-                                        </Box>
-                                        <StatusIcon action={() => navigate(`/edit-task/${id}`)}><img src={Edit} alt="edit-task-icon" height={15} width="100%"/></StatusIcon>
-                                    </MobileAppBar>
-                                </>
-                            )
-                        }
-                    </>
-                )
-            }
+                                )}
+                                </Box>
+                            ))}
+                            </Box>
+                        </Box>
+                        )}
+
+                        <Box
+                            sx={{
+                                p: 2,
+                                bgcolor: "background.paper",
+                                border: "1px solid",
+                                borderColor: "divider",
+                                borderRadius: 3,
+                            }}
+                        >
+                            <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1.5 }}>
+                                Subtasks
+                                <Typography component="span" variant="caption" color="text.secondary">
+                                {" "}({task.subtask.length})
+                                </Typography>
+                            </Typography>
+
+                            {task.subtask.length > 0 ? (
+                                <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+                                {task.subtask.map((subTask, key) => (
+                                    <Box
+                                    key={`${subTask.title}-${key}`}
+                                    sx={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "space-between",
+                                        gap: 1.5,
+                                        p: 1.25,
+                                        border: "1px solid",
+                                        borderColor: "divider",
+                                        borderRadius: 2,
+                                    }}
+                                    >
+                                        <Avatar
+                                            variant="rounded"
+                                            sx={{
+                                                width: 36,
+                                                height: 36,
+                                                bgcolor: "rgba(148, 0, 211, 0.10)",
+                                                color: "#9400D3",
+                                            }}
+                                            >
+                                            <ListTodo size={18} />
+                                        </Avatar>
+                                    <Typography variant="body2" sx={{ flex: 1, overflowWrap: "anywhere" }}>
+                                        {subTask.title}
+                                    </Typography>
+                                    {status && (
+                                        <Chip
+                                            size="small"
+                                            icon={status.icon}
+                                            label={status.label}
+                                            sx={{
+                                            flexShrink: 0,
+                                            bgcolor: status.bgColor,
+                                            color: status.color,
+                                            fontSize: 11,
+                                            }}
+                                        />
+                                    )}
+                                    </Box>
+                                ))}
+                                </Box>
+                            ) : (
+                                <Typography variant="body2" color="text.secondary">
+                                    No subtasks for this task.
+                                </Typography>
+                            )}
+                        </Box>
+                    </Box>
+                </Box>
+
+                <MobileAppBar>
+                    <IconButton onClick={() => setDeleteItem(true)}>
+                        <Trash size={18} />
+                    </IconButton>
+                    <IconButton color="info" size="small" onClick={() => navigate(`/edit-task/${id}`)}>
+                        <Pencil size={18} />
+                    </IconButton>
+                </MobileAppBar>
+            </>
+            )}
         </>
-    )
+    );
 }

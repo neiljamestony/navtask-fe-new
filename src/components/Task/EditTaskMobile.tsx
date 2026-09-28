@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Typography, Button, TextField, Container, InputAdornment, LinearProgress, Divider, CircularProgress, IconButton, Stack, AppBar, Toolbar, Switch, FormControlLabel } from '@mui/material'
+import { Box, Typography, Button, TextField, LinearProgress, CircularProgress, IconButton, AppBar, Toolbar, Switch, FormControlLabel } from '@mui/material'
 import { ArrowBackIosNewRounded, Add } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -20,10 +20,8 @@ import { limitText, validFileTypes } from '../../utils/utils';
 import DeleteSubTask from '../Todo/DeleteSubTask';
 import DropdownDialog from '../Dialog/Mobile/Dropdown';
 import { MobileAppBar } from '../MobileAppBar';
-import FetchingTaskLoader from '../../assets/loader.svg';
-
-import Suppress from '../../assets/Icons/Accordion_supress.svg'
-import { AllSubTaskTitle, DatePickerContainer, DropFilesTitle, EditTaskSaveButton, EditTaskTitle, FetchingTaskImageContainer, FetchingTaskMobile, MarkAsCompletedButton, MarkAsCompletedContainer, MarkAsCompletedSubContainer, MobileAppBarContainer, MobileNoDataContainer, MobileSubTaskContainer, MobileSubTaskTitleField, NewTaskMobileAppBar, NewTaskMobileAttachmentContainer, NewTaskMobileAttachmentImageContainer, NewTaskMobileAttachmentPreviewContainer, NewTaskMobileAttachmentSubContainer, NewTaskMobileAttachmentUploader, NewTaskMobileAttachmentUploaderContainer, NewTaskMobileDescriptionField, NewTaskMobileDividerContainer, NewTaskMobileDueDateDialog, NewTaskMobileDueDateField, NewTaskMobileFormContainer, NewTaskMobileStatusFieldsContainer, NewTaskMobileStatusFieldsContainerAlignment, NewTaskMobileTitleField, NewTaskMobileToolBar, SubTaskMobileButton, SubTaskMobileContainer, SubTaskMobileTitle, TitleStatusContainer, ViewTaskAppBarMobileBackButton, ViewTaskTitle } from '../Styles/Task/Task';
+import { prioritiesIcons, statusIcons } from '../Todo/DesktopTodo';
+import { CalendarDays, Save } from 'lucide-react';
 
 dayjs.extend(customParseFormat);
 
@@ -58,7 +56,6 @@ export default function EditTaskMobile() {
         name: "",
         key: 0
     })
-    const inputRef = useRef<HTMLInputElement | null>(null);
     const navigate = useNavigate();
 
     const priorities = [
@@ -78,6 +75,9 @@ export default function EditTaskMobile() {
             active: true
         }
     ]
+
+    const currentStatus = statusIcons[task.status as keyof typeof statusIcons];
+    const currentPriority = prioritiesIcons[task.priority as keyof typeof prioritiesIcons];
     
     const status = [
         {
@@ -161,10 +161,6 @@ export default function EditTaskMobile() {
             })
         }
     })
-    
-    const handleBrowsFileClick = () => {
-        inputRef.current?.click();
-    }
 
     const handleSubmit = async () => {
         setLoading(true);
@@ -365,321 +361,661 @@ export default function EditTaskMobile() {
         };
     }, [uploading]);
 
-    return (
-        <Box sx={{ padding: 2 }}>
-            <AppBar position="fixed" color="inherit" sx={NewTaskMobileAppBar}>
-                <Toolbar sx={NewTaskMobileToolBar}>
-                    <Button type="button" onClick={() => navigate("/")} startIcon={<ArrowBackIosNewRounded/>}>
-                        <Typography sx={ViewTaskAppBarMobileBackButton}>Back</Typography>
-                    </Button>
-                    <Box sx={NewTaskMobileDividerContainer}>
-                        <Divider orientation="vertical" flexItem sx={{ height: 25 }}/>
-                    </Box>
-                    <Typography sx={EditTaskTitle}>View Task</Typography>
-                    <Typography sx={ViewTaskTitle}>/ Edit</Typography>
-                </Toolbar>
+   return (
+        <Box sx={{ minHeight: "100dvh", bgcolor: "#f6f8fb", pb: 11 }}>
+            <AppBar
+            position="fixed"
+            color="inherit"
+            elevation={0}
+            sx={{
+                borderBottom: "1px solid",
+                borderColor: "divider",
+                bgcolor: "rgba(255,255,255,0.96)",
+                backdropFilter: "blur(12px)",
+            }}
+            >
+            <Toolbar sx={{ minHeight: 58, gap: 1 }}>
+                <IconButton aria-label="Back to tasks" onClick={() => navigate("/")}>
+                <ArrowBackIosNewRounded fontSize="small" />
+                </IconButton>
+                <Box>
+                <Typography variant="subtitle1" sx={{ fontWeight: 700, lineHeight: 1.2 }}>
+                    Edit task
+                </Typography>
+                {task.title && (
+                    <Typography variant="caption" color="text.secondary">
+                    {task.title}
+                    </Typography>
+                )}
+                </Box>
+            </Toolbar>
             </AppBar>
-            {
-                fetchingTask ? (
-                   <Box sx={FetchingTaskMobile}>
-                        <Box sx={FetchingTaskImageContainer}>
-                            <img src={FetchingTaskLoader} height={500} width={400} alt="fetching-task-loader"/>
-                        </Box>
-                        <Typography sx={{ fontSize: 25 }}>Fetching Task ...</Typography>
-                    </Box>
-                ): (
-                    <>
-                        {
-                            !task || !task.title ? (
-                                <>
-                                     <Box sx={MobileNoDataContainer}>
-                                        <Typography sx={{ fontSize: 20 , fontWeight: 'bold' }}>No data found</Typography>
-                                    </Box>
-                                </>
-                            ): (
-                                <>
-                                    <DeleteSubTask open={openDeleteSubtask} proceed={handleRemoveSubTask} close={handleCancelSubTaskDeletionModal} subtaskTitle={subTaskToDelete.name} itemToDelete={subTaskToDelete.key}/>
-                                    <DropdownDialog 
-                                        open={openDropdownDialog} 
-                                        close={() => setOpenDropdownDialog(false)} 
-                                        proceed={dropdownDialogTitle === "priority" ? handleProceedPriority : handleProceedStatus}
-                                        title={dropdownDialogTitle === "priority" ? "Select Priority" : "Select Status"}
-                                        defaultValue={task.status}
-                                        options={dropdownDialogTitle === "priority" ? priorities : status}/>
-                                    <Box sx={{ paddingBottom: task?.subtask.length > 0 ? 5 : 0 }}>
-                                        <Container maxWidth="md" sx={NewTaskMobileFormContainer}>
-                                            <Stack spacing={2}>
-                                                <Box sx={NewTaskMobileStatusFieldsContainer}>
-                                                    <Box sx={NewTaskMobileStatusFieldsContainerAlignment}>
-                                                        <TextField
-                                                            label="Priority"
-                                                            size="small"
-                                                            disabled
-                                                            value={priorities.find((item) => item.value === task.priority)?.label}
-                                                            fullWidth
-                                                            onClick={() => handleOpenDropdownDialog("priority")}
-                                                            sx={{
-                                                                '& .MuiInputBase-root': {
-                                                                    fontSize: '14px',
-                                                                },
-                                                            }}
-                                                            slotProps={{
-                                                                input: {
-                                                                    endAdornment: (
-                                                                        <InputAdornment position="end">
-                                                                            <img src={Suppress} alt="suppress-icon" height={10} width={10} />
-                                                                        </InputAdornment>
-                                                                    ),
-                                                                    readOnly: true,
-                                                                },
-                                                            }}
-                                                        />
-                                                        <TextField
-                                                            label="Status"
-                                                            size="small"
-                                                            value={status.find((item) => item.value === task.status)?.label}
-                                                            fullWidth
-                                                            onClick={() => handleOpenDropdownDialog("status")}
-                                                            sx={{  
-                                                                '& .MuiInputBase-root': {
-                                                                    fontSize: '14px',
-                                                                },
-                                                            }}
-                                                            slotProps={{
-                                                                input: {
-                                                                    endAdornment: (
-                                                                        <InputAdornment position="end">
-                                                                            <img src={Suppress} alt="suppress-icon" height={10} width={10} />
-                                                                        </InputAdornment>
-                                                                    ),
-                                                                    readOnly: true,
-                                                                },
-                                                            }}
-                                                        />
-                                                    </Box>
-                                                    {task.status === "completed" && (
-                                                        <TextField
-                                                            label="Completion Date"
-                                                            value={task.completed_date ? dayjs(task.completed_date).format("MM/DD/YYYY") : dayjs().format("MM/DD/YYYY")}
-                                                            disabled
-                                                            fullWidth
-                                                            size="small"
-                                                            sx={{
-                                                                '& .MuiInputBase-root': {
-                                                                    fontSize: 14,
-                                                                },
-                                                            }}
-                                                        />
-                                                    )}
-                                                </Box>
-                                                <TextField
-                                                    id="outlined-multiline-flexible"
-                                                    label="Title"
-                                                    multiline
-                                                    disabled
-                                                    rows={4}
-                                                    fullWidth
-                                                    value={task.title}
-                                                    sx={NewTaskMobileTitleField}
-                                                />
-                                                <Box sx={DatePickerContainer}>
-                                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                        <DatePicker
-                                                            label="Date Created"
-                                                            value={task.created_at ? dayjs(task.created_at) : null}
-                                                            disabled
-                                                            slotProps={{
-                                                                textField: {
-                                                                    size: "small"
-                                                                },
-                                                            }}
-                                                        />
-                                                    </LocalizationProvider>
 
-                                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                        <DatePicker
-                                                            label="Due Date"
-                                                            value={dayjs(task.due_date)}
-                                                            onChange={handleDueDateChange}
-                                                            slotProps={{
-                                                                toolbar: {
-                                                                    hidden: true,
-                                                                },
-                                                                textField: {
-                                                                    fullWidth: true,
-                                                                    size: 'small',
-                                                                    error: errors.length > 0 && errors.filter((error) => error.key === "due_date").length > 0,
-                                                                    helperText: errors.length > 0 && errors.filter((error) => error.key === "due_date").length > 0 ? errors.filter((error) => error.key === "due_date")[0].error : "",
-                                                                    sx: NewTaskMobileDueDateField,
-                                                                },
-                                                                mobilePaper: {
-                                                                    sx: {
-                                                                        borderRadius: 5
-                                                                    }
-                                                                },
-                                                                dialog: {
-                                                                    sx: NewTaskMobileDueDateDialog,
-                                                                    slotProps: {
-                                                                        backdrop: {
-                                                                            sx: {
-                                                                                height: '94.5vh'
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                },
-                                                                
-                                                            }}
-                                                        />
-                                                    </LocalizationProvider>         
-                                                </Box>
-                                                <TextField
-                                                    id="outlined-multiline-flexible"
-                                                    label="Details(Optional)"
-                                                    name="description"
-                                                    multiline
-                                                    rows={4}
-                                                    fullWidth
-                                                    sx={NewTaskMobileDescriptionField}
-                                                    slotProps={{
-                                                        htmlInput: { maxLength: 300 }
-                                                    }}
-                                                    value={task.description}
-                                                    error={errors.length > 0 && errors.filter((error) => error.key === "description").length > 0 } 
-                                                    helperText={errors.length > 0 && errors.filter((error) => error.key === "description").length > 0 ? errors.filter((error) => error.key === "description")[0].error : ""}
-                                                    onChange={handleTextChange}
-                                                />
-                                                
-                                                <Box>
-                                                    <Box {...getRootProps()}>
-                                                        <input {...getInputProps()} />              
-                                                        <Box sx={{ 
-                                                            ...NewTaskMobileAttachmentContainer,
-                                                            borderColor: fileError ? '#CA0061' : 'grey.300', 
-                                                        }}>
-                                                            <Box sx={{ display: "flex", justifyContent: "center" }}>
-                                                                <Box sx={{
-                                                                    ...NewTaskMobileAttachmentSubContainer,
-                                                                    color: fileError ? "#CA0061" : "text.secondary"
-                                                                }}>Attachments</Box>
-                                                                {
-                                                                    uploading ? (
-                                                                    <Box sx={NewTaskMobileAttachmentUploader}>
-                                                                        <Box sx={NewTaskMobileAttachmentUploaderContainer}>
-                                                                            <Typography sx={{ fontSize: 14, marginBottom: 1 }}>{uploadedFileNames.toString()}</Typography>
-                                                                        </Box>
-                                                                        <LinearProgress variant="determinate" value={progress} aria-label="Export data"/>
-                                                                    </Box>
-                                                                    ):(<Box sx={{...NewTaskMobileAttachmentImageContainer, paddingTop: 4 }}>
-                                                                        <Box><img src={UploadIcon} alt="upload-icon" height={30} width="100%"/></Box>
-                                                                        <Box sx={{ ...DropFilesTitle, color: fileError ? "#CA0061" : "#272D32" }}> 
-                                                                            Drop files to attach, or 
-                                                                            <span style={{ color: fileError ? "#CA0061" : "#027CEC", cursor: "pointer" }} onClick={handleBrowsFileClick}> browse</span>.
-                                                                        </Box>
-                                                                    </Box>
-                                                                    )
-                                                                }
-                                                            </Box>
-                                                            {
-                                                                !uploading && <Box sx={NewTaskMobileAttachmentPreviewContainer}>
-                                                                    {
-                                                                        task.attachments && task.attachments.map((file, key) => (
-                                                                            <EditFilePreview key={key} attachment={file} removeFile={(e: React.MouseEvent<HTMLButtonElement>) => handleRemoveFile(e, key)}/>
-                                                                        ))
-                                                                    }
-                                                                </Box>
-                                                            }
-                                                        </Box>
-                                                    </Box> 
-                                                    {fileError !== null && <Box sx={{ color: '#CA0061', fontSize: 14, marginTop: 1, fontWeight: 'bold' }}>{fileError.msg}</Box>}
-                                                </Box>
-                                                <Divider/>
-                                                <Box sx={SubTaskMobileContainer}>
-                                                    <Typography sx={SubTaskMobileTitle}>Subtask</Typography>
-                                                    <Button color="primary" type="button" variant="outlined" sx={SubTaskMobileButton} startIcon={<Add/>} disabled={task.subtask.length === 10 || task.status === 'completed'} onClick={handleNewSubTask}>New Subtask</Button>
-                                                </Box>
-                                                {
-                                                    task.subtask?.length > 0 && (
-                                                        <Box sx={TitleStatusContainer}>
-                                                            {
-                                                                ["Title", "Status", ""].map((item, key) => {
-                                                                    return <Typography key={key} variant="body2" sx={{ color: 'grey.600' }}>{item}</Typography>
-                                                                })
-                                                            }
-                                                        </Box>
-                                                    )
-                                                }
-                                                {
-                                                    task.subtask?.length > 0 && (
-                                                        <>
-                                                            {task.subtask.map((subTask, key) => (
-                                                                <Box key={key} sx={MobileSubTaskContainer}>
-                                                                    <IconButton size="medium" sx={{ top: 10 }} onClick={() => handleOpenSubTaskDeletionModal(subTask.title, key)}><img src={DeleteIcon} alt="delete-icon" height={20} width="100%"/></IconButton>
-                                                                    <TextField 
-                                                                    type="text" 
-                                                                    label="Title"
-                                                                    value={subTask.title}
-                                                                    error={!subTask.title.trim()}
-                                                                    helperText={!subTask.title.trim() && "Must not be empty"}
-                                                                    id="subtask-title"
-                                                                    size="medium"
-                                                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleSubTaskChange(key, "title", e.target.value)}
-                                                                    sx={MobileSubTaskTitleField}
-                                                                    fullWidth/>
-                                                                    <FormControlLabel 
-                                                                        control={<Switch checked={subTask.status === "done"} 
-                                                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleSubTaskChange(key, "status", e.target.checked ? "done" : "not-done")}/>} 
-                                                                        label={subTask.status === "done" ? "Done" : "Not Done"}
-                                                                        slotProps={{
-                                                                            typography: {
-                                                                                sx: { fontSize: '14px' } 
-                                                                            }
-                                                                        }}
-                                                                        />
-                                                                </Box>
-                                                            ))}
-                                                        </>
-                                                    )
-                                                }
-                                            
-                                                { (task?.subtask?.length > 0 && subtasksCompleted && task.status !== "completed") && ( 
-                                                    <>
-                                                        <Divider/>
-                                                        <Box sx={MarkAsCompletedContainer}>
-                                                            <Box sx={MarkAsCompletedSubContainer}>
-                                                                    <Typography sx={AllSubTaskTitle}>All subtasks are <span style={{ fontWeight: 'bold' }}>done</span></Typography>
-                                                                    <Button 
-                                                                        type="button" 
-                                                                        variant="contained" 
-                                                                        color="primary"
-                                                                        fullWidth
-                                                                        sx={MarkAsCompletedButton} 
-                                                                        onClick={handleMarkAsComplete} disabled={fetchingTask}>Mark as Complete</Button>
-                                                            </Box>
-                                                        </Box>
-                                                    </>
-                                                )}
-                                            </Stack>
-                                        </Container>
+            {fetchingTask ? (
+            <Box
+                role="status"
+                aria-live="polite"
+                sx={{
+                minHeight: "100dvh",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: 1.5,
+                color: "text.secondary",
+                }}
+            >
+                <CircularProgress size={28} />
+                <Typography variant="body2">Loading task…</Typography>
+            </Box>
+            ) : !task || !task.title ? (
+            <Box
+                sx={{
+                minHeight: "100dvh",
+                display: "grid",
+                placeItems: "center",
+                px: 3,
+                pt: 8,
+                textAlign: "center",
+                }}
+            >
+                <Box>
+                <Typography variant="h6" sx={{ fontWeight: 700 }}>
+                    Task not found
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ mt: 0.75, mb: 2 }}>
+                    The task may have been deleted or the link may be invalid.
+                </Typography>
+                <Button variant="contained" onClick={() => navigate("/")} sx={{ textTransform: "none" }}>
+                    Back to tasks
+                </Button>
+                </Box>
+            </Box>
+            ) : (
+            <>
+                <DeleteSubTask
+                open={openDeleteSubtask}
+                proceed={handleRemoveSubTask}
+                close={handleCancelSubTaskDeletionModal}
+                subtaskTitle={subTaskToDelete.name}
+                itemToDelete={subTaskToDelete.key}
+                />
+
+                <DropdownDialog
+                open={openDropdownDialog}
+                close={() => setOpenDropdownDialog(false)}
+                proceed={
+                    dropdownDialogTitle === "priority"
+                    ? handleProceedPriority
+                    : handleProceedStatus
+                }
+                title={dropdownDialogTitle === "priority" ? "Select priority" : "Select status"}
+                defaultValue={
+                    dropdownDialogTitle === "priority" ? task.priority : task.status
+                }
+                options={dropdownDialogTitle === "priority" ? priorities : status}
+                />
+
+                <Box
+                component="main"
+                sx={{
+                    maxWidth: 640,
+                    mx: "auto",
+                    px: 2,
+                    pt: 10,
+                    pb: 3,
+                }}
+                >
+                    <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                        <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1.25 }}>
+                            {[
+                                {
+                                    label: "Priority",
+                                    onClick: () => handleOpenDropdownDialog("priority"),
+                                    item: currentPriority,
+                                    },
+                                    {
+                                    label: "Status",
+                                    onClick: () => handleOpenDropdownDialog("status"),
+                                    item: currentStatus,
+                                },
+                            ].map(({ label, onClick, item }) => (
+                                <Box
+                                key={label}
+                                component="button"
+                                type="button"
+                                onClick={onClick}
+                                sx={{
+                                    p: 1.5,
+                                    border: "1px solid",
+                                    borderColor: "divider",
+                                    borderRadius: 2.5,
+                                    bgcolor: "background.paper",
+                                    textAlign: "left",
+                                    cursor: "pointer",
+                                }}
+                                >
+                                <Typography
+                                    variant="caption"
+                                    color="text.secondary"
+                                    sx={{ display: "block", mb: 0.75 }}
+                                >
+                                    {label}
+                                </Typography>
+
+                                {item ? (
+                                    <Box
+                                    sx={{
+                                        display: "inline-flex",
+                                        alignItems: "center",
+                                        gap: 0.75,
+                                        px: 1,
+                                        py: 0.5,
+                                        borderRadius: 10,
+                                        bgcolor: item.bgColor,
+                                        color: item.color,
+                                    }}
+                                    >
+                                    {item.icon}
+                                    <Typography variant="caption" sx={{ fontWeight: 700, lineHeight: 1 }}>
+                                        {item.label}
+                                    </Typography>
                                     </Box>
-                                    <MobileAppBar>
-                                        <Box sx={MobileAppBarContainer}>
-                                            <Button 
-                                                type="button" 
-                                                variant="contained" 
-                                                color="primary" 
-                                                sx={EditTaskSaveButton} 
-                                                onClick={handleSubmit} disabled={loading || fetchingTask}>
-                                                {loading ? 
-                                                    <CircularProgress size={30} color="inherit"/> 
-                                            : "Save"}</Button>
+                                ) : (
+                                    <Typography variant="body2" sx={{ fontWeight: 700 }}>
+                                    —
+                                    </Typography>
+                                )}
+                                </Box>
+                            ))}
+                        </Box>
+
+                        {task.status === "completed" && (
+                            <TextField
+                                label="Completion date"
+                                value={
+                                task.completed_date
+                                    ? dayjs(task.completed_date).format("MM/DD/YYYY")
+                                    : dayjs().format("MM/DD/YYYY")
+                                }
+                                disabled
+                                fullWidth
+                                size="small"
+                            />
+                        )}
+
+                        <Box
+                            sx={{
+                                p: 2,
+                                border: "1px solid",
+                                borderColor: "divider",
+                                borderRadius: 2.5,
+                                bgcolor: "background.paper",
+                            }}
+                        >
+                            <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1.25 }}>
+                                Task title
+                            </Typography>
+                            <TextField
+                                label="Title"
+                                value={task.title}
+                                error={errors.some((error) => error.key === "title")}
+                                helperText={
+                                errors.find((error) => error.key === "title")?.error ??
+                                `${task.title?.length ?? 0}/300`
+                                }
+                                multiline
+                                minRows={2}
+                                fullWidth
+                                size="small"
+                            />
+                        </Box>
+                        <Box
+                            sx={{
+                                p: 2,
+                                border: "1px solid",
+                                borderColor: "divider",
+                                borderRadius: 2.5,
+                                bgcolor: "background.paper",
+                            }}
+                            >
+                            <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
+                                <CalendarDays size={18} color="#64748b" />
+                                <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
+                                Schedule
+                                </Typography>
+                            </Box>
+
+                            <Box
+                                sx={{
+                                display: "grid",
+                                gridTemplateColumns: { xs: "1fr", sm: "1fr 1.4fr" },
+                                alignItems: "stretch",
+                                gap: 1.5,
+                                }}
+                            >
+                                <Box
+                                    sx={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: 1.25,
+                                        p: 1.5,
+                                        border: "1px solid",
+                                        borderColor: "divider",
+                                        borderRadius: 2,
+                                        bgcolor: "grey.50",
+                                    }}
+                                    >
+                                    <CalendarDays size={17} color="#64748b" />
+                                        <Box>
+                                            <Typography variant="caption" color="text.secondary">
+                                            Created
+                                            </Typography>
+                                            <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                                            {task.created_at ? dayjs(task.created_at).format("D MMM YYYY") : "—"}
+                                            </Typography>
                                         </Box>
-                                    </MobileAppBar>
-                                </>
+                                    </Box>
+
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <DatePicker
+                                        label="Due date"
+                                        value={task.due_date ? dayjs(task.due_date) : null}
+                                        onChange={handleDueDateChange}
+                                        slotProps={{
+                                        textField: {
+                                            fullWidth: true,
+                                            size: "small",
+                                            error: errors.some((error) => error.key === "due_date"),
+                                            helperText:
+                                            errors.find((error) => error.key === "due_date")?.error ?? " ",
+                                        },
+                                        }}
+                                    />
+                                    </LocalizationProvider>
+                                </Box>
+                            </Box>
+                        <Box
+                            sx={{
+                                p: 2,
+                                border: "1px solid",
+                                borderColor: "divider",
+                                borderRadius: 2.5,
+                                bgcolor: "background.paper",
+                            }}>
+                            <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1.25 }}>
+                                Description
+                            </Typography>
+                            <TextField
+                                label="Details (optional)"
+                                name="description"
+                                value={task.description}
+                                onChange={handleTextChange}
+                                multiline
+                                rows={4}
+                                fullWidth
+                                size="small"
+                                slotProps={{ htmlInput: { maxLength: 300 } }}
+                                error={errors.some((error) => error.key === "description")}
+                                helperText={
+                                errors.find((error) => error.key === "description")?.error ??
+                                `${task.description?.length ?? 0}/300`
+                                }
+                            />
+                        </Box>
+                        <Box
+                            sx={{
+                                p: 2,
+                                border: "1px solid",
+                                borderColor: "divider",
+                                borderRadius: 2.5,
+                                bgcolor: "background.paper",
+                            }}
+                            >
+                            <Box
+                                sx={{
+                                display: "flex",
+                                alignItems: "flex-start",
+                                justifyContent: "space-between",
+                                gap: 1,
+                                mb: 1.5,
+                                }}
+                            >
+                                <Box>
+                                <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
+                                    Attachments
+                                </Typography>
+                                <Typography variant="caption" color="text.secondary">
+                                    Up to 5 files · 10 MB max per file
+                                </Typography>
+                                </Box>
+
+                                <Box
+                                sx={{
+                                    px: 1,
+                                    py: 0.4,
+                                    borderRadius: 10,
+                                    bgcolor: "grey.100",
+                                    color: "text.secondary",
+                                    fontSize: 12,
+                                    fontWeight: 700,
+                                    whiteSpace: "nowrap",
+                                }}
+                                >
+                                {task.attachments.length}/5
+                                </Box>
+                            </Box>
+
+                            <Box
+                                {...getRootProps()}
+                                sx={{
+                                    p: 2.5,
+                                    border: "1px dashed",
+                                    borderColor: fileError ? "error.main" : "primary.light",
+                                    borderRadius: 2,
+                                    bgcolor: fileError ? "error.50" : "primary.50",
+                                    textAlign: "center",
+                                    cursor: uploading ? "default" : "pointer",
+                                    transition: "background-color 150ms ease, border-color 150ms ease",
+                                    "&:active": {
+                                        bgcolor: fileError ? "error.100" : "primary.100",
+                                    },
+                                }}
+                            >
+                                <input {...getInputProps()} />
+                                {uploading ? (
+                                <Box>
+                                    <Typography
+                                        variant="body2"
+                                        sx={{ mb: 1.25, fontWeight: 600, overflowWrap: "anywhere" }}
+                                    >
+                                    Uploading {uploadedFileNames.join(", ")}
+                                    </Typography>
+                                    <LinearProgress
+                                        variant="determinate"
+                                        value={progress}
+                                        aria-label="Upload progress"
+                                        sx={{ borderRadius: 5, height: 6 }}
+                                        />
+                                </Box>
+                                ) : (
+                                <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1 }}>
+                                    <Box
+                                    sx={{
+                                        width: 42,
+                                        height: 42,
+                                        display: "grid",
+                                        placeItems: "center",
+                                        borderRadius: 2,
+                                        bgcolor: "background.paper",
+                                    }}
+                                    >
+                                    <Box
+                                        component="img"
+                                        src={UploadIcon}
+                                        alt=""
+                                        sx={{ width: 23, height: 23, objectFit: "contain" }}
+                                    />
+                                    </Box>
+
+                                    <Typography variant="body2" sx={{ fontWeight: 600 }}>Tap to add files</Typography>
+                                    <Typography variant="caption" color="text.secondary">or drag and drop them here</Typography>
+                                </Box>
+                                )}
+                            </Box>
+
+                            {fileError && (
+                                <Typography variant="caption" color="error" sx={{ display: "block", mt: 1 }}>
+                                {fileError.msg}
+                                </Typography>
+                            )}
+
+                            {!uploading && task.attachments.length > 0 && (
+                                <Box sx={{ mt: 1.5, display: "flex", flexDirection: "column", gap: 1 }}>
+                                {task.attachments.map((file, key) => (
+                                    <EditFilePreview
+                                    key={`${file.name}-${key}`}
+                                    attachment={file}
+                                    removeFile={(e: React.MouseEvent<HTMLButtonElement>) =>
+                                        handleRemoveFile(e, key)
+                                    }
+                                    />
+                                ))}
+                                </Box>
+                            )}
+                            </Box>
+                        {/* Subtasks */}
+                        <Box
+                            sx={{
+                                p: 2,
+                                border: "1px solid",
+                                borderColor: "divider",
+                                borderRadius: 2.5,
+                                bgcolor: "background.paper",
+                            }}>
+                            <Box
+                                sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                                gap: 1,
+                                mb: 1.5,
+                                }}>
+                            <Box>
+                                <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>Subtasks</Typography>
+                                <Typography variant="caption" color="text.secondary">{task.subtask.length} of 10 </Typography>
+                            </Box>
+                            <Button
+                                size="small"
+                                variant="outlined"
+                                startIcon={<Add />}
+                                disabled={task.subtask.length >= 10 || task.status === "completed"}
+                                onClick={handleNewSubTask}
+                                sx={{ textTransform: "none", borderRadius: 2 }}
+                                >Add
+                            </Button>
+                        </Box>
+
+                        {task.subtask.length === 0 ? (
+                            <Typography variant="body2" color="text.secondary">
+                                No subtasks added.
+                            </Typography>
+                        ) : (
+                            <Box sx={{ display: "flex", flexDirection: "column", gap: 1.25 }}>
+                                {task.subtask.map((subTask, key) => {
+                                    const isDone = subTask.status === "done";
+
+                                    return (
+                                    <Box
+                                        key={key}
+                                        sx={{
+                                        p: 1.5,
+                                        border: "1px solid",
+                                        borderColor: isDone ? "success.200" : "divider",
+                                        borderRadius: 2.5,
+                                        bgcolor: isDone ? "success.50" : "background.paper",
+                                        transition: "background-color 150ms ease, border-color 150ms ease",
+                                        }}
+                                    >
+                                        <Box
+                                        sx={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "space-between",
+                                            gap: 1,
+                                            mb: 1.25,
+                                        }}
+                                        >
+                                        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                                            <Box
+                                            sx={{
+                                                width: 26,
+                                                height: 26,
+                                                display: "grid",
+                                                placeItems: "center",
+                                                borderRadius: "50%",
+                                                bgcolor: isDone ? "success.main" : "grey.200",
+                                                color: isDone ? "common.white" : "text.secondary",
+                                                fontSize: 12,
+                                                fontWeight: 700,
+                                            }}
+                                            >
+                                            {key + 1}
+                                            </Box>
+
+                                            <Typography
+                                            variant="caption"
+                                            sx={{
+                                                fontWeight: 700,
+                                                color: isDone ? "success.dark" : "text.secondary",
+                                            }}
+                                            >
+                                            {isDone ? "Completed" : "In progress"}
+                                            </Typography>
+                                        </Box>
+
+                                        <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+                                            <FormControlLabel
+                                            sx={{ m: 0 }}
+                                            control={
+                                                <Switch
+                                                size="small"
+                                                checked={isDone}
+                                                onChange={(e) =>
+                                                    handleSubTaskChange(
+                                                    key,
+                                                    "status",
+                                                    e.target.checked ? "done" : "not-done"
+                                                    )
+                                                }
+                                                />
+                                            }
+                                            label=""
+                                            />
+
+                                            <IconButton
+                                            size="small"
+                                            aria-label={`Delete subtask ${key + 1}`}
+                                            onClick={() =>
+                                                handleOpenSubTaskDeletionModal(subTask.title, key)
+                                            }
+                                            sx={{
+                                                color: "text.secondary",
+                                                "&:hover": {
+                                                color: "error.main",
+                                                bgcolor: "error.50",
+                                                },
+                                            }}
+                                            >
+                                            <img src={DeleteIcon} alt="" height={17} width={17} />
+                                            </IconButton>
+                                        </Box>
+                                        </Box>
+
+                                        <TextField
+                                            label={`Subtask ${key + 1}`}
+                                            value={subTask.title}
+                                            error={!subTask.title.trim()}
+                                            helperText={!subTask.title.trim() ? "Title is required" : " "}
+                                            onChange={(e) =>
+                                                handleSubTaskChange(key, "title", e.target.value)
+                                            }
+                                            fullWidth
+                                            size="small"
+                                            sx={{
+                                                "& .MuiOutlinedInput-root": {
+                                                bgcolor: "background.paper",
+                                                },
+                                            }}
+                                        />
+                                    </Box>
+                                    );
+                                })}
+                                </Box>
+                        )}
+                        </Box>
+
+                        {task.subtask.length > 0 && subtasksCompleted && task.status !== "completed" && (
+                            <Box
+                                sx={{
+                                    p: 2,
+                                    borderRadius: 2.5,
+                                    bgcolor: "success.50",
+                                    border: "1px solid",
+                                    borderColor: "success.100",
+                                }}
+                                >
+                                <Typography variant="body2" sx={{ fontWeight: 600, mb: 1 }}>
+                                    All subtasks are complete.
+                                </Typography>
+                                <Button
+                                    variant="contained"
+                                    fullWidth
+                                    onClick={handleMarkAsComplete}
+                                    disabled={fetchingTask}
+                                    sx={{ textTransform: "none" }}
+                                >
+                                    Mark task complete
+                                </Button>
+                            </Box>
+                        )}
+                    </Box>
+                </Box>
+                <MobileAppBar>
+                    <Box
+                        sx={{
+                        display: "flex",
+                        width: "100%",
+                        gap: 1.25,
+                        p: 1,
+                        bgcolor: "background.paper",
+                        borderTop: "1px solid",
+                        borderColor: "divider",
+                        }}
+                    >
+                        <Button
+                            type="button"
+                            variant="outlined"
+                            onClick={() => navigate("/")}
+                            disabled={loading}
+                            sx={{
+                                minHeight: 46,
+                                px: 2,
+                                borderRadius: 2,
+                                borderColor: "divider",
+                                color: "text.secondary",
+                                textTransform: "none",
+                                fontWeight: 600,
+                            }}
+                        >Cancel</Button>
+
+                        <Button
+                        type="button"
+                        variant="contained"
+                        fullWidth
+                        onClick={handleSubmit}
+                        disabled={loading || fetchingTask}
+                        startIcon={
+                            loading ? (
+                            <CircularProgress size={18} color="inherit" />
+                            ) : (
+                            <Save size={18} />
                             )
                         }
-                    </>
-                )
-            }
+                        sx={{
+                            minHeight: 46,
+                            borderRadius: 2,
+                            textTransform: "none",
+                            fontWeight: 700,
+                            boxShadow: "none",
+                        }}
+                        >
+                        {loading ? "Saving…" : "Save changes"}
+                        </Button>
+                    </Box>
+                </MobileAppBar>
+            </>
+            )}
         </Box>
-    )
+        );
 }
