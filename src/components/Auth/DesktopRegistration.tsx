@@ -180,6 +180,7 @@ export default function DesktopRegistration() {
                 sx={{
                   mt: -0.5,
                   p: 1.5,
+                  mb: 1,
                   borderRadius: 2,
                   bgcolor: "#f8fafc",
                   border: "1px solid",

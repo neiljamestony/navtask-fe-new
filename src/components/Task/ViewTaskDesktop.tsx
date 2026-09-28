@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom"
-import { Box, Typography, IconButton, Divider, Stack, Grid, Button, Card, Avatar, CardHeader, CardContent, Chip, Tabs, Tab } from "@mui/material";
+import { Box, Typography, IconButton, Divider, Grid, Button, Card, Avatar, CardHeader, CardContent, Chip, Tabs, Tab } from "@mui/material";
 import { getTask } from "../../api/task/task";
 import toast from "react-hot-toast";
 import { prioritiesIcons, statusIcons } from "../Todo/DesktopTodo";
@@ -10,7 +10,7 @@ import Attachments from "./Attachments";
 import type { UTask } from "../../typescript/interface";
 import dayjs from "dayjs";
 import DeleteItems from "../Todo/DeleteItems";
-import { ChevronLeft, CopyCheck, ListTodo, Edit, Trash, GripVertical } from 'lucide-react'
+import { ChevronLeft, CopyCheck, ListTodo, Edit, Trash, GripVertical, CalendarClock, CalendarCheck } from 'lucide-react'
 
 export default function ViewTaskDesktop(){
     const { id } = useParams();
@@ -197,58 +197,129 @@ export default function ViewTaskDesktop(){
                             </Card>
                             <Grid container spacing={1}>
                                 <Grid size={2}>
-                                    <Card variant="outlined" sx={{ borderRadius: 5, height: '79vh' }}>
+                                    <Card
+                                        variant="outlined"
+                                        sx={{
+                                            height: "79vh",
+                                            borderRadius: 3,
+                                            borderColor: "divider",
+                                            overflow: "hidden",
+                                            display: "flex",
+                                            flexDirection: "column",
+                                        }}
+                                        >
                                         <CardHeader
                                             avatar={
-                                                <GripVertical/>
+                                            <Box
+                                                sx={{
+                                                width: 36,
+                                                height: 36,
+                                                display: "grid",
+                                                placeItems: "center",
+                                                borderRadius: 1.5,
+                                                bgcolor: "primary.50",
+                                                color: "primary.main",
+                                                }}
+                                            >
+                                                <GripVertical size={18} />
+                                            </Box>
                                             }
                                             title={
-                                                <Typography variant="body2" sx={{ fontSize: 16, fontWeight: 'bold' }}>Task Information</Typography>
+                                            <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+                                                Task information
+                                            </Typography>
                                             }
+                                            sx={{
+                                            px: 2.5,
+                                            py: 2,
+                                            borderBottom: "1px solid",
+                                            borderColor: "divider",
+                                            }}
                                         />
-                                        <CardContent>
-                                            <Stack spacing={2}>
+
+                                        <CardContent
+                                            sx={{
+                                            flex: 1,
+                                            overflowY: "auto",
+                                            p: 2.5,
+                                            "&:last-child": { pb: 2.5 },
+                                            }}
+                                        >
+                                            <Box sx={{ display: "flex", flexDirection: "column", gap: 2.5 }}>
                                                 <Box>
-                                                    <Typography variant="body2" sx={{ fontSize: 14, color: 'gray', mb: 1 }}>Status</Typography>
-                                                    <Chip icon={status && status.icon} label={status && status.label} sx={{ backgroundColor: status.bgColor, color: status.color, fontSize: 12 }}/>
-                                                </Box>
-                                                <Box>
-                                                    <Typography variant="body2" sx={{ fontSize: 14, color: 'gray', mb: 1 }}>Priority</Typography>
-                                                    <Chip icon={priority && priority.icon} label={priority && priority.label} sx={{ backgroundColor: priority.bgColor, color: priority.color, fontSize: 12 }}/>
-                                                </Box>
-                                                <Box>
-                                                    <Typography variant="body2" sx={{ fontSize: 14, color: 'gray', mb: 1 }}>Due Date</Typography>
-                                                    <Typography variant="caption" sx={{ fontSize: 13, color: 'gray' }}>{dayjs(task.due_date).format("D MMM YYYY")}</Typography>
-                                                </Box>
-                                                <Box>
-                                                    <Typography variant="body2" sx={{ fontSize: 14, color: 'gray', mb: 1 }}>Created Date</Typography>
-                                                    <Typography variant="caption" sx={{ fontSize: 13, color: 'gray' }}>{dayjs(task.created_at).format("D MMM YYYY")}</Typography>
-                                                </Box>
-                                                {task.description && (
-                                                    <Box sx={{ width: "100%" }}>
-                                                        <Typography
-                                                        variant="body2"
-                                                        sx={{ fontSize: 14, color: "gray", mb: 1 }}
-                                                        >
-                                                        Description
-                                                        </Typography>
-                                                        <Typography
-                                                        variant="caption"
-                                                        component="p"
+                                                    <Typography variant="caption" color="text.secondary" sx={{ display: "block", mb: 0.75 }}>Status</Typography>
+                                                    <Chip
+                                                        size="small"
+                                                        icon={status?.icon}
+                                                        label={status?.label ?? "—"}
                                                         sx={{
-                                                            display: "block",
-                                                            width: "100%",
-                                                            fontSize: 13,
-                                                            color: "gray",
-                                                            textAlign: "justify",
-                                                            m: 0,
+                                                            bgcolor: status?.bgColor,
+                                                            color: status?.color,
+                                                            fontWeight: 600,
                                                         }}
-                                                        >
-                                                        {task.description}
+                                                    />
+                                                </Box>
+                                                <Box>
+                                                    <Typography variant="caption" color="text.secondary" sx={{ display: "block", mb: 0.75 }}>Priority</Typography>
+                                                    <Chip
+                                                        size="small"
+                                                        icon={priority?.icon}
+                                                        label={priority?.label ?? "—"}
+                                                        sx={{
+                                                            bgcolor: priority?.bgColor,
+                                                            color: priority?.color,
+                                                            fontWeight: 600,
+                                                        }}
+                                                    />
+                                                </Box>
+                                                <Divider />
+                                                <Box sx={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 2 }}>
+                                                    <Box>
+                                                        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                                                            <CalendarClock size={15} />
+                                                            <Typography variant="caption" color="text.secondary">
+                                                                Due date
+                                                            </Typography>
+                                                        </Box>
+                                                        <Typography variant="body2" sx={{ mt: 0.5, fontWeight: 600 }}>
+                                                            {task.due_date ? dayjs(task.due_date).format("D MMM YYYY") : "Not set"}
                                                         </Typography>
                                                     </Box>
+
+                                                    <Box>
+                                                        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                                                            <CalendarCheck size={15} />
+                                                            <Typography variant="caption" color="text.secondary">
+                                                                Created
+                                                            </Typography>
+                                                        </Box>
+                                                        <Typography variant="body2" sx={{ mt: 0.5, fontWeight: 600 }}>
+                                                            {task.created_at ? dayjs(task.created_at).format("D MMM YYYY") : "—"}
+                                                        </Typography>
+                                                    </Box>
+                                                </Box>
+
+                                                {task.description && (
+                                                    <>
+                                                        <Divider />
+                                                        <Box>
+                                                            <Typography variant="caption" color="text.secondary">Description</Typography>
+                                                            <Typography
+                                                                variant="body2"
+                                                                sx={{
+                                                                    mt: 0.75,
+                                                                    lineHeight: 1.65,
+                                                                    color: "text.primary",
+                                                                    whiteSpace: "pre-wrap",
+                                                                    overflowWrap: "anywhere",
+                                                                }}
+                                                            >
+                                                            {task.description}
+                                                            </Typography>
+                                                        </Box>
+                                                    </>
                                                 )}
-                                            </Stack>
+                                            </Box>
                                         </CardContent>
                                     </Card>
                                 </Grid>
@@ -305,7 +376,6 @@ export default function ViewTaskDesktop(){
                         </Card>
                     )
                 }
-                
             </Box>
         </>
     )

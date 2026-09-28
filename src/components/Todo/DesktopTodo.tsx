@@ -1,23 +1,18 @@
 import { useState, useEffect, useMemo } from 'react'
-import { Box, Typography, Card, Button, Paper, Stack, IconButton, Badge, Grid, Chip, Divider } from '@mui/material'
+import { Box, Typography, Card, Button, Paper, Stack, IconButton, Grid, Chip, Divider, CircularProgress, Tooltip } from '@mui/material'
 import { Add } from '@mui/icons-material'
-import dayjs from 'dayjs';
 import { getTasks, removeTask } from '../../api/task/task';
 import { useNavigate } from 'react-router-dom';
 import type { GridRowSelectionModel, GridColumnVisibilityModel, GridRowParams, GridColDef } from '@mui/x-data-grid'; 
 import { GRID_CHECKBOX_SELECTION_COL_DEF, DataGrid  } from '@mui/x-data-grid';
-import toast from 'react-hot-toast';
-import DeleteItems from './DeleteItems';
 import { useSelector, useDispatch } from 'react-redux';
 import { setFilteredPriorityItems, setFilteredStatusItems } from '../../reducer/DashboardSlice';
-import { Eye, CopyCheck, SlidersHorizontal, SquarePen, ShieldCheck, ShieldOff, ShieldEllipsis, ShieldLock, Flag } from 'lucide-react'
+import { Eye, CopyCheck, SlidersHorizontal, SquarePen, ShieldCheck, ShieldOff, ShieldEllipsis, ShieldLock, Flag, Trash, TrashOff, StickyNotes } from 'lucide-react'
+import dayjs from 'dayjs';
+import toast from 'react-hot-toast';
+import DeleteItems from './DeleteItems';
 
 // ICONS
-import DeleteActive from '../../assets/Icons/Delete_active.svg';
-import DeleteInactive from '../../assets/Icons/Delete_inactive.svg';
-import Attachment from '../../assets/Icons/attachment.svg'
-import FetchingTaskLoader from '../../assets/loader.svg';
-import NoTaskFound from '../../assets/Icons/no-task-found.png';
 import Filters from './Filters/Filters';
 
 export const prioritiesIcons = {
@@ -172,12 +167,7 @@ export default function DesktopTodo() {
 
     const statusMap = new Map(statusMenuItems.map(item => [item.name, item.value]));
     const priorityMap = new Map(priorityMenuItems.map(item => [item.name, item.value]));
-
-    const borderDesign = {
-        border: '1px solid', 
-        borderRadius: 3, 
-        borderColor: 'grey.500'
-    }
+    const hasActiveFilters = Boolean(filteredPriorityItems || filteredStatusItems);
 
     const handleDeleteItem = async (ids: string[] | []) => {
         setitemRemoval(true)
@@ -211,38 +201,35 @@ export default function DesktopTodo() {
             ...GRID_CHECKBOX_SELECTION_COL_DEF,
             width: 80,
             renderHeader: () => (
-                <Box sx={{ cursor: 'pointer' }} onClick={() => setDeleteItem(true)}> 
-                    <Grid container spacing={3} sx={ids.length > 0 ? borderDesign : null}>
-                        <Grid size={ids.length > 0 ? 6 : 12}>
-                            <IconButton size="small" disabled={ids.length < 1}><img src={ids.length ? DeleteActive : DeleteInactive} alt="delete-item" height={20} width={20}/></IconButton>
-                        </Grid>
-                        {
-                            ids.length > 0 && 
-                            <Grid size={6}>
-                                <Badge badgeContent={ids.length} sx={{ 
-                                    "& .MuiBadge-badge": { 
-                                        backgroundColor: "#62C6FF", 
-                                        color: "white",
-                                        top: 4
-                                    } 
-                                }}/>
-                            </Grid>
-                        }
-                    </Grid>
-                </Box>
+                <Button
+                    type="button"
+                    variant={ids.length > 0 ? "outlined" : "text"}
+                    color="error"
+                    disabled={ids.length === 0}
+                    onClick={() => setDeleteItem(true)}
+                    startIcon={ids.length > 0 ? <Trash size={18} /> : <TrashOff size={18} />}
+                    sx={{
+                        minHeight: 38,
+                        px: 1.5,
+                        borderRadius: 2,
+                        textTransform: "none",
+                        fontWeight: 600,
+                        "&.Mui-disabled": {
+                        color: "text.disabled",
+                        },
+                    }}
+                    >
+                    {ids.length > 0 ? `(${ids.length})` : ""}
+                </Button>
             ),
         },
         { field: 'id', headerName: ""},
-        { field: 'title', headerName: 'Title', width: openFilters ? 430 : 230, 
+        { field: 'title', headerName: 'Title', flex: 1, minWidth: 160, 
             renderCell: (params) => {
                 const due_date = params.row.due_date;
-                const attachments = params.row.attachments;
                 return (
                     <Box sx={{ display: "flex", alignItems: 'center', justifyContent: 'flex-start', gap: 1, marginTop: 2 }}>
                         <Typography variant="caption" sx={{ paddingLeft: due_date === "" ? 10 : 0, fontWeight: 'bold', paddingTop: due_date === "" ? 2 : 0 }}>{params.row.title}</Typography>
-                        {
-                            due_date !== "" && attachments.length > 0 && <img src={Attachment} alt="attachment-icon" height={12} width={12}/>
-                        }
                     </Box>
                 )
                 
@@ -353,12 +340,16 @@ export default function DesktopTodo() {
             renderCell: (params) => {
                 return (
                     params.row.due_date !== "" && <Box sx={{ display: "flex", justifyContent: "center", alignItems: 'center', paddingTop: 1 }}>
-                        <IconButton onClick={() => params.field === "edit" && navigate(`/edit-task/${params.row.id}`)}>
-                            <SquarePen size={20}/>
-                        </IconButton>
-                        <IconButton onClick={() => params.field === "edit" && navigate(`/view-task/${params.row.id}`)}>
-                            <Eye size={20}/>
-                        </IconButton>
+                        <Tooltip title="Edit Task">
+                            <IconButton onClick={() => params.field === "edit" && navigate(`/edit-task/${params.row.id}`)}>
+                                <SquarePen size={20}/>
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="View Task">
+                             <IconButton onClick={() => params.field === "edit" && navigate(`/view-task/${params.row.id}`)}>
+                                <Eye size={20}/>
+                            </IconButton>
+                        </Tooltip>
                     </Box>
                 )
             },
@@ -379,7 +370,6 @@ export default function DesktopTodo() {
             toast.error("Error fetching tasks, please reload the page.");
             setFetchingTasks(false)
         }
-        
     }
 
     const handleSelectionChange = (newSelectionModel: GridRowSelectionModel) => {
@@ -446,12 +436,12 @@ export default function DesktopTodo() {
                         <Button type="button" variant="contained" sx={{ textTransform: 'none', borderRadius: 3, backgroundColor: 'black' }} startIcon={<Add/>} onClick={() => navigate('/new-task')}>Create</Button>
                     </Box>
                     <Divider sx={{ marginBottom: 2}}/>
-                    <Grid container spacing={1}>
+                    <Grid container spacing={1} sx={{ width: "100%", minWidth: 0 }}>
                         <Grid size={openFilters ? 2 : 0}>
                             {openFilters && <Filters priorityMenuItems={priorityMenuItems} statusMenuItems={statusMenuItems} />}
                         </Grid>
                         <Grid size={openFilters ? 10 : 12}>
-                            <Box sx={{ display: "flex", justifyContent: 'flex-start', alignItems: 'center', gap: 1, marginBottom: 2 }}>
+                            <Box sx={{ display: "flex", justifyContent: 'flex-start', alignItems: 'center', gap: 1, marginBottom: 1 }}>
                                 <Button 
                                     type="button" 
                                     variant="outlined" 
@@ -470,22 +460,115 @@ export default function DesktopTodo() {
                             </Box>
                             {
                                 fetchingTasks ? (
-                                    <Box sx={{ borderRadius: 5, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2 }}>
-                                        <Box sx={{ display: "flex", justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
-                                            <img src={FetchingTaskLoader} height={500} width={400} alt="fetching-task-loader"/>
+                                    <Box
+                                        role="status"
+                                        aria-live="polite"
+                                        sx={{
+                                            width: "97%",
+                                            mx: "auto",
+                                            minHeight: 220,
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            gap: 2,
+                                            p: { xs: 2, sm: 3 },
+                                            border: "1px solid",
+                                            borderColor: "divider",
+                                            borderRadius: 3,
+                                            bgcolor: "background.paper",
+                                        }}
+                                        >
+                                        <CircularProgress size={28} />
+                                        <Box sx={{ textAlign: "center" }}>
+                                            <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
+                                            Loading your tasks
+                                            </Typography>
+                                            <Typography variant="body2" color="text.secondary">
+                                            This should only take a moment.
+                                            </Typography>
                                         </Box>
-                                        <Typography sx={{ fontSize: 25 }}>Fetching Tasks ...</Typography>
-                                    </Box>
+
+                                        <Box sx={{ display: "flex", gap: 0.75, mt: 0.5 }}>
+                                            {[0, 1, 2].map((dot) => (
+                                            <Box
+                                                key={dot}
+                                                sx={{
+                                                width: 7,
+                                                height: 7,
+                                                borderRadius: "50%",
+                                                bgcolor: "primary.main",
+                                                animation: "loadingDot 1s ease-in-out infinite",
+                                                animationDelay: `${dot * 150}ms`,
+                                                "@keyframes loadingDot": {
+                                                    "0%, 60%, 100%": { opacity: 0.3, transform: "scale(0.8)" },
+                                                    "30%": { opacity: 1, transform: "scale(1)" },
+                                                },
+                                                }}
+                                            />
+                                            ))}
+                                        </Box>
+                                        </Box>
                                 ): (
                                     <>
                                         {
                                             !displayedTasks.length ? (
-                                                <Box sx={{ display: "flex", justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: 2 }}>
-                                                    <img src={NoTaskFound} alt="No tasks found" height={100} width={100}/>
-                                                    <Typography sx={{ fontSize: 14, fontWeight: 'bold'}}>No data found</Typography>
-                                                </Box>
+                                                <Box
+                                                    sx={{
+                                                        minHeight: 240,
+                                                        display: "flex",
+                                                        flexDirection: "column",
+                                                        justifyContent: "center",
+                                                        alignItems: "center",
+                                                        gap: 1.5,
+                                                        px: 3,
+                                                        py: 4,
+                                                        border: "1px dashed",
+                                                        borderColor: "divider",
+                                                        borderRadius: 3,
+                                                        bgcolor: "grey.50",
+                                                        textAlign: "center",
+                                                    }}
+                                                    >
+                                                    <Box
+                                                        sx={{
+                                                        width: 72,
+                                                        height: 72,
+                                                        display: "grid",
+                                                        placeItems: "center",
+                                                        borderRadius: "50%",
+                                                        bgcolor: "common.white",
+                                                        border: "1px solid",
+                                                        borderColor: "divider",
+                                                        }}
+                                                    >
+                                                        <StickyNotes size={30} color="#9e9e9e"/>
+                                                    </Box>
+                                                        <Box>
+                                                            <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+                                                                {hasActiveFilters ? "No matching tasks" : "No tasks yet"}
+                                                            </Typography>
+
+                                                            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                                                                {hasActiveFilters
+                                                                ? "Try changing or clearing your filters to see more tasks."
+                                                                : "Your tasks will appear here once they’re added."}
+                                                            </Typography>
+                                                        </Box>
+                                                    </Box>
                                             ): (
-                                                <Paper sx={{ height: "81vh", width: '100%', borderRadius: 5 }}>
+                                                <Paper
+                                                    elevation={0}
+                                                    sx={{
+                                                        height: "81vh",
+                                                        width: "100%",
+                                                        overflow: "hidden",
+                                                        border: "1px solid",
+                                                        borderColor: "divider",
+                                                        borderRadius: 3,
+                                                        bgcolor: "background.paper",
+                                                    }}
+                                                    >
                                                     <DataGrid
                                                         rows={displayedTasks}
                                                         columns={columns}
@@ -497,20 +580,53 @@ export default function DesktopTodo() {
                                                         rowSelectionModel={rowSelectioChangeModel}
                                                         onRowSelectionModelChange={handleSelectionChange}
                                                         columnVisibilityModel={columnVisibilityModel}
-                                                        onColumnVisibilityModelChange={(newModel: GridColumnVisibilityModel) => setColumnVisibilityModel(newModel)}
+                                                        onColumnVisibilityModelChange={(newModel: GridColumnVisibilityModel) =>
+                                                        setColumnVisibilityModel(newModel)
+                                                        }
                                                         checkboxSelection
-                                                        sx={{ 
-                                                            borderRadius: 5,
-                                                            '& .MuiCheckbox-root.Mui-checked': {
-                                                                color: '#62C6FF', 
+                                                        sx={{
+                                                        height: "100%",
+                                                        border: 0,
+                                                        color: "text.primary",
+
+                                                        "& .MuiDataGrid-columnHeaders": {
+                                                            bgcolor: "#f8fafc",
+                                                            borderBottom: "1px solid",
+                                                            borderColor: "divider",
+                                                        },
+                                                        "& .MuiDataGrid-columnHeaderTitle": {
+                                                            fontWeight: 700,
+                                                            fontSize: 13,
+                                                            color: "text.secondary",
+                                                        },
+                                                        "& .MuiDataGrid-cell": {
+                                                            borderColor: "divider",
+                                                            display: "flex",
+                                                            alignItems: "center",
+                                                        },
+                                                        "& .MuiDataGrid-row": {
+                                                            transition: "background-color 120ms ease",
+                                                            "&:hover": { bgcolor: "#f8fafc" },
+                                                            "&.Mui-selected": {
+                                                            bgcolor: "rgba(25, 118, 210, 0.06)",
+                                                            "&:hover": { bgcolor: "rgba(25, 118, 210, 0.1)" },
                                                             },
-                                                                '& .MuiDataGrid-row .MuiDataGrid-cellCheckbox .Mui-disabled': {
-                                                                display: 'none',
-                                                            },
-                                                            minHeight: '80vh'
+                                                        },
+                                                        "& .MuiCheckbox-root.Mui-checked": {
+                                                            color: "primary.main",
+                                                        },
+                                                        "& .MuiDataGrid-row .MuiDataGrid-cellCheckbox .Mui-disabled": {
+                                                            visibility: "hidden",
+                                                        },
+                                                        "& .MuiDataGrid-columnSeparator": {
+                                                            color: "divider",
+                                                        },
+                                                        "& .MuiDataGrid-overlay": {
+                                                            bgcolor: "background.paper",
+                                                        },
                                                         }}
                                                     />
-                                                </Paper>
+                                                    </Paper>
                                             )
                                         }
                                     </>
