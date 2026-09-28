@@ -15,8 +15,9 @@ import { useDropzone } from 'react-dropzone'
 import EditFilePreview from './EditFilePreview';
 import DeleteSubTaskDesktop from '../Todo/DeleteSubTaskDesktop';
 import { validFileTypes } from '../../utils/utils';
-import FetchingTaskLoader from '../../assets/loader.svg'
 import { ChevronLeft, Plus, Trash, UploadIcon } from 'lucide-react';
+import TaskNotFound from '../NotFound/TaskNotFound';
+import FetchingTask from '../NotFound/FetchingTask';
 
 dayjs.extend(customParseFormat);
 
@@ -36,6 +37,7 @@ export default function EditTaskDesktop() {
         attachments: [],
         subtask: []
     })
+    const [taskNotFound, setTaskNotFound] = useState(false)
     const [loading, setLoading] = useState(false);
     const [fetchingTask, setFetchingTask] = useState(false);
     const [fileError, setFileError] = useState<{error: boolean, msg: string} | null>(null);
@@ -216,8 +218,10 @@ export default function EditTaskDesktop() {
 
     const fetch = async () => {
         setFetchingTask(true)
+        setTaskNotFound(false)
         try{
             const result = await getTask(id as string);
+            console.log(result)
             if(result.status === 401){
                 toast.error("Session expired, please login again.");
                 navigate("/login")
@@ -226,13 +230,16 @@ export default function EditTaskDesktop() {
                 setTask(task)
                 setFetchingTask(false)
             }
+            if(result.status === 500){
+                setFetchingTask(false)
+                setTaskNotFound(true)
+            }
             setTask(result)
             setFetchingTask(false)
         }catch(error: unknown){
-            toast.error("Error fetching tasks, please reload the page.");
             setFetchingTask(false)
+            setTaskNotFound(true)
         }
-        
     }
 
     const handleSubTaskChange = (index: number, field: string, value: string) => {
@@ -343,6 +350,7 @@ export default function EditTaskDesktop() {
     return (
         <Box
             sx={{
+                boxSizing: "border-box",
                 minHeight: "100%",
                 display: "flex",
                 flexDirection: "column",
@@ -351,49 +359,18 @@ export default function EditTaskDesktop() {
             }}
         >
             {fetchingTask ? (
-            <Box
-                sx={{
-                flex: 1,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                textAlign: "center",
-                }}
-            >
-                <Box
-                component="img"
-                src={FetchingTaskLoader}
-                alt=""
-                sx={{ width: { xs: 220, sm: 320 }, maxWidth: "100%" }}
-                />
-                <Typography variant="h6" sx={{ mt: 2, fontWeight: 600 }}>
-                Loading task…
-                </Typography>
-            </Box>
-            ) : !task ? (
-            <Box
-                sx={{
-                flex: 1,
-                display: "grid",
-                placeItems: "center",
-                }}
-            >
-                <Typography variant="h6" color="text.secondary">
-                No task found
-                </Typography>
-            </Box>
+                <FetchingTask/>
+            ) : taskNotFound ? (
+                <TaskNotFound/>
             ) : (
             <>
                 <DeleteSubTaskDesktop
-                open={openDeleteSubtask}
-                proceed={handleRemoveSubTask}
-                close={handleCancelSubTaskDeletionModal}
-                subtaskTitle={subTaskToDelete.name}
-                itemToDelete={subTaskToDelete.key}
+                    open={openDeleteSubtask}
+                    proceed={handleRemoveSubTask}
+                    close={handleCancelSubTaskDeletionModal}
+                    subtaskTitle={subTaskToDelete.name}
+                    itemToDelete={subTaskToDelete.key}
                 />
-
-                {/* Header stays outside the scrolling form */}
                 <Box
                 sx={{
                     width: "100%",
@@ -415,16 +392,12 @@ export default function EditTaskDesktop() {
                 </IconButton>
 
                 <Box>
-                    <Typography variant="h5" sx={{ fontWeight: 700, lineHeight: 1.2 }}>
-                    Edit task
-                    </Typography>
+                    <Typography variant="h5" sx={{ fontWeight: 700, lineHeight: 1.2 }}>Edit task</Typography>
                     <Typography variant="body2" color="text.secondary">
-                    Update task details, schedule, attachments, and subtasks.
+                        Update task details, schedule, attachments, and subtasks.
                     </Typography>
                 </Box>
                 </Box>
-
-                {/* Card fills available height. Only its content area scrolls. */}
                 <Paper
                 elevation={0}
                 sx={{
@@ -453,7 +426,6 @@ export default function EditTaskDesktop() {
                         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
                             Priority is fixed after creation. You can update the status and task information.
                         </Typography>
-
                         <Grid container spacing={2}>
                             <Grid size={{ xs: 12, sm: 6 }}>
                                 <TextField
@@ -533,9 +505,7 @@ export default function EditTaskDesktop() {
                             </Grid>
                         </Grid>
                     </Box>
-
                     <Divider />
-
                     {/* Schedule */}
                     <Box>
                         <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>Schedule</Typography>
@@ -607,11 +577,9 @@ export default function EditTaskDesktop() {
                     <Divider />
                     {/* Attachments */}
                     <Box>
-                        <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-                        Attachments
-                        </Typography>
+                        <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>Attachments</Typography>
                         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                        Add up to 5 files, with a maximum size of 10 MB per file.
+                            Add up to 5 files, with a maximum size of 10 MB per file.
                         </Typography>
                         <Box
                             {...getRootProps()}
