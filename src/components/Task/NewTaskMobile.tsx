@@ -30,7 +30,6 @@ dayjs.extend(customParseFormat);
 
 export default function NewTaskMobile() {
     const [loading, setLoading] = useState(false);
-    const inputRef = useRef<HTMLInputElement | null>(null);
     const [fileError, setFileError] = useState<{error: boolean, msg: string} | null>(null)
     const navigate = useNavigate();
     const [errors, setErrors] = useState<{key: string, error: string}[] | []>([]);
