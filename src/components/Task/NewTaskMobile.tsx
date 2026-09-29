@@ -151,21 +151,6 @@ export default function NewTaskMobile() {
         }
     })
 
-    const subTasksDropdown = [
-        {
-            value: "not-done",
-            label: "Not Done"
-        },
-        {
-            value: "done",
-            label: "Done"
-        },
-    ]
-    
-    const handleBrowsFileClick = () => {
-        inputRef.current?.click();
-    }
-
     const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setTask((prev) => ({...prev, [name]: value}))
