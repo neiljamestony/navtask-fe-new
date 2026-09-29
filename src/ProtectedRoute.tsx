@@ -1,4 +1,4 @@
-import { Outlet, Navigate } from "react-router-dom";
+import { Outlet, useNavigate, Navigate } from "react-router-dom";
 import { Box, Typography, CircularProgress } from "@mui/material";
 import { isAuthenticated } from "./api/auth/auth";
 import { useEffect, useState } from "react";
@@ -7,45 +7,85 @@ import { setAuthData } from "./reducer/AuthSlice";
 import toast from "react-hot-toast";
 
 const ProtectedRoute = () => {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const [authenticated, setAuthenticated] = useState<boolean | null>(null);
     
     useEffect(() => {
         let done = true
         const check = async () => {
-            try {
-                const request = await isAuthenticated();
-                if(!request.status){
-                    toast.error('Unauthorized, redirecting to login page',{
-                        id: 'unauthorized-expired-error' 
-                    })
-                    setAuthenticated(false);
-                }else{
-                    if(request.status === 200){
-                        const isAuth = request.status === 200;
-                        dispatch(setAuthData(request.data))
-                        setAuthenticated(isAuth);
-                    }
-                    if(request?.status === 401){
-                        if(request?.msg === "TOKEN_EXPIRED"){
-                            toast.error('Session expired, redirecting to login page',{
-                                id: 'session-expired-error' 
-                            })               
+            const requestWithTimeout = async () => {
+                let timeoutId: ReturnType<typeof setTimeout>;
 
-                        }else if (request?.msg === "UNAUTHORIZED"){
-                            toast.error('Unauthorized, redirecting to login page',{
-                                id: 'unauthorized-expired-error' 
-                            })
-                        }
-                        setAuthenticated(false);
-                    }
+                try {
+                return await Promise.race([
+                    isAuthenticated(),
+                    new Promise<never>((_, reject) => {
+                    timeoutId = setTimeout(
+                        () => reject(new Error("AUTH_REQUEST_TIMEOUT")),
+                        5000
+                    );
+                    }),
+                ]);
+                } finally {
+                clearTimeout(timeoutId!);
                 }
-                
-            } catch (err: any) {
-                const message = err instanceof Error ? err.message : err;
-                toast.error(message)
+            };
+
+            try {
+                let request;
+
+                // Retry once if the request fails or times out.
+                for (let attempt = 0; attempt < 2; attempt++) {
+                try {
+                    request = await requestWithTimeout();
+                    break;
+                } catch (error) {
+                    if (attempt === 1) throw error;
+                }
+                }
+
+                if (request?.status === 200) {
+                dispatch(setAuthData(request.data));
+                setAuthenticated(true);
+                return;
+                }
+
+                if (request?.status === 401) {
+                toast.error(
+                    request.msg === "TOKEN_EXPIRED"
+                    ? "Session expired, redirecting to login page."
+                    : "Unauthorized, redirecting to login page.",
+                    {
+                    id:
+                        request.msg === "TOKEN_EXPIRED"
+                        ? "session-expired-error"
+                        : "unauthorized-expired-error",
+                    }
+                );
+                } else {
+                toast.error("Unable to verify your session. Redirecting to login page.", {
+                    id: "auth-check-error",
+                });
+                }
+
+                setAuthenticated(false);
+                navigate("/login", { replace: true });
+            } catch (error) {
+                const timedOut =
+                error instanceof Error && error.message === "AUTH_REQUEST_TIMEOUT";
+
+                toast.error(
+                timedOut
+                    ? "The server did not respond within 5 seconds. Redirecting to login page."
+                    : "Unable to connect to the server. Redirecting to login page.",
+                { id: "auth-connection-error" }
+                );
+
+                setAuthenticated(false);
+                navigate("/login", { replace: true });
             }
-        };
+            };
 
         done && check();
 

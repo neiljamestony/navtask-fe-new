@@ -47,35 +47,32 @@ export default function DesktopIndex() {
       <Box
         sx={{
           display: "flex",
+          flexDirection: "column",
           width: "100%",
           height: "100vh",
+          minHeight: 0,
           overflow: "hidden",
           bgcolor: "#f6f8fb",
         }}
       >
         <Box
-          component="aside"
+          component="header"
           sx={{
-            width: 248,
-            flexShrink: 0,
             display: "flex",
-            flexDirection: "column",
-            px: 2,
-            py: 2.5,
+            alignItems: "center",
+            gap: { xs: 1.5, sm: 3 },
+            width: "100%",
+            minHeight: 76,
+            boxSizing: "border-box",
+            px: { xs: 2, md: 3.5 },
+            py: 1.25,
             bgcolor: "#fff",
-            borderRight: "1px solid",
+            borderBottom: "1px solid",
             borderColor: "divider",
+            zIndex: 1,
           }}
         >
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: 1.25,
-              px: 1.25,
-              mb: 4,
-            }}
-          >
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1.25, flexShrink: 0 }}>
             <Box
               sx={{
                 width: 38,
@@ -89,7 +86,6 @@ export default function DesktopIndex() {
             >
               <CalendarCheck2 size={21} strokeWidth={2.2} />
             </Box>
-
             <Typography
               variant="h6"
               sx={{ fontWeight: 750, letterSpacing: -0.4, color: "text.primary" }}
@@ -98,26 +94,21 @@ export default function DesktopIndex() {
             </Typography>
           </Box>
 
-          <Typography
-            variant="overline"
-            sx={{ px: 1.5, mb: 1, color: "text.secondary", fontWeight: 700 }}
+          <Box
+            component="nav"
+            aria-label="Main navigation"
+            sx={{ display: "flex", alignItems: "center", flex: 1, minWidth: 0, ml: { xs: 0, sm: 2 } }}
           >
-            Workspace
-          </Typography>
-
-          <Box component="nav" aria-label="Main navigation">
             {navItems.map((item) => (
               <ButtonBase
                 key={item.label}
                 onClick={item.onClick}
                 aria-current={item.selected ? "page" : undefined}
                 sx={{
-                  width: "100%",
-                  minHeight: 44,
+                  minHeight: 42,
                   justifyContent: "flex-start",
-                  gap: 1.5,
+                  gap: 1,
                   px: 1.5,
-                  mb: 0.75,
                   borderRadius: 2,
                   color: item.selected ? "primary.main" : "text.secondary",
                   bgcolor: item.selected ? "primary.50" : "transparent",
@@ -134,56 +125,43 @@ export default function DesktopIndex() {
             ))}
           </Box>
 
-          <Box sx={{ mt: "auto" }}>
-            <ButtonBase
-              onClick={() => setSignOutOpen(true)}
-              sx={{
-                width: "100%",
-                minHeight: 44,
-                justifyContent: "flex-start",
-                gap: 1.5,
-                px: 1.5,
-                mb: 1.5,
-                borderRadius: 2,
-                color: "text.secondary",
-                "&:hover": { bgcolor: "action.hover", color: "error.main" },
-              }}
-            >
-              <LogOut size={19} />
-              <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                Sign out
-              </Typography>
-            </ButtonBase>
-
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: 1.25,
-                p: 1.25,
-                border: "1px solid",
-                borderColor: "divider",
-                borderRadius: 2.5,
-                minWidth: 0,
-              }}
-            >
+          <Box sx={{ display: "flex", alignItems: "center", gap: { xs: 1, sm: 2 }, flexShrink: 0 }}>
+            <Box sx={{ display: { xs: "none", sm: "flex" }, alignItems: "center", gap: 1, minWidth: 0 }}>
               <Avatar
                 src={AvatarIcon}
                 alt=""
                 sx={{ width: 36, height: 36, bgcolor: "grey.100" }}
               />
               <Box sx={{ minWidth: 0 }}>
-                <Typography variant="caption" color="text.secondary">
+                <Typography variant="caption" color="text.secondary" sx={{ display: "block", lineHeight: 1.2 }}>
                   Signed in as
                 </Typography>
                 <Typography
                   variant="body2"
-                  sx={{ fontWeight: 700, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}
+                  sx={{ fontWeight: 700, maxWidth: 180, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}
                 >
                   {authData?.username || "User"}
                 </Typography>
               </Box>
             </Box>
+            <ButtonBase
+              onClick={() => setSignOutOpen(true)}
+              sx={{
+                minHeight: 40,
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                px: 1.25,
+                borderRadius: 2,
+                color: "text.secondary",
+                "&:hover": { bgcolor: "action.hover", color: "error.main" },
+              }}
+            >
+              <LogOut size={18} />
+              <Typography variant="body2" sx={{ fontWeight: 500, display: { xs: "none", sm: "block" } }}>
+                Sign out
+              </Typography>
+            </ButtonBase>
           </Box>
         </Box>
 
@@ -192,10 +170,12 @@ export default function DesktopIndex() {
           sx={{
             flex: 1,
             minWidth: 0,
-            height: "100%",
+            minHeight: 0,
+            width: "100%",
             overflowY: "auto",
             overscrollBehavior: "contain",
-            p: { xs: 1.5, md: 3 },
+            p: { xs: 1.5, sm: 2.5, md: 3 },
+            boxSizing: "border-box",
           }}
         >
           <Outlet />

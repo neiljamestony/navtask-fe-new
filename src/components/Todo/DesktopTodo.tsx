@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
-import { Box, Typography, Card, Button, Paper, Stack, IconButton, Grid, Chip, Divider, CircularProgress, Tooltip } from '@mui/material'
+import { Box, Typography, Card, Button, Paper, Stack, IconButton, Grid, Chip, Divider, CircularProgress, Tooltip, useTheme, useMediaQuery } from '@mui/material'
 import { Add } from '@mui/icons-material'
 import { getTasks, removeTask } from '../../api/task/task';
 import { useNavigate } from 'react-router-dom';
@@ -14,6 +14,7 @@ import DeleteItems from './DeleteItems';
 
 // ICONS
 import Filters from './Filters/Filters';
+import ButtonGridFilterMenuItems from './Filters/ButtonGridMenuItems';
 
 export const prioritiesIcons = {
     low: {
@@ -99,6 +100,8 @@ interface Task {
 export default function DesktopTodo() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const theme = useTheme();
+    const smallLaptop = useMediaQuery(theme.breakpoints.down(1441))
     const { filteredPriorityItems, filteredStatusItems } = useSelector((state: any) => state.dashboard);
     const [allTasks, setAllTasks] = useState<Task[] | []>([]);
     const [fetchingTasks, setFetchingTasks] = useState(false);
@@ -224,16 +227,29 @@ export default function DesktopTodo() {
             ),
         },
         { field: 'id', headerName: ""},
-        { field: 'title', headerName: 'Title', flex: 1, minWidth: 160, 
+        {
+            field: "title",
+            headerName: "Title",
+            flex: 1,
+            minWidth: 200,
             renderCell: (params) => {
-                const due_date = params.row.due_date;
+                const dueDate = params.row.due_date;
+
                 return (
-                    <Box sx={{ display: "flex", alignItems: 'center', justifyContent: 'flex-start', gap: 1, marginTop: 2 }}>
-                        <Typography variant="caption" sx={{ paddingLeft: due_date === "" ? 10 : 0, fontWeight: 'bold', paddingTop: due_date === "" ? 2 : 0 }}>{params.row.title}</Typography>
-                    </Box>
-                )
-                
-            } 
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    <Typography
+                    variant="caption"
+                    sx={{
+                        pl: dueDate === "" ? 10 : 0,
+                        fontWeight: "bold",
+                        pt: dueDate === "" ? 2 : 0,
+                    }}
+                    >
+                    {params.row.title}
+                    </Typography>
+                </Box>
+                );
+            },
         },
         {
             field: "due_date",
@@ -442,7 +458,7 @@ export default function DesktopTodo() {
         <>
             <DeleteItems loading={loadingitemRemoval} close={handleCancelDelete} proceed={handleDeleteItem} open={deleteItem} ids={ids}/>
             <Stack spacing={2}>
-                <Card variant="outlined" sx={{ padding: 2, borderRadius: 5, height: "93vh" }}>
+                <Card variant="outlined" sx={{ padding: 2, borderRadius: 5, height: "83vh" }}>
                     <Box sx={{ display: "flex", justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
                         <Box sx={{ display: "flex", justifyContent: 'center', alignItems: 'start', gap: 1 }}>
                             <CopyCheck size={20}/>
@@ -453,25 +469,50 @@ export default function DesktopTodo() {
                     <Divider sx={{ marginBottom: 2}}/>
                     <Grid container spacing={1} sx={{ width: "100%", minWidth: 0 }}>
                         <Grid size={openFilters ? 2 : 0}>
-                            {openFilters && <Filters priorityMenuItems={priorityMenuItems} statusMenuItems={statusMenuItems} />}
+                            {!smallLaptop && openFilters && <Filters priorityMenuItems={priorityMenuItems} statusMenuItems={statusMenuItems} />}
                         </Grid>
-                        <Grid size={openFilters ? 10 : 12}>
-                            <Box sx={{ display: "flex", justifyContent: 'flex-start', alignItems: 'center', gap: 1, marginBottom: 1 }}>
-                                <Button 
-                                    type="button" 
-                                    variant="outlined" 
-                                    sx={{ 
-                                        textTransform: 'none', 
-                                        backgroundColor: '#fff', 
-                                        color: 'black', 
-                                        borderColor: 'grey.300', 
-                                        borderRadius: 3 
-                                    }}
-                                    onClick={() => setOpenFilters(!openFilters)}
-                                    startIcon={
-                                        <SlidersHorizontal size={15}/>
-                                    }>{openFilters ? "Hide Filters" : "Show Filters"}
-                                </Button>
+                        <Grid size={!smallLaptop && openFilters ? 10 : 12}>
+                            <Box sx={{ mb: 1.5 }}>
+                                <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: openFilters ? 1 : 0 }}>
+                                    <Button
+                                    type="button"
+                                    variant={openFilters ? "contained" : "outlined"}
+                                    aria-expanded={openFilters}
+                                    onClick={() => setOpenFilters((open) => !open)}
+                                    startIcon={<SlidersHorizontal size={15} />}
+                                    sx={{ textTransform: "none", borderRadius: 2.5 }}
+                                    >
+                                    {openFilters ? "Hide filters" : "Show filters"}
+                                    </Button>
+                                </Box>
+
+                                {smallLaptop && openFilters && (
+                                    <Paper
+                                    variant="outlined"
+                                    sx={{ p: 1.5, borderRadius: 2.5, bgcolor: "#fbfcfe" }}
+                                    >
+                                        <Stack
+                                            direction="row"
+                                            useFlexGap
+                                            spacing={2}
+                                            sx={{ flexWrap: "wrap" }}
+                                            >
+                                            <Box sx={{ flex: "1 1 420px", minWidth: 0 }}>
+                                                <ButtonGridFilterMenuItems
+                                                filterMenuItems={statusMenuItems}
+                                                name="Status"
+                                                />
+                                            </Box>
+
+                                            <Box sx={{ flex: "1 1 320px", minWidth: 0 }}>
+                                                <ButtonGridFilterMenuItems
+                                                filterMenuItems={priorityMenuItems}
+                                                name="Priority"
+                                                />
+                                            </Box>
+                                        </Stack>
+                                    </Paper>
+                                )}
                             </Box>
                             {
                                 fetchingTasks ? (
@@ -575,7 +616,7 @@ export default function DesktopTodo() {
                                                 <Paper
                                                     elevation={0}
                                                     sx={{
-                                                        height: "81vh",
+                                                        height: "71vh",
                                                         width: "100%",
                                                         overflow: "hidden",
                                                         border: "1px solid",

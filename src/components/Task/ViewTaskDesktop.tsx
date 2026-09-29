@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom"
-import { Box, Typography, IconButton, Divider, Grid, Button, Card, Avatar, CardHeader, CardContent, Chip, Tabs, Tab } from "@mui/material";
+import { Box, Typography, IconButton, Divider, Grid, Button, Card, Avatar, CardHeader, CardContent, Chip, Tabs, Tab, useMediaQuery, useTheme } from "@mui/material";
 import { getTask } from "../../api/task/task";
 import toast from "react-hot-toast";
 import { prioritiesIcons, statusIcons } from "../Todo/DesktopTodo";
@@ -16,6 +16,8 @@ import TaskNotFound from "../NotFound/TaskNotFound";
 
 export default function ViewTaskDesktop(){
     const { id } = useParams();
+    const theme = useTheme();
+    const smallLaptop = useMediaQuery(theme.breakpoints.down(1441))
     const [tab, setTab] = useState(0);
     const navigate = useNavigate();
     const [fetchingTask, setFetchingTask] = useState<boolean>(false)
@@ -111,7 +113,7 @@ export default function ViewTaskDesktop(){
                                 taskNotFound ? (
                                     <TaskNotFound/>
                                 ): (
-                                    <Card variant="outlined" sx={{ borderRadius: 5, padding: 2, height: '92vh' }}>
+                                    <Card variant="outlined" sx={{ borderRadius: 5, padding: 2, height: '87vh' }}>
                                         <DeleteItems loading={itemDeletionLoader} close={() => setDeleteItem(false)} proceed={handleDeleteItem} open={deleteItem} ids={[task.id.toString()]}/>
                                         <Box sx={{ display: "flex", justifyContent: "start", alignItems: 'center', gap: 2 }}>
                                             <IconButton size="small" onClick={() => navigate("/")}>
@@ -209,11 +211,11 @@ export default function ViewTaskDesktop(){
                                             </Grid>
                                         </Card>
                                         <Grid container spacing={1}>
-                                            <Grid size={2}>
+                                            <Grid size={smallLaptop ? 3 : 2}>
                                                 <Card
                                                     variant="outlined"
                                                     sx={{
-                                                        height: "79vh",
+                                                        height: "75vh",
                                                         borderRadius: 3,
                                                         borderColor: "divider",
                                                         overflow: "hidden",
@@ -336,8 +338,8 @@ export default function ViewTaskDesktop(){
                                                     </CardContent>
                                                 </Card>
                                             </Grid>
-                                            <Grid size={10}>
-                                                <Card variant="outlined" sx={{ borderRadius: 5, height: '79vh', overflowY: 'auto' }}>
+                                            <Grid size={smallLaptop ? 9 : 10}>
+                                                <Card variant="outlined" sx={{ borderRadius: 5, height: '75vh', overflowY: 'auto' }}>
                                                     <Box sx={{ marginTop: 1 }}>
                                                         <Tabs
                                                             value={tab}
