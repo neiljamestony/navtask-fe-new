@@ -445,25 +445,25 @@ export default function EditTaskDesktop() {
 
                             <Grid size={{ xs: 12, sm: 6 }}>
                                 <TextField
-                                select
-                                label="Status"
-                                value={task.status}
-                                fullWidth
-                                onChange={handleStatusChange}
+                                    select
+                                    label="Status"
+                                    value={task.status ?? ""}
+                                    fullWidth
+                                    onChange={handleStatusChange}
                                 >
-                                {status.map((option) => (
+                                    {status.map((option) => (
                                     <MenuItem
-                                    key={option.value}
-                                    value={option.value}
-                                    disabled={
-                                        option.value === "completed" &&
-                                        task.subtask.length > 0 &&
-                                        !subtasksCompleted
-                                    }
+                                        key={option.value}
+                                        value={task.status === option.value ? task.status : option.value}
+                                        disabled={
+                                            option.value === "completed" &&
+                                            task.subtask.length > 0 &&
+                                            !subtasksCompleted
+                                        }
                                     >
-                                    {option.label}
+                                        {option.label}
                                     </MenuItem>
-                                ))}
+                                    ))}
                                 </TextField>
                             </Grid>
 

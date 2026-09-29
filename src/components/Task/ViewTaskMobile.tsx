@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom"
 import { Box, Typography, IconButton, AppBar, Toolbar, Chip, Avatar } from "@mui/material";
 import { ArrowBackIosNewRounded } from "@mui/icons-material";
 import { getTask } from "../../api/task/task";
-import { prioritiesIcons, statusIcons } from "../Todo/DesktopTodo";
+import { prioritiesIcons, subTaskStatusIcons, statusIcons } from "../Todo/DesktopTodo";
 import { removeTask } from "../../api/task/task";
 import type { UTask } from "../../typescript/interface";
 import { limitText } from "../../utils/utils";
@@ -73,7 +73,7 @@ export default function ViewTaskMobile(){
 
 
     const priority = prioritiesIcons[task?.priority as keyof typeof prioritiesIcons];
-    const status = statusIcons[task?.status as keyof typeof statusIcons];
+    const status = statusIcons[task?.status as keyof typeof statusIcons]
 
     const handleDeleteItem = async (ids: string[] | []) => {
         setItemDeletionLoader(true)
@@ -391,20 +391,23 @@ export default function ViewTaskMobile(){
                             </Typography>
 
                             {task.subtask.length > 0 ? (
+                                
                                 <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-                                {task.subtask.map((subTask, key) => (
+                                {task.subtask.map((subTask, key) => {
+                                    const subtaskStatus = subTaskStatusIcons[subTask?.status as keyof typeof subTaskStatusIcons]
+                                    return (
                                     <Box
-                                    key={`${subTask.title}-${key}`}
-                                    sx={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "space-between",
-                                        gap: 1.5,
-                                        p: 1.25,
-                                        border: "1px solid",
-                                        borderColor: "divider",
-                                        borderRadius: 2,
-                                    }}
+                                        key={`${subTask.title}-${key}`}
+                                        sx={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "space-between",
+                                            gap: 1.5,
+                                            p: 1.25,
+                                            border: "1px solid",
+                                            borderColor: "divider",
+                                            borderRadius: 2,
+                                        }}
                                     >
                                         <Avatar
                                             variant="rounded"
@@ -420,21 +423,21 @@ export default function ViewTaskMobile(){
                                     <Typography variant="body2" sx={{ flex: 1, overflowWrap: "anywhere" }}>
                                         {subTask.title}
                                     </Typography>
-                                    {status && (
+                                    {subtaskStatus && (
                                         <Chip
                                             size="small"
-                                            icon={status.icon}
-                                            label={status.label}
+                                            icon={subtaskStatus.icon}
+                                            label={subtaskStatus.label}
                                             sx={{
                                             flexShrink: 0,
-                                            bgcolor: status.bgColor,
-                                            color: status.color,
+                                            bgcolor: subtaskStatus.bgColor,
+                                            color: subtaskStatus.color,
                                             fontSize: 11,
                                             }}
                                         />
                                     )}
                                     </Box>
-                                ))}
+                                )})}
                                 </Box>
                             ) : (
                                 <Typography variant="body2" color="text.secondary">

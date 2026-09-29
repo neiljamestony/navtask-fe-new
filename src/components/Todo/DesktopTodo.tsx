@@ -235,58 +235,73 @@ export default function DesktopTodo() {
                 
             } 
         },
-        { field: 'due_date', headerName: 'Due Date', width: 330, sortable: true, 
-            renderCell: (params) => {
-                if(params.value === "") return false
-                const rawValue = params.value;
-                const dueDateObj = rawValue ? dayjs(rawValue) : null;
-                const currentInstant = dayjs();
+        {
+            field: "due_date",
+            headerName: "Due Date",
+            width: 180,
+            sortable: true,
+            renderCell: ({ value, row }) => {
+                if (!value) return "—";
 
-                if (!dueDateObj) {
-                    return <Typography variant="caption" sx={{ color: '#272D32', paddingTop: 1 }}>—</Typography>;
-                }
+                const dueDate = dayjs(value);
+                if (!dueDate.isValid()) return "—";
 
-                const isSameDayAsToday = params.row.status !== "completed" && currentInstant.isSame(dueDateObj, 'day');
-                const isDue = params.row.status !== "completed" && currentInstant.isAfter(dueDateObj, 'day');
+                const now = dayjs();
+                const isCompleted = row.status === "completed";
+                const isOverdue = !isCompleted && dueDate.isBefore(now, "day");
+                const isDueToday = !isCompleted && dueDate.isSame(now, "day");
+                const hoursRemaining = dueDate.diff(now, "hour");
+                const isCriticalSoon =
+                !isCompleted &&
+                row.priority === "critical" &&
+                hoursRemaining >= 0 &&
+                hoursRemaining <= 48;
 
-                const hoursRemaining = dueDateObj.diff(currentInstant, "hour");
-                const criticalItems = params.row.status !== "completed" && params.row.priority === "critical" && hoursRemaining <= 48 && hoursRemaining >= 0;
-                const formattedDisplayDate = dueDateObj.format("MM/DD/YYYY");
+                let label = "";
+                let color = "text.secondary";
+                let backgroundColor = "transparent";
 
-                if (isDue) {
-                    return (
-                        <Box sx={{ display: "flex", flexDirection: "column", paddingTop: 1 }}>
-                            <Typography variant="caption" sx={{ color: '#CA0061' }}>{formattedDisplayDate}</Typography>
-                            <Typography variant="caption" sx={{ color: '#CA0061', fontWeight: 'bold' }}>Overdue</Typography>
-                        </Box>
-                    );
-                }
-
-                if (isSameDayAsToday) {
-                    return (
-                        <Box sx={{ display: "flex", flexDirection: "column", paddingTop: 1 }}>
-                            <Typography variant="caption" sx={{ color: '#009292' }}>{formattedDisplayDate}</Typography>
-                            <Typography variant="caption" sx={{ color: '#009292', fontWeight: 'bold' }}>Today</Typography>
-                        </Box>
-                    );
-                }
-
-                if (criticalItems) {
-                    return (
-                        <Box sx={{ display: "flex", flexDirection: "column", paddingTop: 2 }}>
-                            <Typography variant="caption" sx={{ color: '#009292' }}>{formattedDisplayDate}</Typography>
-                        </Box>
-                    );
+                if (isOverdue) {
+                label = "Overdue";
+                color = "error.main";
+                backgroundColor = "error.lighter";
+                } else if (isDueToday) {
+                label = "Today";
+                color = "warning.dark";
+                backgroundColor = "warning.lighter";
+                } else if (isCriticalSoon) {
+                label = "Critical · due soon";
+                color = "error.main";
+                backgroundColor = "error.lighter";
                 }
 
                 return (
-                    <Box sx={{ display: "flex", flexDirection: "column", paddingTop: 2 }}>
-                        <Typography variant="caption" sx={{ color: '#272D32' }}>{formattedDisplayDate}</Typography>
-                    </Box>
+                <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", lineHeight: 1.3 }}>
+                    <Typography variant="body2" sx={{ color: "text.primary" }}>
+                    {dueDate.format("MMM D, YYYY")}
+                    </Typography>
+
+                    {label && (
+                    <Typography
+                        variant="caption"
+                        sx={{
+                        color,
+                        bgcolor: backgroundColor,
+                        fontWeight: 600,
+                        borderRadius: 1,
+                        px: 0.75,
+                        py: 0.25,
+                        mt: 0.25,
+                        width: "fit-content",
+                        }}
+                    >
+                        {label}
+                    </Typography>
+                    )}
+                </Box>
                 );
-                
-            }
-        },
+            },
+            },
         { field: 'priority', 
             headerName: 'Priority', 
             width: 200, 

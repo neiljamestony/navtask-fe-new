@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Typography, Button, TextField, LinearProgress, CircularProgress, IconButton, AppBar, Toolbar, Switch, FormControlLabel } from '@mui/material'
+import { Box, Typography, Button, TextField, LinearProgress, CircularProgress, IconButton, AppBar, Toolbar, Chip } from '@mui/material'
 import { ArrowBackIosNewRounded, Add } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -15,13 +15,12 @@ import { getTask } from '../../api/task/task';
 import type { UTask } from '../../typescript/interface';
 import { useDropzone } from 'react-dropzone'
 import EditFilePreview from './EditFilePreview';
-import DeleteIcon from '../../assets/Icons/Delete_active.svg'
 import { limitText, validFileTypes } from '../../utils/utils';
 import DeleteSubTask from '../Todo/DeleteSubTask';
 import DropdownDialog from '../Dialog/Mobile/Dropdown';
 import { MobileAppBar } from '../MobileAppBar';
 import { prioritiesIcons, statusIcons } from '../Todo/DesktopTodo';
-import { CalendarDays, Save } from 'lucide-react';
+import { CalendarDays, Check, Circle, Save, Trash } from 'lucide-react';
 import FetchingTask from '../NotFound/FetchingTask';
 
 dayjs.extend(customParseFormat);
@@ -362,6 +361,8 @@ export default function EditTaskMobile() {
         };
     }, [uploading]);
 
+    console.log(task)
+
    return (
         <Box sx={{ minHeight: "100dvh", bgcolor: "#f6f8fb", pb: 11 }}>
             <AppBar
@@ -479,19 +480,19 @@ export default function EditTaskMobile() {
                                 },
                             ].map(({ label, onClick, item }) => (
                                 <Box
-                                key={label}
-                                component="button"
-                                type="button"
-                                onClick={onClick}
-                                sx={{
-                                    p: 1.5,
-                                    border: "1px solid",
-                                    borderColor: "divider",
-                                    borderRadius: 2.5,
-                                    bgcolor: "background.paper",
-                                    textAlign: "left",
-                                    cursor: "pointer",
-                                }}
+                                    key={label}
+                                    component="button"
+                                    type="button"
+                                    onClick={onClick}
+                                    sx={{
+                                        p: 1.5,
+                                        border: "1px solid",
+                                        borderColor: "divider",
+                                        borderRadius: 2.5,
+                                        bgcolor: "background.paper",
+                                        textAlign: "left",
+                                        cursor: "pointer",
+                                    }}
                                 >
                                 <Typography
                                     variant="caption"
@@ -503,16 +504,16 @@ export default function EditTaskMobile() {
 
                                 {item ? (
                                     <Box
-                                    sx={{
-                                        display: "inline-flex",
-                                        alignItems: "center",
-                                        gap: 0.75,
-                                        px: 1,
-                                        py: 0.5,
-                                        borderRadius: 10,
-                                        bgcolor: item.bgColor,
-                                        color: item.color,
-                                    }}
+                                        sx={{
+                                            display: "inline-flex",
+                                            alignItems: "center",
+                                            gap: 0.75,
+                                            px: 1,
+                                            py: 0.5,
+                                            borderRadius: 10,
+                                            bgcolor: item.bgColor,
+                                            color: item.color,
+                                        }}
                                     >
                                     {item.icon}
                                     <Typography variant="caption" sx={{ fontWeight: 700, lineHeight: 1 }}>
@@ -520,9 +521,7 @@ export default function EditTaskMobile() {
                                     </Typography>
                                     </Box>
                                 ) : (
-                                    <Typography variant="body2" sx={{ fontWeight: 700 }}>
-                                    —
-                                    </Typography>
+                                    <Typography variant="body2" sx={{ fontWeight: 700 }}>—</Typography>
                                 )}
                                 </Box>
                             ))}
@@ -822,116 +821,115 @@ export default function EditTaskMobile() {
                             <Box sx={{ display: "flex", flexDirection: "column", gap: 1.25 }}>
                                 {task.subtask.map((subTask, key) => {
                                     const isDone = subTask.status === "done";
-
                                     return (
-                                    <Box
-                                        key={key}
-                                        sx={{
-                                        p: 1.5,
-                                        border: "1px solid",
-                                        borderColor: isDone ? "success.200" : "divider",
-                                        borderRadius: 2.5,
-                                        bgcolor: isDone ? "success.50" : "background.paper",
-                                        transition: "background-color 150ms ease, border-color 150ms ease",
-                                        }}
-                                    >
                                         <Box
-                                        sx={{
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "space-between",
-                                            gap: 1,
-                                            mb: 1.25,
-                                        }}
-                                        >
-                                        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                                            <Box
+                                            key={key}
                                             sx={{
-                                                width: 26,
-                                                height: 26,
-                                                display: "grid",
-                                                placeItems: "center",
-                                                borderRadius: "50%",
-                                                bgcolor: isDone ? "success.main" : "grey.200",
-                                                color: isDone ? "common.white" : "text.secondary",
-                                                fontSize: 12,
-                                                fontWeight: 700,
+                                            p: 1.5,
+                                            border: "1px solid",
+                                            borderColor: isDone ? "success.200" : "divider",
+                                            borderRadius: 2.5,
+                                            bgcolor: isDone ? "success.50" : "background.paper",
+                                            transition: "background-color 150ms ease, border-color 150ms ease",
                                             }}
+                                        >
+                                            <Box
+                                                sx={{
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    justifyContent: "space-between",
+                                                    gap: 1,
+                                                    mb: 1.25,
+                                                }}
                                             >
-                                            {key + 1}
+                                            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                                                <Box
+                                                    sx={{
+                                                    width: 26,
+                                                    height: 26,
+                                                    flexShrink: 0,
+                                                    display: "grid",
+                                                    placeItems: "center",
+                                                    borderRadius: "50%",
+                                                    bgcolor: isDone ? "success.main" : "grey.200",
+                                                    color: isDone ? "common.white" : "text.secondary",
+                                                    fontSize: 12,
+                                                    fontWeight: 700,
+                                                    }}
+                                                >
+                                                    {key + 1}
+                                                </Box>
+
+                                                <Chip
+                                                    size="small"
+                                                    icon={isDone ? <Check size={13} /> : <Circle size={12} />}
+                                                    label={isDone ? "Done · tap to reopen" : "Not done · tap to complete"}
+                                                    aria-label={
+                                                    isDone
+                                                        ? `Subtask ${key + 1} is done. Tap to mark not done`
+                                                        : `Subtask ${key + 1} is not done. Tap to mark done`
+                                                    }
+                                                    onClick={() =>
+                                                    handleSubTaskChange(key, "status", isDone ? "not-done" : "done")
+                                                    }
+                                                    sx={{
+                                                    height: 28,
+                                                    borderRadius: 10,
+                                                    fontSize: 11,
+                                                    fontWeight: 600,
+                                                    cursor: "pointer",
+                                                    bgcolor: isDone ? "success.50" : "grey.100",
+                                                    color: isDone ? "success.dark" : "text.secondary",
+                                                    border: "1px solid",
+                                                    borderColor: isDone ? "success.200" : "divider",
+                                                    "& .MuiChip-icon": { color: "inherit", ml: 0.75 },
+                                                    "&:hover": { bgcolor: isDone ? "success.100" : "grey.200" },
+                                                    }}
+                                                />
+                                                </Box>
+
+                                                <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+                                                    <IconButton
+                                                        size="small"
+                                                        aria-label={`Delete subtask ${key + 1}`}
+                                                        onClick={() =>
+                                                            handleOpenSubTaskDeletionModal(subTask.title, key)
+                                                        }
+                                                        sx={{
+                                                            color: "text.secondary",
+                                                            "&:hover": {
+                                                            color: "error.main",
+                                                            bgcolor: "error.50",
+                                                            },
+                                                        }}
+                                                    >
+                                                        <Trash size={15}/>
+                                                    </IconButton>
+                                                </Box>
                                             </Box>
 
-                                            <Typography
-                                            variant="caption"
-                                            sx={{
-                                                fontWeight: 700,
-                                                color: isDone ? "success.dark" : "text.secondary",
-                                            }}
-                                            >
-                                            {isDone ? "Completed" : "In progress"}
-                                            </Typography>
-                                        </Box>
-
-                                        <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-                                            <FormControlLabel
-                                            sx={{ m: 0 }}
-                                            control={
-                                                <Switch
-                                                size="small"
-                                                checked={isDone}
+                                            <TextField
+                                                label={`Subtask ${key + 1}`}
+                                                value={subTask.title}
+                                                error={!subTask.title.trim()}
+                                                helperText={!subTask.title.trim() ? "Title is required" : " "}
                                                 onChange={(e) =>
-                                                    handleSubTaskChange(
-                                                    key,
-                                                    "status",
-                                                    e.target.checked ? "done" : "not-done"
-                                                    )
+                                                    handleSubTaskChange(key, "title", e.target.value)
                                                 }
-                                                />
-                                            }
-                                            label=""
+                                                fullWidth
+                                                size="small"
+                                                sx={{
+                                                    "& .MuiOutlinedInput-root": {
+                                                    bgcolor: "background.paper",
+                                                    },
+                                                }}
                                             />
-
-                                            <IconButton
-                                            size="small"
-                                            aria-label={`Delete subtask ${key + 1}`}
-                                            onClick={() =>
-                                                handleOpenSubTaskDeletionModal(subTask.title, key)
-                                            }
-                                            sx={{
-                                                color: "text.secondary",
-                                                "&:hover": {
-                                                color: "error.main",
-                                                bgcolor: "error.50",
-                                                },
-                                            }}
-                                            >
-                                            <img src={DeleteIcon} alt="" height={17} width={17} />
-                                            </IconButton>
                                         </Box>
-                                        </Box>
-
-                                        <TextField
-                                            label={`Subtask ${key + 1}`}
-                                            value={subTask.title}
-                                            error={!subTask.title.trim()}
-                                            helperText={!subTask.title.trim() ? "Title is required" : " "}
-                                            onChange={(e) =>
-                                                handleSubTaskChange(key, "title", e.target.value)
-                                            }
-                                            fullWidth
-                                            size="small"
-                                            sx={{
-                                                "& .MuiOutlinedInput-root": {
-                                                bgcolor: "background.paper",
-                                                },
-                                            }}
-                                        />
-                                    </Box>
                                     );
                                 })}
                                 </Box>
-                        )}
-                        </Box>
+                            )}
+                            </Box>
 
                         {task.subtask.length > 0 && subtasksCompleted && task.status !== "completed" && (
                             <Box
@@ -1015,5 +1013,5 @@ export default function EditTaskMobile() {
             </>
             )}
         </Box>
-        );
+    );
 }

@@ -1,5 +1,5 @@
-import React, { useState, useRef, Fragment, useEffect } from 'react';
-import { Box, Typography, Button, TextField, MenuItem, InputAdornment, LinearProgress, Container, Divider, CircularProgress, IconButton, AppBar, Toolbar, Stack } from '@mui/material'
+import React, { useState, useRef, useEffect } from 'react';
+import { Box, Typography, Button, TextField, LinearProgress, CircularProgress, IconButton, AppBar, Toolbar, Chip } from '@mui/material'
 import { ArrowBackIosNewRounded, Add } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -16,16 +16,15 @@ import { useDropzone } from 'react-dropzone'
 import { MobileAppBar } from '../MobileAppBar';
 
 // ICONS
-import DeleteIcon from '../../assets/Icons/Delete_active.svg'
-import Suppress from '../../assets/Icons/Accordion_supress.svg'
 import UploadIcon from '../../assets/Icons/Upload.svg';
 
 // COMPONENTS
 import FilePreview from './FilePreview';
 import DropdownDialog from '../Dialog/Mobile/Dropdown';
+import { prioritiesIcons, statusIcons } from "../Todo/DesktopTodo";
 
 // STYLES
-import { DatePickerContainer, DropFilesTitle, MobileAppBarContainer, MobileAppBarContainerSaveButton, MobileSubTaskContainer, MobileSubTaskStatusField, MobileSubTaskTitleField, NewTaskMobileAppBar, NewTaskMobileAttachmentContainer, NewTaskMobileAttachmentFileErrorMessage, NewTaskMobileAttachmentImageContainer, NewTaskMobileAttachmentPreviewContainer, NewTaskMobileAttachmentSubContainer, NewTaskMobileAttachmentUploader, NewTaskMobileAttachmentUploaderContainer, NewTaskMobileDescriptionField, NewTaskMobileDividerContainer, NewTaskMobileDueDateDialog, NewTaskMobileDueDateField, NewTaskMobileFormContainer, NewTaskMobileStatusFieldsContainer, NewTaskMobileStatusFieldsContainerAlignment, NewTaskMobileTitleField, NewTaskMobileToolBar, SubTaskMobileButton, SubTaskMobileContainer, SubTaskMobileTitle, TitleStatusContainer } from '../Styles/Task/Task';
+import { CalendarClock, CalendarDays, Check, Circle, Trash } from 'lucide-react';
 
 dayjs.extend(customParseFormat);
 
@@ -49,6 +48,9 @@ export default function NewTaskMobile() {
         attachments: [],
         subTask: []
     })
+
+    const currentPriority = prioritiesIcons[task.priority as keyof typeof prioritiesIcons];
+    const currentStatus = statusIcons[task.status as keyof typeof statusIcons];
 
     const priorities = [
         {
@@ -266,270 +268,541 @@ export default function NewTaskMobile() {
     }, [uploading]);
 
     return (
-        <Box sx={{ padding: 2 }}>
-            <AppBar position="fixed" color="inherit" sx={NewTaskMobileAppBar}>
-                <Toolbar sx={NewTaskMobileToolBar}>
-                    <Button type="button" onClick={() => navigate("/")} startIcon={<ArrowBackIosNewRounded/>}>
-                        <Typography sx={{ fontFamily: "Roboto", fontWeight: 'bold', textTransform: 'none', color: '#027CEC', fontSize: 14 }}>Back</Typography>
-                    </Button>
-                    <Box sx={NewTaskMobileDividerContainer}>
-                        <Divider orientation="vertical" flexItem sx={{ height: 25 }}/>
-                    </Box>
-                    <Typography sx={{ fontSize: 14, fontWeight: 'bold', color: '#272D32' }}>New Task</Typography>
-                </Toolbar>
+        <Box sx={{ minHeight: "100dvh", bgcolor: "#f6f8fb", pb: 10 }}>
+            <AppBar
+            position="fixed"
+            color="inherit"
+            elevation={0}
+            sx={{
+                bgcolor: "rgba(255,255,255,0.96)",
+                backdropFilter: "blur(12px)",
+                borderBottom: "1px solid",
+                borderColor: "divider",
+            }}
+            >
+            <Toolbar sx={{ minHeight: 58, gap: 1 }}>
+                <IconButton
+                aria-label="Back to tasks"
+                onClick={() => navigate("/")}
+                size="small"
+                sx={{ border: "1px solid", borderColor: "divider", borderRadius: 2 }}
+                >
+                <ArrowBackIosNewRounded fontSize="small" />
+                </IconButton>
+                <Box>
+                <Typography variant="subtitle1" sx={{ fontWeight: 700, lineHeight: 1.2 }}>
+                    Create task
+                </Typography>
+                <Typography variant="caption" color="text.secondary">
+                    Add details and organize your work
+                </Typography>
+                </Box>
+            </Toolbar>
             </AppBar>
-            <DropdownDialog 
-                open={openDropdownDialog} 
-                close={() => setOpenDropdownDialog(false)} 
-                proceed={dropdownDialogTitle === "priority" ? handleProceedPriority : handleProceedStatus}
-                title={dropdownDialogTitle === "priority" ? "Select Priority" : "Select Status"}
-                defaultValue={dropdownDialogTitle === "priority" ? task.priority : task.status}
-                options={dropdownDialogTitle === "priority" ? priorities : status}/>
-            <Box sx={{ 
-                overflowY: task?.subTask.length > 0 || task.attachments !== null ? 'scroll' : 'none', 
-                paddingBottom: task?.subTask.length > 0 ? 5 : 0
-            }}>
-                <Container maxWidth="md" sx={NewTaskMobileFormContainer}>
-                    <Stack spacing={2}>
-                        <Box sx={NewTaskMobileStatusFieldsContainer}>
-                            <Box sx={NewTaskMobileStatusFieldsContainerAlignment}>
-                                <TextField
-                                    label="Priority"
-                                    size="small"
-                                    value={priorities.find((item) => item.value === task.priority)?.label}
-                                    fullWidth
-                                    onClick={() => handleOpenDropdownDialog("priority")}
-                                    sx={{
-                                        '& .MuiInputBase-root': {
-                                            fontSize: '14px',
-                                        },
-                                    }}
-                                    slotProps={{
-                                        input: {
-                                            readOnly: true,
-                                            endAdornment: (
-                                                <InputAdornment position="end">
-                                                    <img src={Suppress} alt="suppress-icon" height={10} width={10} />
-                                                </InputAdornment>
-                                            ),
-                                        },
-                                    }}
-                                />
-                                <TextField
-                                    label="Status"
-                                    size="small"
-                                    value={status.find((item) => item.value === task.status)?.label}
-                                    fullWidth
-                                    onClick={() => handleOpenDropdownDialog("status")}
-                                    sx={{  
-                                        '& .MuiInputBase-root': {
-                                            fontSize: '14px',
-                                        },
-                                    }}
-                                    slotProps={{
-                                        input: {
-                                            readOnly: true,
-                                            endAdornment: (
-                                                <InputAdornment position="end">
-                                                    <img src={Suppress} alt="suppress-icon" height={10} width={10} />
-                                                </InputAdornment>
-                                            ),
-                                        },
-                                    }}
-                                />
-                            </Box>
-                        </Box>
-                        <TextField
-                            id="outlined-multiline-flexible"
-                            label="Title"
-                            name="title"
-                            value={task.title}
-                            multiline
-                            slotProps={{
-                                htmlInput: { 
-                                    maxLength: 25 
-                                }
-                            }} 
-                            sx={NewTaskMobileTitleField}
-                            rows={4}
-                            required
-                            fullWidth
-                            error={errors.length > 0 && errors.filter((error) => error.key === "title").length > 0 } 
-                            helperText={errors.length > 0 && errors.filter((error) => error.key === "title").length > 0 ? errors.filter((error) => error.key === "title")[0].error : ""}
-                            onChange={handleTextChange}
-                        />
-                        <Box sx={DatePickerContainer}>
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DatePicker
-                                    label="Date Created"
-                                    value={dayjs(new Date())}
-                                    disabled
-                                    slotProps={{
-                                        textField: {
-                                            fullWidth: true,
-                                            size: 'small'
-                                        },
-                                    }}
-                                />
-                            </LocalizationProvider>
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DatePicker
-                                    label="Due Date"
-                                    value={dayjs(task.due_date)}
-                                    onChange={handleDueDateChange}
-                                    slotProps={{
-                                        toolbar: {
-                                            hidden: true,
-                                        },
-                                        textField: {
-                                            fullWidth: true,
-                                            error: errors.length > 0 && errors.filter((error) => error.key === "due_date").length > 0,
-                                            helperText: errors.length > 0 && errors.filter((error) => error.key === "due_date").length > 0 ? errors.filter((error) => error.key === "due_date")[0].error : "",
-                                            size: 'small',
-                                            style: {
-                                                color: errors.length > 0 && errors.filter((error) => error.key === "due_date").length > 0 ? '#CA0061' : '#000000',
-                                            },
-                                            sx: NewTaskMobileDueDateField,
-                                        },
-                                         mobilePaper: {
-                                            sx: {
-                                                borderRadius: 5
-                                            }
-                                        },
-                                        dialog: {
-                                            sx: NewTaskMobileDueDateDialog,
-                                            slotProps: {
-                                                backdrop: {
-                                                    sx: {
-                                                        height: '94.5vh'
-                                                    }
-                                                }
-                                            }
-                                        },
-                                        
-                                    }}
-                                />
-                            </LocalizationProvider>
-                        </Box>
-                        <TextField
-                            id="outlined-multiline-flexible"
-                            label="Details(Optional)"
-                            name="description"
-                            multiline
-                            sx={NewTaskMobileDescriptionField}
-                            slotProps={{
-                                htmlInput: { maxLength: 300 }
-                            }}
-                            error={errors.length > 0 && errors.filter((error) => error.key === "description").length > 0 } 
-                            helperText={errors.length > 0 && errors.filter((error) => error.key === "description").length > 0 ? errors.filter((error) => error.key === "description")[0].error : ""}
-                            value={task.description}
-                            rows={4}
-                            fullWidth
-                            onChange={handleTextChange}
-                        />
-                        <Box>
-                            <Box {...getRootProps()}>
-                                <input {...getInputProps()} />
-                                <Box sx={{...NewTaskMobileAttachmentContainer,
-                                    borderColor: fileError ? '#CA0061' : 'grey.300', 
-                                }}>
-                                    <Box sx={{ display: "flex", justifyContent: "center" }}>
-                                        <Box sx={{
-                                            ...NewTaskMobileAttachmentSubContainer,
-                                            color: fileError ? "#CA0061" : "text.secondary"
-                                        }}>Attachments</Box>
-                                        {
-                                            uploading ? (
-                                                <Box sx={NewTaskMobileAttachmentUploader}>
-                                                    <Box sx={NewTaskMobileAttachmentUploaderContainer}>
-                                                        <Typography sx={{ fontSize: 14, marginBottom: 1 }}>{uploadedFileNames.toString()}</Typography>
-                                                    </Box>
-                                                    <LinearProgress variant="determinate" value={progress} aria-label="Export data"/>
-                                                </Box>
-                                            ): (
-                                                <Box sx={{
-                                                    ...NewTaskMobileAttachmentImageContainer,
-                                                    paddingTop: task.attachments.length > 0 ? 2 : 4 }}>
-                                                    <Box><img src={UploadIcon} alt="upload-icon" height={30} width="100%"/></Box>
-                                                    <Box sx={{ ...DropFilesTitle, color: fileError ? "#CA0061" : "#272D32" }}> 
-                                                        Drop files to attach, or 
-                                                        <span style={{ color: fileError ? "#CA0061" : "#027CEC", cursor: "pointer" }} onClick={handleBrowsFileClick}> browse</span>.
-                                                    </Box>
-                                                </Box>
-                                            )
-                                        }
-                                    </Box>
-                                    {
-                                        !uploading && <Box sx={NewTaskMobileAttachmentPreviewContainer}>
-                                            {
-                                                task.attachments && task.attachments.map((file, key) => (
-                                                    <FilePreview file={file} key={key} removeFile={(e: React.MouseEvent<HTMLButtonElement>) => handleRemoveFile(e, key)}/>
-                                                ))
-                                            }
-                                        </Box>
-                                    }
-                                </Box>
-                            </Box>
-                            {fileError !== null && <Box sx={NewTaskMobileAttachmentFileErrorMessage}>{fileError.msg}</Box>}
-                        </Box>
-                        <Box sx={SubTaskMobileContainer}>
-                            <Typography sx={SubTaskMobileTitle}>Subtask</Typography>
-                            <Button color="primary" type="button" variant="outlined" sx={SubTaskMobileButton} startIcon={<Add/>} disabled={task.subTask.length === 10} onClick={handleNewSubTask}>New Subtask</Button>
-                        </Box>
+
+            <DropdownDialog
+                open={openDropdownDialog}
+                close={() => setOpenDropdownDialog(false)}
+                proceed={
+                    dropdownDialogTitle === "priority"
+                    ? handleProceedPriority
+                    : handleProceedStatus
+                }
+                title={dropdownDialogTitle === "priority" ? "Select priority" : "Select status"}
+                defaultValue={
+                    dropdownDialogTitle === "priority" ? task.priority : task.status
+                }
+                options={dropdownDialogTitle === "priority" ? priorities : status}
+            />
+
+            <Box
+            component="main"
+            sx={{
+                width: "100%",
+                maxWidth: 640,
+                boxSizing: "border-box",
+                mx: "auto",
+                px: 2,
+                pt: 9,
+                pb: 3,
+            }}
+            >
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 1.75 }}>
+                {/* Priority and status */}
+                <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1.25 }}>
+                    {[
                         {
-                            task.subTask.length > 0 && (
-                                <>
-                                    <Box sx={TitleStatusContainer}>
-                                        {
-                                            ["Title", "Status", ""].map((item, key) => {
-                                                return <Typography key={key} variant="body2" sx={{ color: 'grey.600' }}>{item}</Typography>
-                                            })
-                                        }
+                        label: "Priority",
+                        onClick: () => handleOpenDropdownDialog("priority"),
+                        item: currentPriority,
+                        },
+                        {
+                        label: "Status",
+                        onClick: () => handleOpenDropdownDialog("status"),
+                        item: currentStatus,
+                        },
+                    ].map(({ label, onClick, item }) => (
+                        <Box
+                        key={label}
+                        component="button"
+                        type="button"
+                        onClick={onClick}
+                        sx={{
+                            p: 1.5,
+                            border: "1px solid",
+                            borderColor: "divider",
+                            borderRadius: 2.5,
+                            bgcolor: "background.paper",
+                            textAlign: "left",
+                            cursor: "pointer",
+                        }}
+                        >
+                        <Typography
+                            variant="caption"
+                            color="text.secondary"
+                            sx={{ display: "block", mb: 0.75 }}
+                        >
+                            {label}
+                        </Typography>
+
+                        {item ? (
+                            <Box
+                            sx={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: 0.75,
+                                px: 1,
+                                py: 0.5,
+                                borderRadius: 10,
+                                bgcolor: item.bgColor,
+                                color: item.color,
+                            }}
+                            >
+                            {item.icon}
+                            <Typography variant="caption" sx={{ fontWeight: 700, lineHeight: 1 }}>
+                                {item.label}
+                            </Typography>
+                            </Box>
+                        ) : (
+                            <Typography variant="body2" sx={{ fontWeight: 700 }}>
+                            —
+                            </Typography>
+                        )}
+                        </Box>
+                    ))}
+                </Box>
+
+                {/* Title */}
+                <Box
+                    sx={{
+                        p: 2,
+                        border: "1px solid",
+                        borderColor: "divider",
+                        borderRadius: 2.5,
+                        bgcolor: "background.paper",
+                    }}
+                >
+                <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1.25 }}>
+                    Task title
+                </Typography>
+                <TextField
+                    label="What needs to be done?"
+                    name="title"
+                    value={task.title}
+                    onChange={handleTextChange}
+                    required
+                    fullWidth
+                    multiline
+                    minRows={2}
+                    maxRows={4}
+                    slotProps={{ htmlInput: { maxLength: 25 } }}
+                    error={errors.some((error) => error.key === "title")}
+                    helperText={errors.find((error) => error.key === "title")?.error ?? ""}
+                />
+                </Box>
+
+                {/* Schedule */}
+                <Box
+                    sx={{
+                        display: "grid",
+                        gridTemplateColumns: { xs: "1fr", sm: "1fr 1.4fr" },
+                        gap: 1.25,
+                    }}
+                    >
+                    <Box
+                        sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 1.25,
+                        p: 1.5,
+                        border: "1px solid",
+                        borderColor: "divider",
+                        borderRadius: 2.5,
+                        bgcolor: "background.paper",
+                        }}
+                    >
+                        <Box
+                        sx={{
+                            width: 36,
+                            height: 36,
+                            flexShrink: 0,
+                            display: "grid",
+                            placeItems: "center",
+                            borderRadius: 1.5,
+                            bgcolor: "grey.100",
+                            color: "text.secondary",
+                        }}
+                        >
+                        <CalendarDays size={17} />
+                        </Box>
+
+                        <Box>
+                        <Typography variant="caption" color="text.secondary">
+                            Created
+                        </Typography>
+                        <Typography variant="body2" sx={{ fontWeight: 700 }}>
+                            {dayjs().format("D MMM YYYY")}
+                        </Typography>
+                        </Box>
+                    </Box>
+
+                    <Box
+                        sx={{
+                        p: 1.25,
+                        border: "1px solid",
+                        borderColor: errors.some((error) => error.key === "due_date")
+                            ? "error.main"
+                            : "primary.light",
+                        borderRadius: 2.5,
+                        bgcolor: "primary.50",
+                        }}
+                    >
+                        <Box sx={{ display: "flex", alignItems: "center", gap: 0.75, mb: 1 }}>
+                            <CalendarClock size={15} color="#2563eb" />
+                            <Typography variant="caption" sx={{ color: "primary.dark", fontWeight: 700 }}>
+                                Due date
+                            </Typography>
+                        </Box>
+
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker
+                            label="Select a date"
+                            value={task.due_date ? dayjs(task.due_date) : null}
+                            onChange={handleDueDateChange}
+                            slotProps={{
+                            textField: {
+                                fullWidth: true,
+                                size: "small",
+                                error: errors.some((error) => error.key === "due_date"),
+                                helperText:
+                                errors.find((error) => error.key === "due_date")?.error ?? " ",
+                                sx: {
+                                "& .MuiOutlinedInput-root": { bgcolor: "background.paper" },
+                                "& .MuiFormHelperText-root": { mx: 0, fontSize: 11 },
+                                },
+                            },
+                            }}
+                        />
+                        </LocalizationProvider>
+                    </Box>
+                    </Box>
+
+                {/* Description */}
+                <Box
+                sx={{
+                    p: 2,
+                    border: "1px solid",
+                    borderColor: "divider",
+                    borderRadius: 2.5,
+                    bgcolor: "background.paper",
+                }}
+                >
+                <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1.25 }}>
+                    Description
+                </Typography>
+                <TextField
+                    label="Details (optional)"
+                    name="description"
+                    value={task.description}
+                    onChange={handleTextChange}
+                    multiline
+                    rows={4}
+                    fullWidth
+                    slotProps={{ htmlInput: { maxLength: 300 } }}
+                    error={errors.some((error) => error.key === "description")}
+                    helperText={
+                        errors.find((error) => error.key === "description")?.error ??
+                        `${task.description?.length ?? 0}/300`
+                    }
+                    sx={{
+                        "& .MuiInputBase-input": {
+                        fontSize: 14,
+                        lineHeight: 1.5,
+                        },
+                        "& .MuiInputLabel-root": {
+                        fontSize: 14,
+                        },
+                        "& .MuiFormHelperText-root": {
+                        fontSize: 11,
+                        },
+                    }}
+                    />
+                </Box>
+
+                {/* Attachments */}
+                <Box
+                sx={{
+                    p: 2,
+                    border: "1px solid",
+                    borderColor: "divider",
+                    borderRadius: 2.5,
+                    bgcolor: "background.paper",
+                }}
+                >
+                <Box sx={{ display: "flex", justifyContent: "space-between", gap: 1, mb: 1.5 }}>
+                    <Box>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
+                        Attachments
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary">
+                        Up to 5 files · 10 MB max each
+                    </Typography>
+                    </Box>
+                    <Chip size="small" label={`${task.attachments.length}/5`} />
+                </Box>
+
+                <Box
+                    {...getRootProps()}
+                    sx={{
+                    p: 2.5,
+                    border: "1px dashed",
+                    borderColor: fileError ? "error.main" : "primary.light",
+                    borderRadius: 2,
+                    bgcolor: fileError ? "error.50" : "primary.50",
+                    textAlign: "center",
+                    cursor: uploading ? "default" : "pointer",
+                    }}
+                >
+                    <input {...getInputProps()} />
+
+                    {uploading ? (
+                    <>
+                        <Typography variant="body2" sx={{ mb: 1, overflowWrap: "anywhere" }}>
+                        Uploading {uploadedFileNames.join(", ")}
+                        </Typography>
+                        <LinearProgress
+                        variant="determinate"
+                        value={progress}
+                        aria-label="Upload progress"
+                        sx={{ borderRadius: 5, height: 6 }}
+                        />
+                    </>
+                    ) : (
+                    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1 }}>
+                        <Box
+                        component="img"
+                        src={UploadIcon}
+                        alt=""
+                        sx={{ width: 28, height: 28, objectFit: "contain" }}
+                        />
+                        <Typography variant="body2">
+                        <Box component="span" sx={{ color: "primary.main", fontWeight: 700 }}>
+                            Tap to choose files
+                        </Box>{" "}
+                        or drop them here
+                        </Typography>
+                    </Box>
+                    )}
+                </Box>
+
+                {fileError && (
+                    <Typography variant="caption" color="error" sx={{ display: "block", mt: 1 }}>
+                    {fileError.msg}
+                    </Typography>
+                )}
+
+                {!uploading && task.attachments.length > 0 && (
+                    <Box sx={{ display: "flex", flexDirection: "column", gap: 1, mt: 1.5 }}>
+                    {task.attachments.map((file, key) => (
+                        <FilePreview
+                        key={key}
+                        file={file}
+                        removeFile={(e: React.MouseEvent<HTMLButtonElement>) =>
+                            handleRemoveFile(e, key)
+                        }
+                        />
+                    ))}
+                    </Box>
+                )}
+                </Box>
+
+                {/* Subtasks */}
+                <Box
+                    sx={{
+                        p: 2,
+                        border: "1px solid",
+                        borderColor: "divider",
+                        borderRadius: 2.5,
+                        bgcolor: "background.paper",
+                    }}
+                >
+                <Box
+                    sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    gap: 1,
+                    mb: 1.5,
+                    }}
+                >
+                    <Box>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
+                        Subtasks
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary">
+                        {task.subTask.length} of 10
+                    </Typography>
+                    </Box>
+
+                    <Button
+                        type="button"
+                        variant="outlined"
+                        size="small"
+                        startIcon={<Add />}
+                        disabled={task.subTask.length >= 10}
+                        onClick={handleNewSubTask}
+                        sx={{ textTransform: "none", borderRadius: 2 }}
+                    >Add</Button>
+                </Box>
+
+                {task.subTask.length === 0 ? (
+                    <Typography variant="body2" color="text.secondary">
+                    No subtasks added.
+                    </Typography>
+                ) : (
+                    <Box sx={{ display: "flex", flexDirection: "column", gap: 1.25 }}>
+                        {task.subTask.map((subTask, key) => {
+                            const isDone = subTask.status === "done";
+
+                            return (
+                            <Box
+                                key={key}
+                                sx={{
+                                    p: 1.5,
+                                    border: "1px solid",
+                                    borderColor: isDone ? "success.200" : "divider",
+                                    borderRadius: 2.5,
+                                    bgcolor: isDone ? "success.50" : "background.paper",
+                                    transition: "background-color 150ms ease, border-color 150ms ease",
+                                }}
+                            >
+                                <Box
+                                    sx={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: 1,
+                                        mb: 1.25,
+                                    }}>
+                                    <Box
+                                        sx={{
+                                        width: 26,
+                                        height: 26,
+                                        flexShrink: 0,
+                                        display: "grid",
+                                        placeItems: "center",
+                                        borderRadius: "50%",
+                                        bgcolor: isDone ? "success.main" : "grey.200",
+                                        color: isDone ? "common.white" : "text.secondary",
+                                        fontSize: 12,
+                                        fontWeight: 700,
+                                        }}
+                                    >
+                                        {key + 1}
                                     </Box>
 
-                                    {task.subTask.map((subTask, key) => (
-                                        <Fragment key={key}>
-                                            <Box sx={MobileSubTaskContainer}>
-                                                <TextField 
-                                                    type="text" 
-                                                    size="small"
-                                                    error={!subTask.title.trim()}
-                                                    helperText={!subTask.title.trim() && "Must not be empty"}
-                                                    label="Title" 
-                                                    value={subTask.title} id="subtask-title" onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleSubTaskChange(key, "title", e.target.value)}
-                                                    sx={MobileSubTaskTitleField}
-                                                    fullWidth/>
-                                                    <TextField
-                                                        select
-                                                        label="Status"
-                                                        value={subTask.status}
-                                                        fullWidth
-                                                        size="small"
-                                                        defaultValue="Not Done"
-                                                        sx={MobileSubTaskStatusField}
-                                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleSubTaskChange(key, "status", e.target.value)}
-                                                        >
-                                                        {subTasksDropdown.map((option, key) => (
-                                                            <MenuItem key={key} value={option.value}>
-                                                            {option.label}
-                                                            </MenuItem>
-                                                        ))}
-                                                    </TextField>
-                                                <IconButton size="medium" sx={{ top: 0 }} onClick={() => handleRemoveSubTask(key)}><img src={DeleteIcon} alt="delete-icon" height={20} width="100%"/></IconButton>
-                                            </Box>
-                                        </Fragment>
-                                    ))}
-                                </>
-                            )
-                        }
-                    </Stack>
-                </Container>
-            </Box>
-            <MobileAppBar>
-                <Box sx={MobileAppBarContainer}>
-                    <Button type="button" variant="contained" color="primary" sx={MobileAppBarContainerSaveButton} onClick={handleSubmit} disabled={loading}>{loading ? <CircularProgress size={30} color="inherit"/> : "Save"}</Button>
+                                    <Chip
+                                        size="small"
+                                        icon={isDone ? <Check size={13} /> : <Circle size={12} />}
+                                        label={isDone ? "Done · tap to reopen" : "Not done · tap to complete"}
+                                        aria-label={isDone ? "Done. Tap to mark as not done" : "Not done. Tap to mark as done"}
+                                        onClick={() =>
+                                            handleSubTaskChange(key, "status", isDone ? "not-done" : "done")
+                                        }
+                                        sx={{
+                                            height: 28,
+                                            borderRadius: 10,
+                                            fontSize: 11,
+                                            fontWeight: 600,
+                                            cursor: "pointer",
+                                            bgcolor: isDone ? "success.50" : "grey.100",
+                                            color: isDone ? "success.dark" : "text.secondary",
+                                            border: "1px solid",
+                                            borderColor: isDone ? "success.200" : "divider",
+                                            "& .MuiChip-icon": { color: "inherit", ml: 0.75 },
+                                            "&:hover": { bgcolor: isDone ? "success.100" : "grey.200" },
+                                        }}
+                                    />
+
+                                    <Box sx={{ flex: 1 }} />
+
+                                    <IconButton
+                                        size="small"
+                                        aria-label={`Remove subtask ${key + 1}`}
+                                        onClick={() => handleRemoveSubTask(key)}
+                                        sx={{
+                                        color: "text.secondary",
+                                        }}
+                                    >
+                                        <Trash size={15}/>
+                                    </IconButton>
+                                </Box>
+
+                                <TextField
+                                    label={`Subtask ${key + 1}`}
+                                    value={subTask.title}
+                                    onChange={(e) => handleSubTaskChange(key, "title", e.target.value)}
+                                    error={!subTask.title.trim()}
+                                    helperText={!subTask.title.trim() ? "Title is required" : " "}
+                                    fullWidth
+                                    size="small"
+                                    sx={{
+                                        mt: 2,
+                                        mb: -3,
+                                        "& .MuiOutlinedInput-root": {
+                                        bgcolor: "background.paper",
+                                        },
+                                        "& .MuiInputBase-input": {
+                                        fontSize: 14,
+                                        },
+                                        "& .MuiInputLabel-root": {
+                                        fontSize: 14,
+                                        },
+                                        "& .MuiFormHelperText-root": {
+                                        fontSize: 11,
+                                        },
+                                    }}
+                                    />
+                            </Box>
+                            );
+                        })}
+                        </Box>
+                    )}
                 </Box>
+            </Box>
+            </Box>
+
+            <MobileAppBar>
+                <Button
+                    type="button"
+                    variant="contained"
+                    fullWidth
+                    onClick={handleSubmit}
+                    disabled={loading}
+                    sx={{ minHeight: 44, borderRadius: 2, textTransform: "none", fontWeight: 700 }}
+                >
+                    {loading ? <CircularProgress size={22} color="inherit" /> : "Create task"}
+                </Button>
             </MobileAppBar>
         </Box>
-    )
+    );
 }
