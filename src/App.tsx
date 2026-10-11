@@ -16,6 +16,8 @@ import NewTask from './components/Task/NewTask';
 import ViewTask from './components/Task/ViewTask';
 import EditTask from './components/Task/EditTask';
 
+import AdminDashboard from './components/Admin/Index';
+
 function App() {
   return (
     <>
@@ -27,6 +29,7 @@ function App() {
           <Route path="*" element={<NotFound/>}/>
           <Route element={<ProtectedRoute/>}>
             <Route path="/" element={<Dashboard/>}>
+              <Route path="/admin" element={<AdminDashboard/>}/>
               <Route path="/" element={<Todo/>}/>
               <Route path="new-task" element={<NewTask/>}/>
               <Route path="view-task/:id" element={<ViewTask/>}/>

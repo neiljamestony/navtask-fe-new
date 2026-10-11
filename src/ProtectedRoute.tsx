@@ -18,17 +18,17 @@ const ProtectedRoute = () => {
                 let timeoutId: ReturnType<typeof setTimeout>;
 
                 try {
-                return await Promise.race([
-                    isAuthenticated(),
-                    new Promise<never>((_, reject) => {
-                    timeoutId = setTimeout(
-                        () => reject(new Error("AUTH_REQUEST_TIMEOUT")),
-                        5000
-                    );
-                    }),
-                ]);
+                    return await Promise.race([
+                        isAuthenticated(),
+                        new Promise<never>((_, reject) => {
+                            timeoutId = setTimeout(
+                                () => reject(new Error("AUTH_REQUEST_TIMEOUT")),
+                                5000
+                            );
+                        }),
+                    ]);
                 } finally {
-                clearTimeout(timeoutId!);
+                    clearTimeout(timeoutId!);
                 }
             };
 
@@ -37,55 +37,52 @@ const ProtectedRoute = () => {
 
                 // Retry once if the request fails or times out.
                 for (let attempt = 0; attempt < 2; attempt++) {
-                try {
-                    request = await requestWithTimeout();
-                    break;
-                } catch (error) {
-                    if (attempt === 1) throw error;
-                }
+                    try {
+                        request = await requestWithTimeout();
+                        break;
+                    } catch (error) {
+                        if (attempt === 1) throw error;
+                    }
                 }
 
                 if (request?.status === 200) {
-                dispatch(setAuthData(request.data));
-                setAuthenticated(true);
-                return;
+                    dispatch(setAuthData(request.data));
+                    setAuthenticated(true);
+                    return;
                 }
 
                 if (request?.status === 401) {
-                toast.error(
-                    request.msg === "TOKEN_EXPIRED"
-                    ? "Session expired, redirecting to login page."
-                    : "Unauthorized, redirecting to login page.",
-                    {
-                    id:
+                    toast.error(
                         request.msg === "TOKEN_EXPIRED"
-                        ? "session-expired-error"
-                        : "unauthorized-expired-error",
-                    }
-                );
+                        ? "Session expired, redirecting to login page."
+                        : "Unauthorized, redirecting to login page.",
+                        {
+                        id:
+                            request.msg === "TOKEN_EXPIRED"
+                            ? "session-expired-error"
+                            : "unauthorized-expired-error",
+                        }
+                    );
                 } else {
-                toast.error("Unable to verify your session. Redirecting to login page.", {
-                    id: "auth-check-error",
-                });
+                    toast.error("Unable to verify your session. Redirecting to login page.", {
+                        id: "auth-check-error",
+                    });
                 }
 
                 setAuthenticated(false);
                 navigate("/login", { replace: true });
             } catch (error) {
-                const timedOut =
-                error instanceof Error && error.message === "AUTH_REQUEST_TIMEOUT";
-
+                const timedOut = error instanceof Error && error.message === "AUTH_REQUEST_TIMEOUT";
                 toast.error(
-                timedOut
-                    ? "The server did not respond within 5 seconds. Redirecting to login page."
-                    : "Unable to connect to the server. Redirecting to login page.",
-                { id: "auth-connection-error" }
+                    timedOut
+                        ? "The server did not respond within 5 seconds. Redirecting to login page."
+                        : "Unable to connect to the server. Redirecting to login page.",
+                    { id: "auth-connection-error" }
                 );
-
                 setAuthenticated(false);
                 navigate("/login", { replace: true });
             }
-            };
+        };
 
         done && check();
 

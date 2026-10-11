@@ -388,48 +388,84 @@ export default function NewTaskDesktop() {
                                   textAlign: "left",
                                 }}
                               >
-                                <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 1.5 }}>
+                                <Box
+                                  sx={{
+                                    p: 2,
+                                    border: "1px solid",
+                                    borderColor: "divider",
+                                    borderRadius: 3,
+                                    bgcolor: "background.paper",
+                                  }}
+                                >
+                                  <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                                    <Box
+                                      sx={{
+                                        width: 44,
+                                        height: 44,
+                                        flexShrink: 0,
+                                        display: "grid",
+                                        placeItems: "center",
+                                        borderRadius: 2.5,
+                                        bgcolor: "primary.50",
+                                        color: "primary.main",
+                                      }}
+                                    >
+                                      <UploadCloud size={22} />
+                                    </Box>
+
+                                    <Box sx={{ flex: 1, minWidth: 0 }}>
+                                      <Typography variant="body2" sx={{ fontWeight: 700 }}>
+                                        Uploading files
+                                      </Typography>
+                                      <Typography
+                                        variant="caption"
+                                        color="text.secondary"
+                                        sx={{
+                                          display: "block",
+                                          overflow: "hidden",
+                                          textOverflow: "ellipsis",
+                                          whiteSpace: "nowrap",
+                                          mt: 0.25,
+                                        }}
+                                        title={uploadedFileNames.join(", ")}
+                                      >
+                                        {uploadedFileNames.join(", ")}
+                                      </Typography>
+                                    </Box>
+
+                                    <Typography
+                                      variant="body2"
+                                      color="primary.main"
+                                      sx={{ fontWeight: 700, fontVariantNumeric: "tabular-nums" }}
+                                    >
+                                      {Math.round(progress)}%
+                                    </Typography>
+                                  </Box>
+
                                   <Box
+                                    role="progressbar"
+                                    aria-label="File upload progress"
+                                    aria-valuemin={0}
+                                    aria-valuemax={100}
+                                    aria-valuenow={Math.round(progress)}
                                     sx={{
-                                      width: 40,
-                                      height: 40,
-                                      flexShrink: 0,
-                                      display: "grid",
-                                      placeItems: "center",
-                                      borderRadius: 2,
-                                      bgcolor: "primary.50",
-                                      color: "primary.main",
+                                      mt: 1.75,
+                                      height: 6,
+                                      overflow: "hidden",
+                                      borderRadius: 999,
+                                      bgcolor: "action.hover",
                                     }}
                                   >
-                                    <UploadCloud size={21} />
-                                  </Box>
-
-                                  <Box sx={{ flex: 1, minWidth: 0 }}>
-                                    <Typography variant="body2" sx={{ fontWeight: 700 }}>
-                                      Uploading files
-                                    </Typography>
-                                    <Typography
-                                      variant="caption"
-                                      color="text.secondary"
+                                    <Box
                                       sx={{
-                                        display: "block",
-                                        overflow: "hidden",
-                                        textOverflow: "ellipsis",
-                                        whiteSpace: "nowrap",
+                                        width: `${Math.min(100, Math.max(0, progress))}%`,
+                                        height: "100%",
+                                        borderRadius: "inherit",
+                                        bgcolor: "primary.main",
+                                        transition: "width 250ms ease",
                                       }}
-                                      title={uploadedFileNames.join(", ")}
-                                    >
-                                      {uploadedFileNames.join(", ")}
-                                    </Typography>
+                                    />
                                   </Box>
-
-                                  <Typography
-                                    variant="body2"
-                                    color="primary.main"
-                                    sx={{ fontWeight: 700, flexShrink: 0 }}
-                                  >
-                                    {Math.round(progress)}%
-                                  </Typography>
                                 </Box>
 
                                 <LinearProgress

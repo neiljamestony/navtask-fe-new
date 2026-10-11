@@ -6,6 +6,7 @@ interface AuthState {
     authData: {
         username: string;
         userId: number;
+        userType: string;
     }
 }
 
@@ -13,7 +14,8 @@ const initialState: AuthState = {
     authStatus: "",
     authData: {
         username: "",
-        userId: 0
+        userId: 0,
+        userType: ""
     }
 }
 
@@ -24,7 +26,7 @@ const authSlice = createSlice({
         setAuthStatus: (state, action: PayloadAction<string>) => {
             state.authStatus = action.payload;
         },
-        setAuthData: (state, action: PayloadAction<{ userId: number, username: string }>) => {
+        setAuthData: (state, action: PayloadAction<{ userId: number, username: string, userType: string }>) => {
             state.authData = action.payload;
         }
     }

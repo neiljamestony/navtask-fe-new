@@ -475,12 +475,12 @@ export default function DesktopTodo() {
                             <Box sx={{ mb: 1.5 }}>
                                 <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: openFilters ? 1 : 0 }}>
                                     <Button
-                                    type="button"
-                                    variant={openFilters ? "contained" : "outlined"}
-                                    aria-expanded={openFilters}
-                                    onClick={() => setOpenFilters((open) => !open)}
-                                    startIcon={<SlidersHorizontal size={15} />}
-                                    sx={{ textTransform: "none", borderRadius: 2.5 }}
+                                        type="button"
+                                        variant={openFilters ? "contained" : "outlined"}
+                                        aria-expanded={openFilters}
+                                        onClick={() => setOpenFilters((open) => !open)}
+                                        startIcon={<SlidersHorizontal size={15} />}
+                                        sx={{ textTransform: "none", border: '1px solid black', borderRadius: 2.5, backgroundColor: openFilters ? "black" : "transparent", color: openFilters ? "white" : "text.primary", "&:hover": { backgroundColor: openFilters ? "black" : "transparent" } }}
                                     >
                                     {openFilters ? "Hide filters" : "Show filters"}
                                     </Button>

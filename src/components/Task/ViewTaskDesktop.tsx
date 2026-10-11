@@ -113,7 +113,7 @@ export default function ViewTaskDesktop(){
                                 taskNotFound ? (
                                     <TaskNotFound/>
                                 ): (
-                                    <Card variant="outlined" sx={{ borderRadius: 5, padding: 2, height: '87vh' }}>
+                                    <Card variant="outlined" sx={{ borderRadius: 5, padding: 2, height: '84vh' }}>
                                         <DeleteItems loading={itemDeletionLoader} close={() => setDeleteItem(false)} proceed={handleDeleteItem} open={deleteItem} ids={[task.id.toString()]}/>
                                         <Box sx={{ display: "flex", justifyContent: "start", alignItems: 'center', gap: 2 }}>
                                             <IconButton size="small" onClick={() => navigate("/")}>
@@ -215,7 +215,7 @@ export default function ViewTaskDesktop(){
                                                 <Card
                                                     variant="outlined"
                                                     sx={{
-                                                        height: "75vh",
+                                                        height: "71vh",
                                                         borderRadius: 3,
                                                         borderColor: "divider",
                                                         overflow: "hidden",
@@ -339,7 +339,7 @@ export default function ViewTaskDesktop(){
                                                 </Card>
                                             </Grid>
                                             <Grid size={smallLaptop ? 9 : 10}>
-                                                <Card variant="outlined" sx={{ borderRadius: 5, height: '75vh', overflowY: 'auto' }}>
+                                                <Card variant="outlined" sx={{ borderRadius: 5, height: '71vh' }}>
                                                     <Box sx={{ marginTop: 1 }}>
                                                         <Tabs
                                                             value={tab}
@@ -380,10 +380,12 @@ export default function ViewTaskDesktop(){
                                                                 />
                                                             ))}
                                                         </Tabs>
-                                                        <Box role="tabpanel" sx={{ mr: 1 }}>
-                                                            {tab === 0 && <Subtask subtasks={task.subtask}/>}
-                                                            {tab === 1 && <Attachments attachments={task.attachments}/>}
-                                                        </Box>
+                                                        <CardContent sx={{ overflowY: 'auto', height: '62vh' }}>
+                                                            <Box role="tabpanel" sx={{ mr: 1 }}>
+                                                                {tab === 0 && <Subtask subtasks={task.subtask}/>}
+                                                                {tab === 1 && <Attachments attachments={task.attachments}/>}
+                                                            </Box>
+                                                        </CardContent>
                                                     </Box>
                                                 </Card>
                                             </Grid>

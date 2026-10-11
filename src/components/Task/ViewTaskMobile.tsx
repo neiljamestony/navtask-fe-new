@@ -287,91 +287,91 @@ export default function ViewTaskMobile(){
                         </Box>
 
                         {task.description && (
-                        <Box
-                            sx={{
-                            p: 2,
-                            bgcolor: "background.paper",
-                            border: "1px solid",
-                            borderColor: "divider",
-                            borderRadius: 3,
-                            }}
-                        >
-                            <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.75 }}>
-                            Description
-                            </Typography>
-                            <Typography
-                            variant="body2"
-                            color="text.secondary"
-                            sx={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere", lineHeight: 1.6 }}
+                            <Box
+                                sx={{
+                                p: 2,
+                                bgcolor: "background.paper",
+                                border: "1px solid",
+                                borderColor: "divider",
+                                borderRadius: 3,
+                                }}
                             >
-                            {task.description}
-                            </Typography>
-                        </Box>
+                                <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.75 }}>
+                                Description
+                                </Typography>
+                                <Typography
+                                variant="body2"
+                                color="text.secondary"
+                                sx={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere", lineHeight: 1.6 }}
+                                >
+                                {task.description}
+                                </Typography>
+                            </Box>
                         )}
 
                         {task.attachments && task.attachments.length > 0 && (
-                        <Box
-                            sx={{
-                            p: 2,
-                            bgcolor: "background.paper",
-                            border: "1px solid",
-                            borderColor: "divider",
-                            borderRadius: 3,
-                            }}
-                        >
-                            <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1.5 }}>
-                                Attachments ({task.attachments.length})
-                            </Typography>
-
                             <Box
                                 sx={{
-                                    display: "grid",
-                                    gridTemplateColumns: "repeat(auto-fill, minmax(100px, 1fr))",
-                                    gap: 1.5,
+                                p: 2,
+                                bgcolor: "background.paper",
+                                border: "1px solid",
+                                borderColor: "divider",
+                                borderRadius: 3,
                                 }}
                             >
-                            {task.attachments.map((item, key) => (
-                                <Box key={`${item.name}-${key}`} sx={{ minWidth: 0 }}>
-                                {item.url && (
-                                    <Box
-                                    component="a"
-                                    href={item.url}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    sx={{ display: "block", color: "inherit", textDecoration: "none" }}
-                                    >
-                                    <Box
-                                        component="img"
-                                        src={item.url}
-                                        alt={item.name}
-                                        sx={{
-                                        width: "100%",
-                                        aspectRatio: "1",
-                                        display: "block",
-                                        objectFit: "cover",
-                                        borderRadius: 2,
-                                        bgcolor: "grey.100",
-                                        }}
-                                    />
-                                    <Typography
-                                        variant="caption"
-                                        title={item.name}
-                                        sx={{
-                                        display: "block",
-                                        mt: 0.75,
-                                        overflow: "hidden",
-                                        textOverflow: "ellipsis",
-                                        whiteSpace: "nowrap",
-                                        }}
-                                    >
-                                        {limitText(item.name)}
-                                    </Typography>
+                                <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1.5 }}>
+                                    Attachments ({task.attachments.length})
+                                </Typography>
+
+                                <Box
+                                    sx={{
+                                        display: "grid",
+                                        gridTemplateColumns: "repeat(auto-fill, minmax(100px, 1fr))",
+                                        gap: 1.5,
+                                    }}
+                                >
+                                {task.attachments.map((item, key) => (
+                                    <Box key={`${item.name}-${key}`} sx={{ minWidth: 0 }}>
+                                    {item.url && (
+                                        <Box
+                                        component="a"
+                                        href={item.url}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        sx={{ display: "block", color: "inherit", textDecoration: "none" }}
+                                        >
+                                        <Box
+                                            component="img"
+                                            src={item.url}
+                                            alt={item.name}
+                                            sx={{
+                                            width: "100%",
+                                            aspectRatio: "1",
+                                            display: "block",
+                                            objectFit: "cover",
+                                            borderRadius: 2,
+                                            bgcolor: "grey.100",
+                                            }}
+                                        />
+                                        <Typography
+                                            variant="caption"
+                                            title={item.name}
+                                            sx={{
+                                            display: "block",
+                                            mt: 0.75,
+                                            overflow: "hidden",
+                                            textOverflow: "ellipsis",
+                                            whiteSpace: "nowrap",
+                                            }}
+                                        >
+                                            {limitText(item.name)}
+                                        </Typography>
+                                        </Box>
+                                    )}
                                     </Box>
-                                )}
+                                ))}
                                 </Box>
-                            ))}
                             </Box>
-                        </Box>
                         )}
 
                         <Box
