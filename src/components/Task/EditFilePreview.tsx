@@ -1,3 +1,12 @@
+import {
+  EditFilePreviewBoxSurfaceStyle1,
+  EditFilePreviewBoxSurfaceStyle2,
+  EditFilePreviewBoxSizeStyle3,
+  EditFilePreviewBoxSizeStyle4,
+  EditFilePreviewTypographyTextStyle5,
+  EditFilePreviewIconButtonTextStyle6,
+  EditFilePreviewIconButtonTextStyle7
+} from "../Styles/Task/EditFilePreview/EditFilePreview.styles";
 import { Box, IconButton, Typography } from "@mui/material";
 import { Download, FileText, Trash2 } from "lucide-react";
 
@@ -26,44 +35,24 @@ export default function EditFilePreview({
 
   return (
     <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        gap: 1.25,
-        minWidth: 0,
-        p: 1,
-        border: "1px solid",
-        borderColor: "divider",
-        borderRadius: 2,
-        bgcolor: "background.paper",
-      }}
+      sx={EditFilePreviewBoxSurfaceStyle1}
     >
       <Box
-        sx={{
-          width: 48,
-          height: 48,
-          flexShrink: 0,
-          display: "grid",
-          placeItems: "center",
-          overflow: "hidden",
-          borderRadius: 1.5,
-          bgcolor: "grey.100",
-          color: "text.secondary",
-        }}
+        sx={EditFilePreviewBoxSurfaceStyle2}
       >
         {isImage ? (
           <Box
             component="img"
             src={url}
             alt={attachment.name}
-            sx={{ width: "100%", height: "100%", objectFit: "cover" }}
+            sx={EditFilePreviewBoxSizeStyle3}
           />
         ) : (
           <FileText size={21} />
         )}
       </Box>
 
-      <Box sx={{ flex: 1, minWidth: 0 }}>
+      <Box sx={EditFilePreviewBoxSizeStyle4}>
         <Typography
           component={url ? "a" : "span"}
           href={url || undefined}
@@ -71,15 +60,7 @@ export default function EditFilePreview({
           rel={url ? "noreferrer" : undefined}
           variant="body2"
           title={attachment.name}
-          sx={{
-            display: "block",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
-            color: url ? "primary.main" : "text.primary",
-            fontWeight: 600,
-            textDecoration: url ? "none" : "none",
-          }}
+          sx={EditFilePreviewTypographyTextStyle5({ url: url })}
         >
           {limitText(attachment.name)}
         </Typography>
@@ -97,7 +78,7 @@ export default function EditFilePreview({
           rel="noreferrer"
           size="small"
           aria-label={`Download ${attachment.name}`}
-          sx={{ color: "text.secondary" }}
+          sx={EditFilePreviewIconButtonTextStyle6}
         >
           <Download size={17} />
         </IconButton>
@@ -108,10 +89,7 @@ export default function EditFilePreview({
         size="small"
         aria-label={`Remove ${attachment.name}`}
         onClick={removeFile}
-        sx={{
-          color: "text.secondary",
-          "&:hover": { color: "error.main", bgcolor: "error.50" },
-        }}
+        sx={EditFilePreviewIconButtonTextStyle7}
       >
         <Trash2 size={17} />
       </IconButton>

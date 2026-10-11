@@ -1,3 +1,45 @@
+import {
+  DesktopTodoButtonSurfaceStyle1,
+  DesktopTodoBoxLayoutStyle2,
+  DesktopTodoTypographyTextStyle3,
+  DesktopTodoBoxSizeStyle4,
+  DesktopTodoTypographyTextStyle5,
+  DesktopTodoTypographySurfaceStyle6,
+  DesktopTodoChipSurfaceStyle7,
+  DesktopTodoBoxLayoutStyle8,
+  DesktopTodoBoxLayoutStyle9,
+  DesktopTodoBoxLayoutStyle10,
+  DesktopTodoBoxLayoutStyle11,
+  DesktopTodoTypographySizeStyle12,
+  DesktopTodoTypographyTextStyle13,
+  DesktopTodoChipSurfaceStyle14,
+  DesktopTodoBoxLayoutStyle15,
+  DesktopTodoCardSurfaceStyle16,
+  DesktopTodoBoxLayoutStyle17,
+  DesktopTodoBoxLayoutStyle18,
+  DesktopTodoTypographyTextStyle19,
+  DesktopTodoButtonSurfaceStyle20,
+  DesktopTodoDividerSpacingStyle21,
+  DesktopTodoGridSizeStyle22,
+  DesktopTodoBoxSpacingStyle23,
+  DesktopTodoBoxLayoutStyle24,
+  DesktopTodoButtonSurfaceStyle25,
+  DesktopTodoPaperSurfaceStyle26,
+  DesktopTodoStackLayoutStyle27,
+  DesktopTodoBoxSizeStyle28,
+  DesktopTodoBoxSizeStyle29,
+  DesktopTodoBoxSurfaceStyle30,
+  DesktopTodoBoxTextStyle31,
+  DesktopTodoTypographyTextStyle32,
+  DesktopTodoBoxLayoutStyle33,
+  DesktopTodoBoxSurfaceStyle34,
+  DesktopTodoBoxSurfaceStyle35,
+  DesktopTodoBoxSurfaceStyle36,
+  DesktopTodoTypographyTextStyle37,
+  DesktopTodoTypographySpacingStyle38,
+  DesktopTodoPaperSurfaceStyle39,
+  DesktopTodoDataGridTitleStyle40
+} from "../Styles/Todo/DesktopTodo/DesktopTodo.styles";
 import { useState, useEffect, useMemo } from 'react'
 import { Box, Typography, Card, Button, Paper, Stack, IconButton, Grid, Chip, Divider, CircularProgress, Tooltip, useTheme, useMediaQuery } from '@mui/material'
 import { Add } from '@mui/icons-material'
@@ -211,16 +253,7 @@ export default function DesktopTodo() {
                     disabled={ids.length === 0}
                     onClick={() => setDeleteItem(true)}
                     startIcon={ids.length > 0 ? <Trash size={18} /> : <TrashOff size={18} />}
-                    sx={{
-                        minHeight: 38,
-                        px: 1.5,
-                        borderRadius: 2,
-                        textTransform: "none",
-                        fontWeight: 600,
-                        "&.Mui-disabled": {
-                        color: "text.disabled",
-                        },
-                    }}
+                    sx={DesktopTodoButtonSurfaceStyle1}
                     >
                     {ids.length > 0 ? `(${ids.length})` : ""}
                 </Button>
@@ -236,14 +269,10 @@ export default function DesktopTodo() {
                 const dueDate = params.row.due_date;
 
                 return (
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <Box sx={DesktopTodoBoxLayoutStyle2}>
                     <Typography
                     variant="caption"
-                    sx={{
-                        pl: dueDate === "" ? 10 : 0,
-                        fontWeight: "bold",
-                        pt: dueDate === "" ? 2 : 0,
-                    }}
+                    sx={DesktopTodoTypographyTextStyle3({ dueDate: dueDate })}
                     >
                     {params.row.title}
                     </Typography>
@@ -292,24 +321,15 @@ export default function DesktopTodo() {
                 }
 
                 return (
-                <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", lineHeight: 1.3 }}>
-                    <Typography variant="body2" sx={{ color: "text.primary" }}>
+                <Box sx={DesktopTodoBoxSizeStyle4}>
+                    <Typography variant="body2" sx={DesktopTodoTypographyTextStyle5}>
                     {dueDate.format("MMM D, YYYY")}
                     </Typography>
 
                     {label && (
                     <Typography
                         variant="caption"
-                        sx={{
-                        color,
-                        bgcolor: backgroundColor,
-                        fontWeight: 600,
-                        borderRadius: 1,
-                        px: 0.75,
-                        py: 0.25,
-                        mt: 0.25,
-                        width: "fit-content",
-                        }}
+                        sx={DesktopTodoTypographySurfaceStyle6({ color: color, backgroundColor: backgroundColor })}
                     >
                         {label}
                     </Typography>
@@ -326,7 +346,7 @@ export default function DesktopTodo() {
                 const p = prioritiesIcons[params.value as keyof typeof prioritiesIcons];
                 if(!p) return params.value;
                 return (
-                    <Chip icon={p && p.icon} label={p && p.label} sx={{ backgroundColor: p.bgColor, color: p.color, fontSize: 12 }}/>
+                    <Chip icon={p && p.icon} label={p && p.label} sx={DesktopTodoChipSurfaceStyle7({ p: p })}/>
                 )
             } 
         },
@@ -336,27 +356,27 @@ export default function DesktopTodo() {
                 const subItem = subTaskStatusIcons[params.value as keyof typeof subTaskStatusIcons];
                 if(!p && params.row.due_date === "" && subItem) {
                     return (
-                        <Box sx={{ display: "flex", justifyContent: 'center', alignItems: 'center', gap: 1, paddingLeft: 5 }}>
+                        <Box sx={DesktopTodoBoxLayoutStyle8}>
                             <Box>{subItem.icon}</Box>
                             <Typography variant="caption">{subItem.label}</Typography>
                         </Box>
                     )
                 }else{
                     return (
-                        <Box sx={{ display: "flex", justifyContent: 'center', alignItems: 'center', gap: 1 }}>
+                        <Box sx={DesktopTodoBoxLayoutStyle9}>
                             {
                                 params.row.completed_date !== null && params.row.status === "completed" ? (
                                     <>
-                                        <Box sx={{ display: 'flex', alignItems: 'center' }}>{p.icon}</Box>
-                                          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', marginTop: 1 }}>
-                                            <Typography variant="caption" sx={{ lineHeight: 1.2 }}>{p.label}</Typography>
-                                            <Typography variant="caption" sx={{ lineHeight: 1.2, color: '#818D99' }}>{dayjs(params.row.completed_date).format("MM/DD/YYYY")}</Typography>
+                                        <Box sx={DesktopTodoBoxLayoutStyle10}>{p.icon}</Box>
+                                          <Box sx={DesktopTodoBoxLayoutStyle11}>
+                                            <Typography variant="caption" sx={DesktopTodoTypographySizeStyle12}>{p.label}</Typography>
+                                            <Typography variant="caption" sx={DesktopTodoTypographyTextStyle13}>{dayjs(params.row.completed_date).format("MM/DD/YYYY")}</Typography>
                                         </Box>
                                     </>
                                    
                                 ): (
                                     <Box>
-                                        <Chip icon={p && p.icon} label={p && p.label} sx={{ backgroundColor: p.bgColor, color: p.color, fontSize: 12 }}/>
+                                        <Chip icon={p && p.icon} label={p && p.label} sx={DesktopTodoChipSurfaceStyle14({ p: p })}/>
                                     </Box>
                                 )
                             }
@@ -370,7 +390,7 @@ export default function DesktopTodo() {
         { field: 'edit', headerName: 'Actions', width: 50, sortable: false, flex: 1,
             renderCell: (params) => {
                 return (
-                    params.row.due_date !== "" && <Box sx={{ display: "flex", justifyContent: "center", alignItems: 'center', paddingTop: 1 }}>
+                    params.row.due_date !== "" && <Box sx={DesktopTodoBoxLayoutStyle15}>
                         <Tooltip title="Edit Task">
                             <IconButton onClick={() => params.field === "edit" && navigate(`/edit-task/${params.row.id}`)}>
                                 <SquarePen size={20}/>
@@ -458,29 +478,29 @@ export default function DesktopTodo() {
         <>
             <DeleteItems loading={loadingitemRemoval} close={handleCancelDelete} proceed={handleDeleteItem} open={deleteItem} ids={ids}/>
             <Stack spacing={2}>
-                <Card variant="outlined" sx={{ padding: 2, borderRadius: 5, height: "83vh" }}>
-                    <Box sx={{ display: "flex", justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
-                        <Box sx={{ display: "flex", justifyContent: 'center', alignItems: 'start', gap: 1 }}>
+                <Card variant="outlined" sx={DesktopTodoCardSurfaceStyle16}>
+                    <Box sx={DesktopTodoBoxLayoutStyle17}>
+                        <Box sx={DesktopTodoBoxLayoutStyle18}>
                             <CopyCheck size={20}/>
-                            <Typography sx={{ fontSize: 14 }}>Tasks</Typography>
+                            <Typography sx={DesktopTodoTypographyTextStyle19}>Tasks</Typography>
                         </Box>
-                        <Button type="button" variant="contained" sx={{ textTransform: 'none', borderRadius: 3, backgroundColor: 'black' }} startIcon={<Add/>} onClick={() => navigate('/new-task')}>Create</Button>
+                        <Button type="button" variant="contained" sx={DesktopTodoButtonSurfaceStyle20} startIcon={<Add/>} onClick={() => navigate('/new-task')}>Create</Button>
                     </Box>
-                    <Divider sx={{ marginBottom: 2}}/>
-                    <Grid container spacing={1} sx={{ width: "100%", minWidth: 0 }}>
+                    <Divider sx={DesktopTodoDividerSpacingStyle21}/>
+                    <Grid container spacing={1} sx={DesktopTodoGridSizeStyle22}>
                         <Grid size={openFilters ? 2 : 0}>
                             {!smallLaptop && openFilters && <Filters priorityMenuItems={priorityMenuItems} statusMenuItems={statusMenuItems} />}
                         </Grid>
                         <Grid size={!smallLaptop && openFilters ? 10 : 12}>
-                            <Box sx={{ mb: 1.5 }}>
-                                <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: openFilters ? 1 : 0 }}>
+                            <Box sx={DesktopTodoBoxSpacingStyle23}>
+                                <Box sx={DesktopTodoBoxLayoutStyle24({ openFilters: openFilters })}>
                                     <Button
                                         type="button"
                                         variant={openFilters ? "contained" : "outlined"}
                                         aria-expanded={openFilters}
                                         onClick={() => setOpenFilters((open) => !open)}
                                         startIcon={<SlidersHorizontal size={15} />}
-                                        sx={{ textTransform: "none", border: '1px solid black', borderRadius: 2.5, backgroundColor: openFilters ? "black" : "transparent", color: openFilters ? "white" : "text.primary", "&:hover": { backgroundColor: openFilters ? "black" : "transparent" } }}
+                                        sx={DesktopTodoButtonSurfaceStyle25({ openFilters: openFilters })}
                                     >
                                     {openFilters ? "Hide filters" : "Show filters"}
                                     </Button>
@@ -489,22 +509,22 @@ export default function DesktopTodo() {
                                 {smallLaptop && openFilters && (
                                     <Paper
                                     variant="outlined"
-                                    sx={{ p: 1.5, borderRadius: 2.5, bgcolor: "#fbfcfe" }}
+                                    sx={DesktopTodoPaperSurfaceStyle26}
                                     >
                                         <Stack
                                             direction="row"
                                             useFlexGap
                                             spacing={2}
-                                            sx={{ flexWrap: "wrap" }}
+                                            sx={DesktopTodoStackLayoutStyle27}
                                             >
-                                            <Box sx={{ flex: "1 1 420px", minWidth: 0 }}>
+                                            <Box sx={DesktopTodoBoxSizeStyle28}>
                                                 <ButtonGridFilterMenuItems
                                                 filterMenuItems={statusMenuItems}
                                                 name="Status"
                                                 />
                                             </Box>
 
-                                            <Box sx={{ flex: "1 1 320px", minWidth: 0 }}>
+                                            <Box sx={DesktopTodoBoxSizeStyle29}>
                                                 <ButtonGridFilterMenuItems
                                                 filterMenuItems={priorityMenuItems}
                                                 name="Priority"
@@ -519,25 +539,11 @@ export default function DesktopTodo() {
                                     <Box
                                         role="status"
                                         aria-live="polite"
-                                        sx={{
-                                            width: "97%",
-                                            mx: "auto",
-                                            minHeight: 220,
-                                            display: "flex",
-                                            flexDirection: "column",
-                                            alignItems: "center",
-                                            justifyContent: "center",
-                                            gap: 2,
-                                            p: { xs: 2, sm: 3 },
-                                            border: "1px solid",
-                                            borderColor: "divider",
-                                            borderRadius: 3,
-                                            bgcolor: "background.paper",
-                                        }}
+                                        sx={DesktopTodoBoxSurfaceStyle30}
                                         >
                                         <CircularProgress size={28} />
-                                        <Box sx={{ textAlign: "center" }}>
-                                            <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
+                                        <Box sx={DesktopTodoBoxTextStyle31}>
+                                            <Typography variant="subtitle2" sx={DesktopTodoTypographyTextStyle32}>
                                             Loading your tasks
                                             </Typography>
                                             <Typography variant="body2" color="text.secondary">
@@ -545,22 +551,11 @@ export default function DesktopTodo() {
                                             </Typography>
                                         </Box>
 
-                                        <Box sx={{ display: "flex", gap: 0.75, mt: 0.5 }}>
+                                        <Box sx={DesktopTodoBoxLayoutStyle33}>
                                             {[0, 1, 2].map((dot) => (
                                             <Box
                                                 key={dot}
-                                                sx={{
-                                                width: 7,
-                                                height: 7,
-                                                borderRadius: "50%",
-                                                bgcolor: "primary.main",
-                                                animation: "loadingDot 1s ease-in-out infinite",
-                                                animationDelay: `${dot * 150}ms`,
-                                                "@keyframes loadingDot": {
-                                                    "0%, 60%, 100%": { opacity: 0.3, transform: "scale(0.8)" },
-                                                    "30%": { opacity: 1, transform: "scale(1)" },
-                                                },
-                                                }}
+                                                sx={DesktopTodoBoxSurfaceStyle34({ dot: dot })}
                                             />
                                             ))}
                                         </Box>
@@ -570,42 +565,19 @@ export default function DesktopTodo() {
                                         {
                                             !displayedTasks.length ? (
                                                 <Box
-                                                    sx={{
-                                                        minHeight: 240,
-                                                        display: "flex",
-                                                        flexDirection: "column",
-                                                        justifyContent: "center",
-                                                        alignItems: "center",
-                                                        gap: 1.5,
-                                                        px: 3,
-                                                        py: 4,
-                                                        border: "1px dashed",
-                                                        borderColor: "divider",
-                                                        borderRadius: 3,
-                                                        bgcolor: "grey.50",
-                                                        textAlign: "center",
-                                                    }}
+                                                    sx={DesktopTodoBoxSurfaceStyle35}
                                                     >
                                                     <Box
-                                                        sx={{
-                                                        width: 72,
-                                                        height: 72,
-                                                        display: "grid",
-                                                        placeItems: "center",
-                                                        borderRadius: "50%",
-                                                        bgcolor: "common.white",
-                                                        border: "1px solid",
-                                                        borderColor: "divider",
-                                                        }}
+                                                        sx={DesktopTodoBoxSurfaceStyle36}
                                                     >
                                                         <StickyNotes size={30} color="#9e9e9e"/>
                                                     </Box>
                                                         <Box>
-                                                            <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+                                                            <Typography variant="subtitle1" sx={DesktopTodoTypographyTextStyle37}>
                                                                 {hasActiveFilters ? "No matching tasks" : "No tasks yet"}
                                                             </Typography>
 
-                                                            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                                                            <Typography variant="body2" color="text.secondary" sx={DesktopTodoTypographySpacingStyle38}>
                                                                 {hasActiveFilters
                                                                 ? "Try changing or clearing your filters to see more tasks."
                                                                 : "Your tasks will appear here once they’re added."}
@@ -615,15 +587,7 @@ export default function DesktopTodo() {
                                             ): (
                                                 <Paper
                                                     elevation={0}
-                                                    sx={{
-                                                        height: "71vh",
-                                                        width: "100%",
-                                                        overflow: "hidden",
-                                                        border: "1px solid",
-                                                        borderColor: "divider",
-                                                        borderRadius: 3,
-                                                        bgcolor: "background.paper",
-                                                    }}
+                                                    sx={DesktopTodoPaperSurfaceStyle39}
                                                     >
                                                     <DataGrid
                                                         rows={displayedTasks}
@@ -640,47 +604,7 @@ export default function DesktopTodo() {
                                                         setColumnVisibilityModel(newModel)
                                                         }
                                                         checkboxSelection
-                                                        sx={{
-                                                        height: "100%",
-                                                        border: 0,
-                                                        color: "text.primary",
-
-                                                        "& .MuiDataGrid-columnHeaders": {
-                                                            bgcolor: "#f8fafc",
-                                                            borderBottom: "1px solid",
-                                                            borderColor: "divider",
-                                                        },
-                                                        "& .MuiDataGrid-columnHeaderTitle": {
-                                                            fontWeight: 700,
-                                                            fontSize: 13,
-                                                            color: "text.secondary",
-                                                        },
-                                                        "& .MuiDataGrid-cell": {
-                                                            borderColor: "divider",
-                                                            display: "flex",
-                                                            alignItems: "center",
-                                                        },
-                                                        "& .MuiDataGrid-row": {
-                                                            transition: "background-color 120ms ease",
-                                                            "&:hover": { bgcolor: "#f8fafc" },
-                                                            "&.Mui-selected": {
-                                                            bgcolor: "rgba(25, 118, 210, 0.06)",
-                                                            "&:hover": { bgcolor: "rgba(25, 118, 210, 0.1)" },
-                                                            },
-                                                        },
-                                                        "& .MuiCheckbox-root.Mui-checked": {
-                                                            color: "primary.main",
-                                                        },
-                                                        "& .MuiDataGrid-row .MuiDataGrid-cellCheckbox .Mui-disabled": {
-                                                            visibility: "hidden",
-                                                        },
-                                                        "& .MuiDataGrid-columnSeparator": {
-                                                            color: "divider",
-                                                        },
-                                                        "& .MuiDataGrid-overlay": {
-                                                            bgcolor: "background.paper",
-                                                        },
-                                                        }}
+                                                        sx={DesktopTodoDataGridTitleStyle40}
                                                     />
                                                     </Paper>
                                             )

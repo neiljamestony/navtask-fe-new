@@ -1,3 +1,57 @@
+import {
+  MobileTodoMenuSurfaceStyle1,
+  MobileTodoMenuItemTextStyle2,
+  MobileTodoBoxLayoutStyle3,
+  MobileTodoMenuSurfaceStyle4,
+  MobileTodoMenuItemTextStyle5,
+  MobileTodoBoxSurfaceStyle6,
+  MobileTodoTypographyTextStyle7,
+  MobileTodoChipTextStyle8,
+  MobileTodoChipTextStyle9,
+  MobileTodoBoxLayoutStyle10,
+  MobileTodoTypographyTextStyle11,
+  MobileTodoTypographyTextStyle12,
+  MobileTodoTypographyTextStyle13,
+  MobileTodoBoxLayoutStyle14,
+  MobileTodoimgContainerStyle15,
+  MobileTodoTypographyTextStyle16,
+  MobileTodoCircleTextStyle17,
+  MobileTodoBoxLayoutStyle18,
+  MobileTodoimgContainerStyle19,
+  MobileTodoTypographyTextStyle20,
+  MobileTodoCircleTextStyle21,
+  MobileTodoBoxLayoutStyle22,
+  MobileTodoimgContainerStyle23,
+  MobileTodoTypographyTextStyle24,
+  MobileTodoBoxLayoutStyle25,
+  MobileTodoTypographyTextStyle26,
+  MobileTodoAppBarSurfaceStyle27,
+  MobileTodoToolbarSizeStyle28,
+  MobileTodoTypographyTextStyle29,
+  MobileTodoIconButtonSurfaceStyle30,
+  MobileTodoIconButtonSurfaceStyle31,
+  MobileTodoBadgeSpacingStyle32,
+  MobileTodoBoxLayoutStyle33,
+  MobileTodoBoxSpacingStyle34,
+  MobileTodoBoxSizeStyle35,
+  MobileTodoBoxTextStyle36,
+  MobileTodoBoxSurfaceStyle37,
+  MobileTodoCircleTextStyle38,
+  MobileTodoTypographyTextStyle39,
+  MobileTodoTypographySpacingStyle40,
+  MobileTodoBoxLayoutStyle41,
+  MobileTodoBoxSurfaceStyle42,
+  MobileTodoBoxLayoutStyle43,
+  MobileTodoBoxSizeStyle44,
+  MobileTodoBoxLayoutStyle45,
+  MobileTodoBoxLayoutStyle46,
+  MobileTodoBoxSizeStyle47,
+  MobileTodoBoxSpacingStyle48,
+  MobileTodoBoxSpacingStyle49,
+  MobileTodoCheckboxSpacingStyle50,
+  MobileTodoIconButtonSurfaceStyle51,
+  MobileTodoIconButtonTextStyle52
+} from "../Styles/Todo/MobileTodo/MobileTodo.styles";
 import React, { useState, useEffect, useMemo } from 'react'
 import { Box, Typography, IconButton, Badge, Menu, MenuItem, Chip, AppBar, Toolbar, Checkbox } from '@mui/material'
 import { Add, ArrowRightOutlined, Circle } from '@mui/icons-material'
@@ -201,10 +255,7 @@ export default function MobileTodo() {
                 vertical: 'top',
                 horizontal: 'left',
             }}
-            sx={{
-                marginTop: 5,
-                borderRadius: 20
-            }}
+            sx={MobileTodoMenuSurfaceStyle1}
             slotProps={{
                 paper: {
                     sx: {
@@ -218,8 +269,8 @@ export default function MobileTodo() {
             >
             {
                 priorityStatusItems.map((item, key) => {
-                    return <MenuItem key={key} onClick={(e: React.MouseEvent<HTMLElement>) => item.action(e.currentTarget)} value={item.value} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: 14 }}>
-                        <Box sx={{ flexGrow: 1 }}>{item.name}</Box>
+                    return <MenuItem key={key} onClick={(e: React.MouseEvent<HTMLElement>) => item.action(e.currentTarget)} value={item.value} sx={MobileTodoMenuItemTextStyle2}>
+                        <Box sx={MobileTodoBoxLayoutStyle3}>{item.name}</Box>
                         <ArrowRightOutlined/>
                     </MenuItem>
                 })
@@ -240,11 +291,7 @@ export default function MobileTodo() {
                 vertical: 'top',
                 horizontal: 'left',
             }}
-            sx={{
-                marginTop: 5,
-                borderRadius: 20,
-                marginLeft: 20
-            }}
+            sx={MobileTodoMenuSurfaceStyle4}
             slotProps={{
                 paper: {
                     sx: {
@@ -257,7 +304,7 @@ export default function MobileTodo() {
             onClose={() => items.forEach((item) => item.close())}>
             {
                 items.map((item, key) => {
-                    return <MenuItem key={key} onClick={() => item.action(item.name)} value={item.value} sx={{ textAlign: 'left', fontSize: 14 }}>
+                    return <MenuItem key={key} onClick={() => item.action(item.name)} value={item.value} sx={MobileTodoMenuItemTextStyle5}>
                         {item.name}
                     </MenuItem>
                 })
@@ -293,19 +340,10 @@ export default function MobileTodo() {
         if (!taskStatus && due_date === "" && subtaskStatus) {
             return (
             <Box
-                sx={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 0.75,
-                px: 1,
-                py: 0.5,
-                borderRadius: 10,
-                bgcolor: "grey.100",
-                color: "text.secondary",
-                }}
+                sx={MobileTodoBoxSurfaceStyle6}
             >
                 {subtaskStatus.icon}
-                <Typography variant="caption" sx={{ fontWeight: 600, lineHeight: 1 }}>
+                <Typography variant="caption" sx={MobileTodoTypographyTextStyle7}>
                 {subtaskStatus.label}
                 </Typography>
             </Box>
@@ -319,11 +357,7 @@ export default function MobileTodo() {
                 size="small"
                 icon={taskStatus?.icon}
                 label={<Typography variant="caption">{taskStatus?.label ?? "—"}</Typography>}
-                sx={{
-                    bgcolor: taskStatus?.bgColor,
-                    color: taskStatus?.color,
-                    fontWeight: 600,
-                }}
+                sx={MobileTodoChipTextStyle8({ taskStatus: taskStatus })}
             />
         );
     };
@@ -335,22 +369,18 @@ export default function MobileTodo() {
             size="small"
             icon={p?.icon}
             label={<Typography variant="caption">{p?.label ?? "—"}</Typography>}
-            sx={{
-                bgcolor: p?.bgColor,
-                color: p?.color,
-                fontWeight: 600,
-            }}
+            sx={MobileTodoChipTextStyle9({ p: p })}
         />
     }
 
     const handleTitle = (id: number, title: string, due_date: string, attachments?: IFile[] | []) => {
         return (
-            <Box sx={{ display: "flex", alignItems: 'center', gap: 1 }}>
+            <Box sx={MobileTodoBoxLayoutStyle10}>
                 {
                     due_date !== "" ? (
-                        <Typography variant="caption" onClick={() => navigate(`/view-task/${id}`)} sx={{ paddingLeft: 0, fontWeight: 'bold', textDecoration: 'underline', fontSize: 14 }}>{title}</Typography>
+                        <Typography variant="caption" onClick={() => navigate(`/view-task/${id}`)} sx={MobileTodoTypographyTextStyle11}>{title}</Typography>
                     ) : (
-                        <Typography variant="caption" sx={{ paddingLeft: 13.5, fontWeight: 'bold', paddingTop: due_date === "" ? 2 : 0, fontSize: 14 }}>{title}</Typography>
+                        <Typography variant="caption" sx={MobileTodoTypographyTextStyle12({ due_date: due_date })}>{title}</Typography>
                     )
                 }
                 {
@@ -448,7 +478,7 @@ export default function MobileTodo() {
         const currentInstant = dayjs();
 
         if (!dueDateObj) {
-            return <Typography variant="caption" sx={{ color: '#272D32', paddingTop: 1 }}>—</Typography>;
+            return <Typography variant="caption" sx={MobileTodoTypographyTextStyle13}>—</Typography>;
         }
 
         const isSameDayAsToday = status !== "completed" && currentInstant.isSame(dueDateObj, 'day');
@@ -466,67 +496,58 @@ export default function MobileTodo() {
 
         if (isDue) {
             return (
-                <Box sx={{ display: "flex", alignItems: 'center', gap: 0.5 }}>
+                <Box sx={MobileTodoBoxLayoutStyle14}>
                     {status !== "cancelled" && due_date !== "" && <img 
                             src={DueDate} 
                             alt="due-date-icon" 
                             height={18} 
                             width={18}
-                            style={{
-                                filter: getIconFilter(),
-                                transition: 'filter 0.2s ease-in-out'
-                            }}
+                            style={MobileTodoimgContainerStyle15({ getIconFilter: getIconFilter })}
                     />}
-                    <Typography variant="caption" sx={{ color: '#CA0061' }}>{formattedDisplayDate} <Circle sx={{ fontSize: 5 }}/> Overdue</Typography>
+                    <Typography variant="caption" sx={MobileTodoTypographyTextStyle16}>{formattedDisplayDate} <Circle sx={MobileTodoCircleTextStyle17}/> Overdue</Typography>
                 </Box>
             );
         }
 
         if (isSameDayAsToday) {
             return (
-                <Box sx={{ display: "flex", alignItems: 'center', gap: 0.5 }}>
+                <Box sx={MobileTodoBoxLayoutStyle18}>
                     {status !== "cancelled" && due_date !== "" && <img 
                             src={DueDate} 
                             alt="due-date-icon" 
                             height={18} 
                             width={18}
-                            style={{
-                                filter: getIconFilter(),
-                                transition: 'filter 0.2s ease-in-out'
-                            }}
+                            style={MobileTodoimgContainerStyle19({ getIconFilter: getIconFilter })}
                     />}
-                    <Typography variant="caption" sx={{ color: '#009292' }}>{formattedDisplayDate} <Circle sx={{ fontSize: 5 }}/> Today</Typography>
+                    <Typography variant="caption" sx={MobileTodoTypographyTextStyle20}>{formattedDisplayDate} <Circle sx={MobileTodoCircleTextStyle21}/> Today</Typography>
                 </Box>
             );
         }
 
         if (criticalItems) {
             return (
-                <Box sx={{ display: "flex", alignItems: 'center', gap: 0.5 }}>
+                <Box sx={MobileTodoBoxLayoutStyle22}>
                     {status !== "cancelled" && due_date !== "" && <img 
                             src={DueDate} 
                             alt="due-date-icon" 
                             height={18} 
                             width={18}
-                            style={{
-                                filter: getIconFilter(),
-                                transition: 'filter 0.2s ease-in-out'
-                            }}
+                            style={MobileTodoimgContainerStyle23({ getIconFilter: getIconFilter })}
                     />}
-                    <Typography variant="caption" sx={{ color: '#009292' }}>{formattedDisplayDate}</Typography>
+                    <Typography variant="caption" sx={MobileTodoTypographyTextStyle24}>{formattedDisplayDate}</Typography>
                 </Box>
             );
         }
 
         return (
-            <Box sx={{ display: "flex", alignItems: 'center', gap: 0.5 }}>
+            <Box sx={MobileTodoBoxLayoutStyle25}>
                 {status !== "cancelled" && due_date !== "" && <img 
                         src={DueDate} 
                         alt="due-date-icon" 
                         height={18} 
                         width={18}
                 />}
-                <Typography variant="caption" sx={{ color: '#272D32' }}>{formattedDisplayDate}</Typography>
+                <Typography variant="caption" sx={MobileTodoTypographyTextStyle26}>{formattedDisplayDate}</Typography>
             </Box>
         );
     }
@@ -563,23 +584,17 @@ export default function MobileTodo() {
                 position="fixed"
                 color="inherit"
                 elevation={0}
-                sx={{
-                    top: 0,
-                    borderBottom: "1px solid",
-                    borderColor: "divider",
-                    bgcolor: "rgba(255,255,255,0.96)",
-                    backdropFilter: "blur(12px)",
-                }}
+                sx={MobileTodoAppBarSurfaceStyle27}
             >
-                <Toolbar sx={{ minHeight: 64, gap: 1 }}>
-                    <Typography variant="subtitle1" sx={{ fontWeight: 750, mr: "auto" }}>
+                <Toolbar sx={MobileTodoToolbarSizeStyle28}>
+                    <Typography variant="subtitle1" sx={MobileTodoTypographyTextStyle29}>
                         My tasks
                     </Typography>
 
                     <IconButton
                         aria-label="Filter tasks"
                         onClick={() => setOpenFilterDropdown((prev) => !prev)}
-                        sx={{ border: "1px solid", borderColor: "divider", borderRadius: 2 }}
+                        sx={MobileTodoIconButtonSurfaceStyle30}
                         >
                         <Funnel size={20}/>
                     </IconButton>
@@ -592,30 +607,12 @@ export default function MobileTodo() {
                         }
                         aria-pressed={selectedSortOption.sortTitle !== "none"}
                         onClick={() => setOpenSort((prev) => !prev)}
-                        sx={{
-                            border: "1px solid",
-                            borderColor:
-                            selectedSortOption.sortTitle !== "none" ? "primary.main" : "divider",
-                            borderRadius: 2,
-                            bgcolor:
-                            selectedSortOption.sortTitle !== "none" ? "primary.50" : "background.paper",
-                            color:
-                            selectedSortOption.sortTitle !== "none" ? "primary.main" : "text.secondary",
-                            "&:hover": {
-                            bgcolor:
-                                selectedSortOption.sortTitle !== "none" ? "primary.100" : "action.hover",
-                            },
-                        }}
+                        sx={MobileTodoIconButtonSurfaceStyle31({ selectedSortOption: selectedSortOption })}
                         >
                         <Badge
                             variant="dot"
                             invisible={selectedSortOption.sortTitle === "none"}
-                            sx={{
-                            "& .MuiBadge-badge": {
-                                bgcolor: "primary.main",
-                                boxShadow: "0 0 0 2px white",
-                            },
-                            }}
+                            sx={MobileTodoBadgeSpacingStyle32}
                         >
                             <ArrowDownUp size={20}/>
                         </Badge>
@@ -624,13 +621,7 @@ export default function MobileTodo() {
 
                 {(filteredPriorityItems || filteredStatusItems) && (
                     <Box
-                    sx={{
-                        display: "flex",
-                        gap: 1,
-                        px: 2,
-                        pb: 1.25,
-                        overflowX: "auto",
-                    }}
+                    sx={MobileTodoBoxLayoutStyle33}
                     >
                     {filteredPriorityItems && (
                         <Chip
@@ -666,66 +657,37 @@ export default function MobileTodo() {
 
             <Box
                 component="main"
-                sx={{
-                    px: 2,
-                    pt: filteredPriorityItems || filteredStatusItems ? 13 : 10,
-                    pb: 12,
-                }}
+                sx={MobileTodoBoxSpacingStyle34({ filteredPriorityItems: filteredPriorityItems, filteredStatusItems: filteredStatusItems })}
             >
             {fetchingTasks ? (
                 <Box
-                    sx={{
-                    width: "100%",
-                    minHeight: "50dvh",
-                    boxSizing: "border-box",
-                    pt: "64px",
-                    px: 2,
-                    display: "flex",
-                    alignItems: "center",
-                    }}
+                    sx={MobileTodoBoxSizeStyle35}
                 >
                     <FetchingTask />
                 </Box>
             ) : displayedTasks.length === 0 ? (
                 <Box
-                    sx={{
-                        minHeight: "55vh",
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        px: 3,
-                        textAlign: "center",
-                    }}
+                    sx={MobileTodoBoxTextStyle36}
                 >
                 <Box
-                    sx={{
-                    width: 64,
-                    height: 64,
-                    mb: 2,
-                    display: "grid",
-                    placeItems: "center",
-                    borderRadius: 3,
-                    bgcolor: "grey.100",
-                    color: "text.secondary",
-                    }}
+                    sx={MobileTodoBoxSurfaceStyle37}
                 >
-                    <Circle sx={{ fontSize: 18 }} />
+                    <Circle sx={MobileTodoCircleTextStyle38} />
                 </Box>
 
-                <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+                <Typography variant="subtitle1" sx={MobileTodoTypographyTextStyle39}>
                     {filteredPriorityItems || filteredStatusItems
                     ? "No matching tasks"
                     : "No tasks yet"}
                 </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                <Typography variant="body2" color="text.secondary" sx={MobileTodoTypographySpacingStyle40}>
                     {filteredPriorityItems || filteredStatusItems
                     ? "Try changing or clearing your filters."
                     : "Tasks you create will show up here."}
                 </Typography>
                 </Box>
             ) : (
-                <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
+                <Box sx={MobileTodoBoxLayoutStyle41}>
                     {displayedTasks.map((task) => {
                         const taskId = task.id.toString();
                         const isSelected = ids.includes(taskId);
@@ -733,29 +695,17 @@ export default function MobileTodo() {
                         return (
                             <Box
                                 key={task.id}
-                                sx={{
-                                p: 1.75,
-                                border: "1px solid",
-                                borderColor: isSelected ? "primary.light" : "divider",
-                                borderRadius: 2.5,
-                                bgcolor: isSelected ? "rgba(25,118,210,0.035)" : "background.paper",
-                                boxShadow: "0 2px 8px rgba(15,23,42,0.035)",
-                                }}
+                                sx={MobileTodoBoxSurfaceStyle42({ isSelected: isSelected })}
                             >
                                 <Box
-                                sx={{
-                                    display: "flex",
-                                    alignItems: "flex-start",
-                                    justifyContent: "space-between",
-                                    gap: 1,
-                                }}
+                                sx={MobileTodoBoxLayoutStyle43}
                                 >
-                                <Box sx={{ minWidth: 0, flex: 1 }}>
-                                    <Box sx={{ display: "flex", alignItems: "center", gap: 1.25, mb: 1 }}>
-                                        <Box sx={{ display: "flex", alignItems: "center" }}>
+                                <Box sx={MobileTodoBoxSizeStyle44}>
+                                    <Box sx={MobileTodoBoxLayoutStyle45}>
+                                        <Box sx={MobileTodoBoxLayoutStyle46}>
                                             {handlePriorityIcons(task.priority)}
                                         </Box>
-                                        <Box sx={{ minWidth: 0 }}>
+                                        <Box sx={MobileTodoBoxSizeStyle47}>
                                             {handleStatusIcons(
                                                 task.status,
                                                 task.due_date
@@ -763,7 +713,7 @@ export default function MobileTodo() {
                                         </Box>
                                     </Box>
 
-                                    <Box sx={{ "& .MuiTypography-root": { fontSize: 15 } }}>
+                                    <Box sx={MobileTodoBoxSpacingStyle48}>
                                         {handleTitle(
                                             task.id,
                                             task.title,
@@ -773,7 +723,7 @@ export default function MobileTodo() {
                                     </Box>
 
                                     {task.due_date !== "" && (
-                                    <Box sx={{ mt: 1 }}>
+                                    <Box sx={MobileTodoBoxSpacingStyle49}>
                                         {handleDueDate(task.status, task.due_date, task.priority)}
                                     </Box>
                                     )}
@@ -785,7 +735,7 @@ export default function MobileTodo() {
                                             aria-label={`Select ${task.title}`}
                                             checked={isSelected}
                                             onChange={() => handleSelectionChange(taskId)}
-                                            sx={{ p: 0.5, mt: -0.5 }}
+                                            sx={MobileTodoCheckboxSpacingStyle50}
                                         />
                                     )}
                                 </Box>
@@ -806,10 +756,7 @@ export default function MobileTodo() {
                         disabled={!ids.length}
                         aria-label={`Delete ${ids.length} selected tasks`}
                         onClick={() => setDeleteItem(true)}
-                        sx={{
-                            borderRadius: 2,
-                            color: ids.length ? "error.main" : "text.disabled",
-                        }}>
+                        sx={MobileTodoIconButtonSurfaceStyle51({ ids: ids })}>
                         {ids.length ? <Trash size={18} /> : <TrashOff size={18} />}
                     </IconButton>
                 </Badge>
@@ -817,13 +764,7 @@ export default function MobileTodo() {
                 <IconButton
                     aria-label="Create task"
                     onClick={() => navigate("/new-task")}
-                    sx={{
-                    width: 44,
-                    height: 44,
-                    bgcolor: "primary.main",
-                    color: "primary.contrastText",
-                    "&:hover": { bgcolor: "primary.dark" },
-                    }}
+                    sx={MobileTodoIconButtonTextStyle52}
                 >
                     <Add />
                 </IconButton>

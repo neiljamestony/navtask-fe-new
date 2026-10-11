@@ -1,3 +1,24 @@
+import {
+  DesktopRegistrationBoxImageStyle1,
+  DesktopRegistrationCardSurfaceStyle2,
+  DesktopRegistrationCardContentSpacingStyle3,
+  DesktopRegistrationBoxSpacingStyle4,
+  DesktopRegistrationTypographyTextStyle5,
+  DesktopRegistrationTypographySpacingStyle6,
+  DesktopRegistrationBoxLayoutStyle7,
+  DesktopRegistrationBoxSizeStyle8,
+  DesktopRegistrationBoxSurfaceStyle9,
+  DesktopRegistrationBoxLayoutStyle10,
+  DesktopRegistrationTypographyTextStyle11,
+  DesktopRegistrationTypographyTextStyle12,
+  DesktopRegistrationBoxLayoutStyle13,
+  DesktopRegistrationBoxLayoutStyle14,
+  DesktopRegistrationCheckTextStyle15,
+  DesktopRegistrationCircleTextStyle16,
+  DesktopRegistrationButtonSurfaceStyle17,
+  DesktopRegistrationTypographyTextStyle18,
+  DesktopRegistrationBoxTextStyle19
+} from "../Styles/Auth/DesktopRegistration/DesktopRegistration.styles";
 import { useState } from "react";
 import {
   Box,
@@ -89,35 +110,18 @@ export default function DesktopRegistration() {
 
   return (
     <Box
-      sx={{
-        minHeight: "100dvh",
-        boxSizing: "border-box",
-        display: "grid",
-        placeItems: "center",
-        px: 2,
-        py: 2,
-        bgcolor: "#f4f7fb",
-        backgroundImage:
-          "radial-gradient(circle at 15% 15%, rgba(25,118,210,0.10), transparent 30%), radial-gradient(circle at 85% 85%, rgba(25,118,210,0.08), transparent 32%)",
-      }}
+      sx={DesktopRegistrationBoxImageStyle1}
     >
       <Card
         elevation={0}
-        sx={{
-          width: "100%",
-          maxWidth: 440,
-          border: "1px solid",
-          borderColor: "rgba(15, 23, 42, 0.08)",
-          borderRadius: 4,
-          boxShadow: "0 18px 55px rgba(15, 23, 42, 0.08)",
-        }}
+        sx={DesktopRegistrationCardSurfaceStyle2}
       >
-        <CardContent sx={{ p: { xs: 3, sm: 4 } }}>
-          <Box sx={{ mb: 3 }}>
-            <Typography variant="h4" sx={{ fontWeight: 750, letterSpacing: -0.5 }}>
+        <CardContent sx={DesktopRegistrationCardContentSpacingStyle3}>
+          <Box sx={DesktopRegistrationBoxSpacingStyle4}>
+            <Typography variant="h4" sx={DesktopRegistrationTypographyTextStyle5}>
               Create account
             </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.75 }}>
+            <Typography variant="body2" color="text.secondary" sx={DesktopRegistrationTypographySpacingStyle6}>
               Sign up to get started.
             </Typography>
           </Box>
@@ -128,7 +132,7 @@ export default function DesktopRegistration() {
               e.preventDefault();
               void handleSubmit(formData);
             }}
-            sx={{ display: "flex", flexDirection: "column" }}
+            sx={DesktopRegistrationBoxLayoutStyle7}
           >
             <TextField
                 size="small"
@@ -166,7 +170,7 @@ export default function DesktopRegistration() {
                             component="img"
                             src={showPassword ? HideIcon : ShowIcon}
                             alt=""
-                            sx={{ width: 20, height: 20, objectFit: "contain" }}
+                            sx={DesktopRegistrationBoxSizeStyle8}
                             />
                         </IconButton>
                         </InputAdornment>
@@ -177,48 +181,32 @@ export default function DesktopRegistration() {
 
             {formData.username && formData.password && (
               <Box
-                sx={{
-                  mt: -0.5,
-                  p: 1.5,
-                  mb: 1,
-                  borderRadius: 2,
-                  bgcolor: "#f8fafc",
-                  border: "1px solid",
-                  borderColor: "divider",
-                }}
+                sx={DesktopRegistrationBoxSurfaceStyle9}
               >
                 <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    mb: 1,
-                  }}
+                  sx={DesktopRegistrationBoxLayoutStyle10}
                 >
-                  <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                  <Typography variant="body2" sx={DesktopRegistrationTypographyTextStyle11}>
                     Password requirements
                   </Typography>
                   <Typography
                     variant="caption"
-                    sx={{
-                      fontWeight: 700,
-                      color: isPasswordStrong ? "success.main" : "text.secondary",
-                    }}
+                    sx={DesktopRegistrationTypographyTextStyle12({ isPasswordStrong: isPasswordStrong })}
                   >
                     {isPasswordStrong ? "Looks good" : "In progress"}
                   </Typography>
                 </Box>
 
-                <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
+                <Box sx={DesktopRegistrationBoxLayoutStyle13}>
                   {requirements.map((requirement) => (
                     <Box
                       key={requirement.text}
-                      sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                      sx={DesktopRegistrationBoxLayoutStyle14}
                     >
                       {requirement.met ? (
-                        <Check sx={{ fontSize: 16, color: "success.main" }} />
+                        <Check sx={DesktopRegistrationCheckTextStyle15} />
                       ) : (
-                        <Circle sx={{ fontSize: 8, color: "text.disabled" }} />
+                        <Circle sx={DesktopRegistrationCircleTextStyle16} />
                       )}
                       <Typography
                         variant="caption"
@@ -237,14 +225,7 @@ export default function DesktopRegistration() {
               type="submit"
               disabled={loading || !isPasswordStrong}
               fullWidth
-              sx={{
-                minHeight: 48,
-                borderRadius: 2,
-                textTransform: "none",
-                fontWeight: 700,
-                fontSize: 15,
-                boxShadow: "none",
-              }}
+              sx={DesktopRegistrationButtonSurfaceStyle17}
             >
               {loading ? (
                 <CircularProgress size={22} color="inherit" />
@@ -256,18 +237,13 @@ export default function DesktopRegistration() {
 
           <Typography
             variant="body2"
-            sx={{ mt: 2.5, mb: 2, textAlign: "center", color: "text.secondary" }}
+            sx={DesktopRegistrationTypographyTextStyle18}
           >
             Already have an account?{" "}
             <Box
               component={Link}
               to="/login"
-              sx={{
-                color: "primary.main",
-                fontWeight: 700,
-                textDecoration: "none",
-                "&:hover": { textDecoration: "underline" },
-              }}
+              sx={DesktopRegistrationBoxTextStyle19}
             >
               Sign in
             </Box>

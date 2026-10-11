@@ -1,3 +1,11 @@
+import {
+  DropdownDialogDialogStyle1,
+  DropdownBoxTextStyle2,
+  DropdownTypographyTextStyle3,
+  DropdownBoxLayoutStyle4,
+  DropdownDialogContentSpacingStyle5,
+  DropdownButtonSurfaceStyle6
+} from "../../Styles/Dialog/Mobile/Dropdown/Dropdown.styles";
 import { Dialog, DialogContent, DialogActions, Button, Typography, Box, Stack, IconButton, Divider, RadioGroup, Radio, FormControlLabel } from '@mui/material'
 import { useState, useEffect } from 'react'
 import Close from '../../../assets/Icons/Close.svg';
@@ -25,20 +33,7 @@ export default function DropdownDialog(
     }, [defaultValue])
 
     return (
-        <Dialog fullWidth maxWidth="xl" open={open} sx={{
-            '& .MuiDialog-paper': {
-                borderRadius: '20px',
-                boxShadow: 'none',
-                marginTop: '64px',
-                margin: 1,
-                marginBox: 0,
-                width: '100%',
-                marginBottom: 10
-            },
-            '& .MuiDialog-container': {
-                alignItems: 'flex-end',
-            },
-        }}
+        <Dialog fullWidth maxWidth="xl" open={open} sx={DropdownDialogDialogStyle1}
         slotProps={{
             backdrop: {
                 sx: {
@@ -48,14 +43,14 @@ export default function DropdownDialog(
                 }
             }
         }}>
-            <Box sx={{ display: "flex", alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
-                <Typography sx={{ fontSize: 16, fontWeight: 'bold', flexGrow: 1, paddingLeft: 4 }}>{title}</Typography>
-                <Box sx={{ display: "flex", justifyContent: "flex-end", m: 0, p: 1  }}>
+            <Box sx={DropdownBoxTextStyle2}>
+                <Typography sx={DropdownTypographyTextStyle3}>{title}</Typography>
+                <Box sx={DropdownBoxLayoutStyle4}>
                     <IconButton onClick={handleClose}><img src={Close} alt="close-model" height={15} width={15}/></IconButton>
                 </Box>
             </Box>
             <Divider/>
-            <DialogContent sx={{ m: 0, p: 2 }}>
+            <DialogContent sx={DropdownDialogContentSpacingStyle5}>
                 <Stack spacing={2}>
                     <RadioGroup onChange={handleChange} value={optionValue}>
                         {
@@ -79,7 +74,7 @@ export default function DropdownDialog(
                 </Stack>
             </DialogContent>
             <DialogActions>
-                <Button type="button" variant="contained" color="primary" fullWidth onClick={handleApply} sx={{ textTransform: 'none', borderRadius: 5 }}>Apply</Button>
+                <Button type="button" variant="contained" color="primary" fullWidth onClick={handleApply} sx={DropdownButtonSurfaceStyle6}>Apply</Button>
             </DialogActions>
         </Dialog>
     )

@@ -1,3 +1,17 @@
+import {
+  DesktopLoginBoxImageStyle1,
+  DesktopLoginCardSurfaceStyle2,
+  DesktopLoginCardContentSpacingStyle3,
+  DesktopLoginBoxSpacingStyle4,
+  DesktopLoginBoxSurfaceStyle5,
+  DesktopLoginTypographyTextStyle6,
+  DesktopLoginTypographyTextStyle7,
+  DesktopLoginTypographySpacingStyle8,
+  DesktopLoginBoxLayoutStyle9,
+  DesktopLoginButtonSurfaceStyle10,
+  DesktopLoginTypographyTextStyle11,
+  DesktopLoginBoxTextStyle12
+} from "../Styles/Auth/DesktopLogin/DesktopLogin.styles";
 import { useState } from "react";
 import {
   Box,
@@ -65,51 +79,28 @@ export default function DesktopLogin() {
 
   return (
     <Box
-      sx={{
-        minHeight: "100dvh",
-        boxSizing: "border-box",
-        display: "grid",
-        placeItems: "center",
-        px: 2,
-        py: 2,
-        bgcolor: "#f4f7fb",
-        backgroundImage:
-            "radial-gradient(circle at 15% 15%, rgba(25,118,210,0.10), transparent 30%), radial-gradient(circle at 85% 85%, rgba(25,118,210,0.08), transparent 32%)",
-      }}
+      sx={DesktopLoginBoxImageStyle1}
     >
       <Card
         elevation={0}
-        sx={{
-          width: "100%",
-          maxWidth: 420,
-          border: "1px solid",
-          borderColor: "rgba(15, 23, 42, 0.08)",
-          borderRadius: 4,
-          boxShadow: "0 18px 55px rgba(15, 23, 42, 0.08)",
-        }}
+        sx={DesktopLoginCardSurfaceStyle2}
       >
-        <CardContent sx={{ p: { xs: 3, sm: 4 } }}>
-          <Box sx={{ mb: 3 }}>
+        <CardContent sx={DesktopLoginCardContentSpacingStyle3}>
+          <Box sx={DesktopLoginBoxSpacingStyle4}>
             {authStatus === "Success!" ? (
               <Box
-                sx={{
-                  mb: 2.5,
-                  p: 1.5,
-                  borderRadius: 2,
-                  bgcolor: "success.50",
-                  color: "success.dark",
-                }}
+                sx={DesktopLoginBoxSurfaceStyle5}
               >
-                <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                <Typography variant="body2" sx={DesktopLoginTypographyTextStyle6}>
                   Account created successfully. Sign in to continue.
                 </Typography>
               </Box>
             ) : null}
 
-            <Typography variant="h4" sx={{ fontWeight: 750, letterSpacing: -0.5 }}>
+            <Typography variant="h4" sx={DesktopLoginTypographyTextStyle7}>
               Welcome back
             </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.75 }}>
+            <Typography variant="body2" color="text.secondary" sx={DesktopLoginTypographySpacingStyle8}>
               Sign in to continue to your account.
             </Typography>
           </Box>
@@ -120,7 +111,7 @@ export default function DesktopLogin() {
               e.preventDefault();
               handleSubmit(formData);
             }}
-            sx={{ display: "flex", flexDirection: "column" }}
+            sx={DesktopLoginBoxLayoutStyle9}
           >
             <TextField
                 size="small"
@@ -167,15 +158,7 @@ export default function DesktopLogin() {
               type="submit"
               disabled={loading}
               fullWidth
-              sx={{
-                minHeight: 48,
-                mt: 0.5,
-                borderRadius: 2,
-                textTransform: "none",
-                fontWeight: 700,
-                fontSize: 15,
-                boxShadow: "none",
-              }}
+              sx={DesktopLoginButtonSurfaceStyle10}
             >
               {loading ? (
                 <CircularProgress size={22} color="inherit" />
@@ -187,18 +170,13 @@ export default function DesktopLogin() {
 
           <Typography
             variant="body2"
-            sx={{ mt: 2.5, textAlign: "center", color: "text.secondary" }}
+            sx={DesktopLoginTypographyTextStyle11}
           >
             Don’t have an account?{" "}
             <Box
               component={Link}
               to="/register"
-              sx={{
-                color: "primary.main",
-                fontWeight: 700,
-                textDecoration: "none",
-                "&:hover": { textDecoration: "underline" },
-              }}
+              sx={DesktopLoginBoxTextStyle12}
             >
               Sign up
             </Box>

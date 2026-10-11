@@ -1,3 +1,10 @@
+import {
+  DeleteSubTaskDesktopDialogDialogStyle1,
+  DeleteSubTaskDesktopTypographyTextStyle2,
+  DeleteSubTaskDesktopTypographyTextStyle3,
+  DeleteSubTaskDesktopButtonSurfaceStyle4,
+  DeleteSubTaskDesktopButtonSurfaceStyle5
+} from "../Styles/Todo/DeleteSubTaskDesktop/DeleteSubTaskDesktop.styles";
 import { Dialog, DialogContent, DialogActions, Button, Typography, Box, Stack } from '@mui/material'
 import Alert from '../../assets/Icons/Alert.svg';
 
@@ -12,23 +19,17 @@ export default function DeleteSubTaskDesktop({ proceed, open, close, subtaskTitl
     }
 
     return (
-        <Dialog fullWidth maxWidth="xl" open={open} sx={{
-            '& .MuiDialog-paper': {
-                borderRadius: '20px',
-                boxShadow: 'none',
-                width: 300
-            },
-        }}>
+        <Dialog fullWidth maxWidth="xl" open={open} sx={DeleteSubTaskDesktopDialogDialogStyle1}>
             <DialogContent>
                 <Stack spacing={2}>
                     <Box><img src={Alert} alt="alert-icon" height={50} width="100%"/></Box>
-                    <Typography sx={{ fontFamily: "Roboto", textAlign: 'center', color: 'grey.600' }}>Delete this subtask?</Typography>
-                    <Typography sx={{ fontFamily: "Roboto", textAlign: 'center', color: 'grey.600', fontWeight: 'bold', fontSize: 20, textDecoration: 'underline' }}>{subtaskTitle}</Typography>
+                    <Typography sx={DeleteSubTaskDesktopTypographyTextStyle2}>Delete this subtask?</Typography>
+                    <Typography sx={DeleteSubTaskDesktopTypographyTextStyle3}>{subtaskTitle}</Typography>
                 </Stack>
             </DialogContent>
             <DialogActions>
-                <Button type="button" variant="outlined" color="primary" fullWidth onClick={handleClose} sx={{ textTransform: 'none', borderRadius: 5 }}>Cancel</Button>
-                <Button type="button" variant="contained" color="primary" fullWidth onClick={handleProceed} sx={{ textTransform: 'none', borderRadius: 5 }}>Delete</Button>
+                <Button type="button" variant="outlined" color="primary" fullWidth onClick={handleClose} sx={DeleteSubTaskDesktopButtonSurfaceStyle4}>Cancel</Button>
+                <Button type="button" variant="contained" color="primary" fullWidth onClick={handleProceed} sx={DeleteSubTaskDesktopButtonSurfaceStyle5}>Delete</Button>
             </DialogActions>
         </Dialog>
     )

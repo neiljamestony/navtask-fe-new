@@ -1,3 +1,10 @@
+import {
+  ProtectedRouteBoxTextStyle1,
+  ProtectedRouteBoxSurfaceStyle2,
+  ProtectedRouteBoxTextStyle3,
+  ProtectedRouteTypographyTextStyle4,
+  ProtectedRouteTypographySpacingStyle5
+} from "./components/Styles/ProtectedRoute/ProtectedRoute.styles";
 import { Outlet, useNavigate, Navigate } from "react-router-dom";
 import { Box, Typography, CircularProgress } from "@mui/material";
 import { isAuthenticated } from "./api/auth/auth";
@@ -96,36 +103,18 @@ const ProtectedRoute = () => {
             <Box
                 role="status"
                 aria-live="polite"
-                sx={{
-                    minHeight: "100dvh",
-                    boxSizing: "border-box",
-                    display: "grid",
-                    placeItems: "center",
-                    bgcolor: "#f6f8fb",
-                    px: 2,
-                }}
+                sx={ProtectedRouteBoxTextStyle1}
             >
                 <Box
-                    sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    gap: 1.5,
-                    p: 4,
-                    border: "1px solid",
-                    borderColor: "divider",
-                    borderRadius: 3,
-                    bgcolor: "background.paper",
-                    boxShadow: "0 12px 32px rgba(15, 23, 42, 0.06)",
-                    }}
+                    sx={ProtectedRouteBoxSurfaceStyle2}
                 >
                     <CircularProgress size={32} />
 
-                    <Box sx={{ textAlign: "center" }}>
-                    <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+                    <Box sx={ProtectedRouteBoxTextStyle3}>
+                    <Typography variant="subtitle1" sx={ProtectedRouteTypographyTextStyle4}>
                         Checking your session
                     </Typography>
-                    <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                    <Typography variant="body2" color="text.secondary" sx={ProtectedRouteTypographySpacingStyle5}>
                         Redirecting you shortly…
                     </Typography>
                     </Box>

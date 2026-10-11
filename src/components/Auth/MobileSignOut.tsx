@@ -1,3 +1,14 @@
+import {
+  MobileSignOutDialogDialogStyle1,
+  MobileSignOutBoxLayoutStyle2,
+  MobileSignOutDialogContentSpacingStyle3,
+  MobileSignOutBoxLayoutStyle4,
+  MobileSignOutBoxSurfaceStyle5,
+  MobileSignOutTypographyTextStyle6,
+  MobileSignOutBoxLayoutStyle7,
+  MobileSignOutButtonSurfaceStyle8,
+  MobileSignOutButtonSurfaceStyle9
+} from "../Styles/Auth/MobileSignOut/MobileSignOut.styles";
 import { useState } from "react";
 import {
   Box,
@@ -43,19 +54,9 @@ export default function MobileSignOut({
       onClose={loading ? undefined : handleCancel}
       aria-labelledby="signout-title"
       aria-describedby="signout-description"
-      sx={{
-        "& .MuiDialog-container": { alignItems: "flex-end" },
-        "& .MuiDialog-paper": {
-          width: "100%",
-          maxWidth: 520,
-          m: 1,
-          mb: 5,
-          borderRadius: 5,
-          overflow: "hidden",
-        },
-      }}
+      sx={MobileSignOutDialogDialogStyle1}
     >
-      <Box sx={{ display: "flex", justifyContent: "flex-end", px: 1, pt: 1 }}>
+      <Box sx={MobileSignOutBoxLayoutStyle2}>
         <IconButton
           aria-label="Close"
           onClick={handleCancel}
@@ -66,25 +67,16 @@ export default function MobileSignOut({
         </IconButton>
       </Box>
 
-      <DialogContent sx={{ px: 2.5, pt: 0.5, pb: 2.5 }}>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+      <DialogContent sx={MobileSignOutDialogContentSpacingStyle3}>
+        <Box sx={MobileSignOutBoxLayoutStyle4}>
           <Box
-            sx={{
-              width: 44,
-              height: 44,
-              flexShrink: 0,
-              display: "grid",
-              placeItems: "center",
-              borderRadius: 2,
-              bgcolor: "grey.100",
-              color: "text.secondary",
-            }}
+            sx={MobileSignOutBoxSurfaceStyle5}
           >
             <LogOut size={21} />
           </Box>
 
           <Box>
-            <Typography id="signout-title" variant="subtitle1" sx={{ fontWeight: 700 }}>
+            <Typography id="signout-title" variant="subtitle1" sx={MobileSignOutTypographyTextStyle6}>
               Sign out?
             </Typography>
             <Typography
@@ -99,19 +91,14 @@ export default function MobileSignOut({
       </DialogContent>
 
       <Box
-        sx={{
-          display: "flex",
-          gap: 1.25,
-          px: 2,
-          pb: "calc(12px + env(safe-area-inset-bottom))",
-        }}
+        sx={MobileSignOutBoxLayoutStyle7}
       >
         <Button
           variant="outlined"
           fullWidth
           onClick={handleCancel}
           disabled={loading}
-          sx={{ minHeight: 42, borderRadius: 2, textTransform: "none" }}
+          sx={MobileSignOutButtonSurfaceStyle8}
         >
           Cancel
         </Button>
@@ -125,12 +112,7 @@ export default function MobileSignOut({
           startIcon={
             loading ? <CircularProgress size={18} color="inherit" /> : <LogOut size={17} />
           }
-          sx={{
-            minHeight: 42,
-            borderRadius: 2,
-            textTransform: "none",
-            boxShadow: "none",
-          }}
+          sx={MobileSignOutButtonSurfaceStyle9}
         >
           {loading ? "Signing out…" : "Sign out"}
         </Button>

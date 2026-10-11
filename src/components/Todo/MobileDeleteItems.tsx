@@ -1,4 +1,15 @@
 import {
+  MobileDeleteItemsDialogDialogStyle1,
+  MobileDeleteItemsBoxLayoutStyle2,
+  MobileDeleteItemsDialogContentSpacingStyle3,
+  MobileDeleteItemsBoxLayoutStyle4,
+  MobileDeleteItemsBoxSurfaceStyle5,
+  MobileDeleteItemsTypographyTextStyle6,
+  MobileDeleteItemsBoxLayoutStyle7,
+  MobileDeleteItemsButtonSurfaceStyle8,
+  MobileDeleteItemsButtonSurfaceStyle9
+} from "../Styles/Todo/MobileDeleteItems/MobileDeleteItems.styles";
+import {
   Box,
   Button,
   CircularProgress,
@@ -33,42 +44,24 @@ export default function MobileDeleteItems({
         maxWidth={false}
         open={open}
         onClose={loading ? undefined : close}
-        sx={{
-            "& .MuiDialog-container": { alignItems: "flex-end" },
-            "& .MuiDialog-paper": {
-            width: "100%",
-            maxWidth: 520,
-            m: 1,
-            mb: 5,
-            borderRadius: 5,
-            },
-        }}
+        sx={MobileDeleteItemsDialogDialogStyle1}
         >
-        <Box sx={{ display: "flex", justifyContent: "flex-end", px: 1, pt: 1 }}>
+        <Box sx={MobileDeleteItemsBoxLayoutStyle2}>
             <IconButton onClick={close} disabled={loading} size="small" aria-label="Close">
             <X size={18} />
             </IconButton>
         </Box>
 
-        <DialogContent sx={{ px: 2.5, pt: 0, pb: 2 }}>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+        <DialogContent sx={MobileDeleteItemsDialogContentSpacingStyle3}>
+            <Box sx={MobileDeleteItemsBoxLayoutStyle4}>
             <Box
-                sx={{
-                width: 44,
-                height: 44,
-                flexShrink: 0,
-                display: "grid",
-                placeItems: "center",
-                borderRadius: 2,
-                bgcolor: "error.50",
-                color: "error.main",
-                }}
+                sx={MobileDeleteItemsBoxSurfaceStyle5}
             >
                 <TriangleAlert size={22} />
             </Box>
 
             <Box>
-                <Typography id="delete-tasks-title" variant="subtitle1" sx={{ fontWeight: 700 }}>
+                <Typography id="delete-tasks-title" variant="subtitle1" sx={MobileDeleteItemsTypographyTextStyle6}>
                 Delete {itemLabel}?
                 </Typography>
                 <Typography id="delete-tasks-description" variant="body2" color="text.secondary">
@@ -78,13 +71,13 @@ export default function MobileDeleteItems({
             </Box>
         </DialogContent>
 
-        <Box sx={{ display: "flex", gap: 1, px: 2, pb: "calc(12px + env(safe-area-inset-bottom))" }}>
+        <Box sx={MobileDeleteItemsBoxLayoutStyle7}>
             <Button
             variant="outlined"
             fullWidth
             onClick={close}
             disabled={loading}
-            sx={{ minHeight: 40, borderRadius: 2, textTransform: "none" }}
+            sx={MobileDeleteItemsButtonSurfaceStyle8}
             >
             Cancel
             </Button>
@@ -95,7 +88,7 @@ export default function MobileDeleteItems({
             fullWidth
             onClick={() => proceed(ids)}
             disabled={loading || count === 0}
-            sx={{ minHeight: 40, borderRadius: 2, textTransform: "none", boxShadow: "none" }}
+            sx={MobileDeleteItemsButtonSurfaceStyle9}
             >
             {loading ? <CircularProgress size={20} color="inherit" /> : "Delete"}
             </Button>

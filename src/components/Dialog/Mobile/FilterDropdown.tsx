@@ -1,3 +1,17 @@
+import {
+  FilterDropdownFormLabelTextStyle1,
+  FilterDropdownRadioGroupLayoutStyle2,
+  FilterDropdownFormControlLabelSurfaceStyle3,
+  FilterDropdownDialogDialogStyle4,
+  FilterDropdownBoxLayoutStyle5,
+  FilterDropdownBoxLayoutStyle6,
+  FilterDropdownTypographyTextStyle7,
+  FilterDropdownDialogContentSpacingStyle8,
+  FilterDropdownBoxLayoutStyle9,
+  FilterDropdownDialogActionsSurfaceStyle10,
+  FilterDropdownButtonSurfaceStyle11,
+  FilterDropdownButtonSurfaceStyle12
+} from "../../Styles/Dialog/Mobile/FilterDropdown/FilterDropdown.styles";
 import { useEffect, useState } from "react";
 import {
   Box,
@@ -67,13 +81,7 @@ export default function FilterDropdownDialog({
   ) => (
     <FormControl fullWidth>
       <FormLabel
-        sx={{
-          mb: 1,
-          color: "text.primary",
-          fontSize: 14,
-          fontWeight: 700,
-          "&.Mui-focused": { color: "text.primary" },
-        }}
+        sx={FilterDropdownFormLabelTextStyle1}
       >
         {title}
       </FormLabel>
@@ -82,7 +90,7 @@ export default function FilterDropdownDialog({
         name={name}
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        sx={{ gap: 0.5 }}
+        sx={FilterDropdownRadioGroupLayoutStyle2}
       >
         {options.map((option) => (
           <FormControlLabel
@@ -90,14 +98,7 @@ export default function FilterDropdownDialog({
             value={option.label}
             control={<Radio size="small" />}
             label={option.label}
-            sx={{
-              mx: 0,
-              px: 1,
-              minHeight: 40,
-              borderRadius: 1.5,
-              bgcolor: value === option.label ? "action.selected" : "transparent",
-              "& .MuiFormControlLabel-label": { fontSize: 14 },
-            }}
+            sx={FilterDropdownFormControlLabelSurfaceStyle3({ value: value, option: option })}
           />
         ))}
       </RadioGroup>
@@ -111,22 +112,11 @@ export default function FilterDropdownDialog({
       open={open}
       onClose={close}
       aria-labelledby="task-filter-title"
-      sx={{
-        "& .MuiDialog-container": { alignItems: "flex-end" },
-        "& .MuiDialog-paper": {
-          width: "100%",
-          maxWidth: 520,
-          maxHeight: "78dvh",
-          m: 1,
-          mb: 0,
-          borderRadius: "20px 20px 0 0",
-          overflow: "hidden",
-        },
-      }}
+      sx={FilterDropdownDialogDialogStyle4}
     >
-      <Box sx={{ display: "flex", alignItems: "center", px: 2, py: 1.5 }}>
-        <Box sx={{ flex: 1 }}>
-          <Typography id="task-filter-title" variant="subtitle1" sx={{ fontWeight: 700 }}>
+      <Box sx={FilterDropdownBoxLayoutStyle5}>
+        <Box sx={FilterDropdownBoxLayoutStyle6}>
+          <Typography id="task-filter-title" variant="subtitle1" sx={FilterDropdownTypographyTextStyle7}>
             Filter tasks
           </Typography>
           <Typography variant="caption" color="text.secondary">
@@ -141,8 +131,8 @@ export default function FilterDropdownDialog({
 
       <Divider />
 
-      <DialogContent sx={{ p: 2, overflowY: "auto" }}>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 2.5 }}>
+      <DialogContent sx={FilterDropdownDialogContentSpacingStyle8}>
+        <Box sx={FilterDropdownBoxLayoutStyle9}>
           {renderOptions(
             "Priority",
             "filter-priority",
@@ -164,18 +154,12 @@ export default function FilterDropdownDialog({
       </DialogContent>
 
       <DialogActions
-        sx={{
-          p: 2,
-          pt: 1.5,
-          borderTop: "1px solid",
-          borderColor: "divider",
-          gap: 1,
-        }}
+        sx={FilterDropdownDialogActionsSurfaceStyle10}
       >
         <Button
           variant="outlined"
           onClick={handleClear}
-          sx={{ minHeight: 42, borderRadius: 2, textTransform: "none" }}
+          sx={FilterDropdownButtonSurfaceStyle11}
         >
           Clear
         </Button>
@@ -184,7 +168,7 @@ export default function FilterDropdownDialog({
           variant="contained"
           fullWidth
           onClick={handleApply}
-          sx={{ minHeight: 42, borderRadius: 2, textTransform: "none", fontWeight: 700 }}
+          sx={FilterDropdownButtonSurfaceStyle12}
         >
           Apply filters
         </Button>

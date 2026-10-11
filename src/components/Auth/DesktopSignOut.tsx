@@ -1,3 +1,13 @@
+import {
+  DesktopSignOutDialogDialogStyle1,
+  DesktopSignOutDialogTitleSpacingStyle2,
+  DesktopSignOutBoxLayoutStyle3,
+  DesktopSignOutBoxSurfaceStyle4,
+  DesktopSignOutTypographySpacingStyle5,
+  DesktopSignOutDialogActionsLayoutStyle6,
+  DesktopSignOutButtonSurfaceStyle7,
+  DesktopSignOutButtonSurfaceStyle8
+} from "../Styles/Auth/DesktopSignOut/DesktopSignOut.styles";
 import { useState } from "react";
 import {
   Box,
@@ -45,30 +55,16 @@ export default function DesktopSignOut({
       aria-describedby="signout-description"
       maxWidth="xs"
       fullWidth
-      sx={{
-        "& .MuiDialog-paper": {
-          borderRadius: 3,
-          p: 1,
-        },
-      }}
+      sx={DesktopSignOutDialogDialogStyle1}
     >
-      <DialogTitle id="signout-title" sx={{ pb: 1 }}>
+      <DialogTitle id="signout-title" sx={DesktopSignOutDialogTitleSpacingStyle2}>
         Sign out?
       </DialogTitle>
 
       <DialogContent>
-        <Box sx={{ display: "flex", alignItems: "flex-start", gap: 1.5 }}>
+        <Box sx={DesktopSignOutBoxLayoutStyle3}>
           <Box
-            sx={{
-              width: 40,
-              height: 40,
-              flexShrink: 0,
-              display: "grid",
-              placeItems: "center",
-              borderRadius: 2,
-              bgcolor: "grey.100",
-              color: "text.secondary",
-            }}
+            sx={DesktopSignOutBoxSurfaceStyle4}
           >
             <LogOut size={20} />
           </Box>
@@ -77,20 +73,20 @@ export default function DesktopSignOut({
             <Typography id="signout-description" variant="body2">
               Are you sure you want to sign out?
             </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+            <Typography variant="body2" color="text.secondary" sx={DesktopSignOutTypographySpacingStyle5}>
               Any unsaved changes will be lost.
             </Typography>
           </Box>
         </Box>
       </DialogContent>
 
-      <DialogActions sx={{ px: 2, pb: 2, gap: 1 }}>
+      <DialogActions sx={DesktopSignOutDialogActionsLayoutStyle6}>
         <Button
           type="button"
           variant="outlined"
           onClick={handleCancel}
           disabled={loading}
-          sx={{ textTransform: "none", borderRadius: 2 }}
+          sx={DesktopSignOutButtonSurfaceStyle7}
         >
           Cancel
         </Button>
@@ -101,7 +97,7 @@ export default function DesktopSignOut({
           color="error"
           onClick={handleSignOut}
           disabled={loading}
-          sx={{ textTransform: "none", borderRadius: 2, minWidth: 100 }}
+          sx={DesktopSignOutButtonSurfaceStyle8}
         >
           {loading ? (
             <CircularProgress color="inherit" size={20} />

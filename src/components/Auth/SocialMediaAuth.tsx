@@ -1,3 +1,10 @@
+import {
+  SocialMediaAuthBoxLayoutStyle1,
+  SocialMediaAuthDividerSpacingStyle2,
+  SocialMediaAuthTypographyTextStyle3,
+  SocialMediaAuthBoxSizeStyle4,
+  SocialMediaAuthButtonSurfaceStyle5
+} from "../Styles/Auth/SocialMediaAuth/SocialMediaAuth.styles";
 import { useEffect, useState } from "react";
 import { Box, Button, CircularProgress, Divider, Typography } from "@mui/material";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
@@ -82,16 +89,11 @@ export default function SocialMediaAuth() {
   ];
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: 1.25 }}>
-      <Divider sx={{ mb: 0.5 }}>
+    <Box sx={SocialMediaAuthBoxLayoutStyle1}>
+      <Divider sx={SocialMediaAuthDividerSpacingStyle2}>
         <Typography
           variant="caption"
-          sx={{
-            px: 1,
-            color: "text.secondary",
-            fontWeight: 600,
-            letterSpacing: 0.5,
-          }}
+          sx={SocialMediaAuthTypographyTextStyle3}
         >
           OR CONTINUE WITH
         </Typography>
@@ -117,22 +119,11 @@ export default function SocialMediaAuth() {
                   component="img"
                   src={provider.icon}
                   alt=""
-                  sx={{ width: 18, height: 18, objectFit: "contain" }}
+                  sx={SocialMediaAuthBoxSizeStyle4}
                 />
               )
             }
-            sx={{
-              minHeight: 46,
-              borderColor: "divider",
-              borderRadius: 2,
-              color: "text.primary",
-              textTransform: "none",
-              fontWeight: 600,
-              "&:hover": {
-                borderColor: "text.secondary",
-                bgcolor: "action.hover",
-              },
-            }}
+            sx={SocialMediaAuthButtonSurfaceStyle5}
           >
             {isLoading ? `Connecting to ${provider.label}…` : `Continue with ${provider.label}`}
           </Button>

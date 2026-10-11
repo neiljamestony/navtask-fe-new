@@ -1,3 +1,11 @@
+import {
+  FilePreviewBoxSurfaceStyle1,
+  FilePreviewBoxSurfaceStyle2,
+  FilePreviewBoxSizeStyle3,
+  FilePreviewBoxSizeStyle4,
+  FilePreviewTypographyTextStyle5,
+  FilePreviewIconButtonTextStyle6
+} from "../Styles/Task/FilePreview/FilePreview.styles";
 import { useEffect, useMemo } from "react";
 import { Box, IconButton, Typography } from "@mui/material";
 import { FileText, X } from "lucide-react";
@@ -28,17 +36,7 @@ export default function FilePreview({ file, removeFile }: FilePreviewProps) {
 
   return (
     <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        gap: 1.25,
-        minWidth: 0,
-        p: 1,
-        border: "1px solid",
-        borderColor: "divider",
-        borderRadius: 2,
-        bgcolor: "background.paper",
-      }}
+      sx={FilePreviewBoxSurfaceStyle1}
     >
       <Box
         component="a"
@@ -46,31 +44,21 @@ export default function FilePreview({ file, removeFile }: FilePreviewProps) {
         target="_blank"
         rel="noreferrer"
         aria-label={`Preview ${file.name}`}
-        sx={{
-          width: 48,
-          height: 48,
-          flexShrink: 0,
-          display: "grid",
-          placeItems: "center",
-          overflow: "hidden",
-          borderRadius: 1.5,
-          bgcolor: "grey.100",
-          color: "text.secondary",
-        }}
+        sx={FilePreviewBoxSurfaceStyle2}
       >
         {isImage ? (
           <Box
             component="img"
             src={fileUrl}
             alt={file.name}
-            sx={{ width: "100%", height: "100%", objectFit: "cover" }}
+            sx={FilePreviewBoxSizeStyle3}
           />
         ) : (
           <FileText size={21} />
         )}
       </Box>
 
-      <Box sx={{ flex: 1, minWidth: 0 }}>
+      <Box sx={FilePreviewBoxSizeStyle4}>
         <Typography
           component="a"
           href={fileUrl}
@@ -78,16 +66,7 @@ export default function FilePreview({ file, removeFile }: FilePreviewProps) {
           rel="noreferrer"
           variant="body2"
           title={file.name}
-          sx={{
-            display: "block",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
-            color: "text.primary",
-            fontWeight: 600,
-            textDecoration: "none",
-            "&:hover": { color: "primary.main" },
-          }}
+          sx={FilePreviewTypographyTextStyle5}
         >
           {limitText(file.name)}
         </Typography>
@@ -103,11 +82,7 @@ export default function FilePreview({ file, removeFile }: FilePreviewProps) {
           size="small"
           aria-label={`Remove ${file.name}`}
           onClick={removeFile}
-          sx={{
-            flexShrink: 0,
-            color: "text.secondary",
-            "&:hover": { color: "error.main", bgcolor: "error.50" },
-          }}
+          sx={FilePreviewIconButtonTextStyle6}
         >
           <X size={17} />
         </IconButton>

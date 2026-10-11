@@ -1,3 +1,19 @@
+import {
+  SortDropdownDialogDialogStyle1,
+  SortDropdownBoxLayoutStyle2,
+  SortDropdownBoxLayoutStyle3,
+  SortDropdownTypographyTextStyle4,
+  SortDropdownDialogContentSpacingStyle5,
+  SortDropdownFormLabelTextStyle6,
+  SortDropdownRadioGroupLayoutStyle7,
+  SortDropdownFormControlLabelSurfaceStyle8,
+  SortDropdownDividerSpacingStyle9,
+  SortDropdownFormLabelTextStyle10,
+  SortDropdownRadioGroupLayoutStyle11,
+  SortDropdownFormControlLabelSurfaceStyle12,
+  SortDropdownDialogActionsSurfaceStyle13,
+  SortDropdownButtonSurfaceStyle14
+} from "../../Styles/Dialog/Mobile/SortDropdown/SortDropdown.styles";
 import { useState } from "react";
 import {
   Box,
@@ -60,22 +76,11 @@ export default function SortDropdownDialog({
       open={open}
       onClose={handleClose}
       aria-labelledby="sort-dialog-title"
-      sx={{
-        "& .MuiDialog-container": { alignItems: "flex-end" },
-        "& .MuiDialog-paper": {
-          width: "100%",
-          maxWidth: 520,
-          maxHeight: "75dvh",
-          m: 1,
-          mb: 0,
-          borderRadius: "20px 20px 0 0",
-          overflow: "hidden",
-        },
-      }}
+      sx={SortDropdownDialogDialogStyle1}
     >
-      <Box sx={{ display: "flex", alignItems: "center", px: 2, py: 1.5 }}>
-        <Box sx={{ flex: 1 }}>
-          <Typography id="sort-dialog-title" variant="subtitle1" sx={{ fontWeight: 700 }}>
+      <Box sx={SortDropdownBoxLayoutStyle2}>
+        <Box sx={SortDropdownBoxLayoutStyle3}>
+          <Typography id="sort-dialog-title" variant="subtitle1" sx={SortDropdownTypographyTextStyle4}>
             Sort tasks
           </Typography>
           <Typography variant="caption" color="text.secondary">
@@ -90,16 +95,10 @@ export default function SortDropdownDialog({
 
       <Divider />
 
-      <DialogContent sx={{ p: 2 }}>
+      <DialogContent sx={SortDropdownDialogContentSpacingStyle5}>
         <FormControl fullWidth>
           <FormLabel
-            sx={{
-              mb: 1,
-              color: "text.primary",
-              fontSize: 14,
-              fontWeight: 700,
-              "&.Mui-focused": { color: "text.primary" },
-            }}
+            sx={SortDropdownFormLabelTextStyle6}
           >
             Sort by
           </FormLabel>
@@ -110,7 +109,7 @@ export default function SortDropdownDialog({
               setFieldValue(event.target.value);
               if (event.target.value === "none") setSortValue("");
             }}
-            sx={{ gap: 0.5 }}
+            sx={SortDropdownRadioGroupLayoutStyle7}
           >
             {items.map((option) => (
               <FormControlLabel
@@ -118,30 +117,17 @@ export default function SortDropdownDialog({
                 value={option.value}
                 control={<Radio size="small" />}
                 label={option.name}
-                sx={{
-                  mx: 0,
-                  minHeight: 40,
-                  px: 1,
-                  borderRadius: 1.5,
-                  bgcolor: fieldValue === option.value ? "action.selected" : "transparent",
-                  "& .MuiFormControlLabel-label": { fontSize: 14 },
-                }}
+                sx={SortDropdownFormControlLabelSurfaceStyle8({ fieldValue: fieldValue, option: option })}
               />
             ))}
           </RadioGroup>
         </FormControl>
 
-        <Divider sx={{ my: 2 }} />
+        <Divider sx={SortDropdownDividerSpacingStyle9} />
 
         <FormControl fullWidth disabled={fieldValue === "none"}>
           <FormLabel
-            sx={{
-              mb: 1,
-              color: "text.primary",
-              fontSize: 14,
-              fontWeight: 700,
-              "&.Mui-focused": { color: "text.primary" },
-            }}
+            sx={SortDropdownFormLabelTextStyle10}
           >
             Order
           </FormLabel>
@@ -149,7 +135,7 @@ export default function SortDropdownDialog({
           <RadioGroup
             value={sortValue}
             onChange={(event) => setSortValue(event.target.value)}
-            sx={{ gap: 0.5 }}
+            sx={SortDropdownRadioGroupLayoutStyle11}
           >
             {sortDirections.map((option) => (
               <FormControlLabel
@@ -157,14 +143,7 @@ export default function SortDropdownDialog({
                 value={option.value}
                 control={<Radio size="small" />}
                 label={option.name}
-                sx={{
-                  mx: 0,
-                  minHeight: 40,
-                  px: 1,
-                  borderRadius: 1.5,
-                  bgcolor: sortValue === option.value ? "action.selected" : "transparent",
-                  "& .MuiFormControlLabel-label": { fontSize: 14 },
-                }}
+                sx={SortDropdownFormControlLabelSurfaceStyle12({ sortValue: sortValue, option: option })}
               />
             ))}
           </RadioGroup>
@@ -172,23 +151,13 @@ export default function SortDropdownDialog({
       </DialogContent>
 
       <DialogActions
-        sx={{
-          p: 2,
-          pt: 1.5,
-          borderTop: "1px solid",
-          borderColor: "divider",
-        }}
+        sx={SortDropdownDialogActionsSurfaceStyle13}
       >
         <Button
           variant="contained"
           fullWidth
           onClick={handleApply}
-          sx={{
-            minHeight: 44,
-            borderRadius: 2,
-            textTransform: "none",
-            fontWeight: 700,
-          }}
+          sx={SortDropdownButtonSurfaceStyle14}
         >
           Apply sort
         </Button>

@@ -1,3 +1,45 @@
+import {
+  ViewTaskDesktopCardSurfaceStyle1,
+  ViewTaskDesktopBoxLayoutStyle2,
+  ViewTaskDesktopBoxLayoutStyle3,
+  ViewTaskDesktopBoxLayoutStyle4,
+  ViewTaskDesktopTypographyTextStyle5,
+  ViewTaskDesktopTypographyTextStyle6,
+  ViewTaskDesktopDividerSpacingStyle7,
+  ViewTaskDesktopCardSurfaceStyle8,
+  ViewTaskDesktopBoxLayoutStyle9,
+  ViewTaskDesktopAvatarTextStyle10,
+  ViewTaskDesktopTypographyTextStyle11,
+  ViewTaskDesktopBoxLayoutStyle12,
+  ViewTaskDesktopButtonSurfaceStyle13,
+  ViewTaskDesktopButtonSurfaceStyle14,
+  ViewTaskDesktopButtonSurfaceStyle15,
+  ViewTaskDesktopCardSurfaceStyle16,
+  ViewTaskDesktopBoxSurfaceStyle17,
+  ViewTaskDesktopTypographyTextStyle18,
+  ViewTaskDesktopCardHeaderSurfaceStyle19,
+  ViewTaskDesktopCardContentLayoutStyle20,
+  ViewTaskDesktopBoxLayoutStyle21,
+  ViewTaskDesktopTypographyLayoutStyle22,
+  ViewTaskDesktopChipTextStyle23,
+  ViewTaskDesktopTypographyLayoutStyle24,
+  ViewTaskDesktopChipTextStyle25,
+  ViewTaskDesktopBoxGridStyle26,
+  ViewTaskDesktopBoxLayoutStyle27,
+  ViewTaskDesktopTypographyTextStyle28,
+  ViewTaskDesktopBoxLayoutStyle29,
+  ViewTaskDesktopTypographyTextStyle30,
+  ViewTaskDesktopTypographyTextStyle31,
+  ViewTaskDesktopCardSurfaceStyle32,
+  ViewTaskDesktopBoxSpacingStyle33,
+  ViewTaskDesktopTabsSpacingStyle34,
+  ViewTaskDesktopBoxTextStyle35,
+  ViewTaskDesktopBoxSpacingStyle36,
+  ViewTaskDesktopBoxSurfaceStyle37,
+  ViewTaskDesktopTabSurfaceStyle38,
+  ViewTaskDesktopCardContentSizeStyle39,
+  ViewTaskDesktopBoxSpacingStyle40
+} from "../Styles/Task/ViewTaskDesktop/ViewTaskDesktop.styles";
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom"
 import { Box, Typography, IconButton, Divider, Grid, Button, Card, Avatar, CardHeader, CardContent, Chip, Tabs, Tab, useMediaQuery, useTheme } from "@mui/material";
@@ -113,54 +155,41 @@ export default function ViewTaskDesktop(){
                                 taskNotFound ? (
                                     <TaskNotFound/>
                                 ): (
-                                    <Card variant="outlined" sx={{ borderRadius: 5, padding: 2, height: '84vh' }}>
+                                    <Card variant="outlined" sx={ViewTaskDesktopCardSurfaceStyle1}>
                                         <DeleteItems loading={itemDeletionLoader} close={() => setDeleteItem(false)} proceed={handleDeleteItem} open={deleteItem} ids={[task.id.toString()]}/>
-                                        <Box sx={{ display: "flex", justifyContent: "start", alignItems: 'center', gap: 2 }}>
+                                        <Box sx={ViewTaskDesktopBoxLayoutStyle2}>
                                             <IconButton size="small" onClick={() => navigate("/")}>
                                                 <ChevronLeft size={14}/>
                                             </IconButton>
-                                            <Box sx={{ display: "flex", alignItems: 'flex-start', gap: 1 }}>
-                                                <Box sx={{ display: "flex", justifyContent: 'center', alignItems: 'center', gap: 1, opacity: 0.4 }}>
+                                            <Box sx={ViewTaskDesktopBoxLayoutStyle3}>
+                                                <Box sx={ViewTaskDesktopBoxLayoutStyle4}>
                                                     <CopyCheck size={20}/>
-                                                    <Typography sx={{ fontSize: 14 }}>Task</Typography>
+                                                    <Typography sx={ViewTaskDesktopTypographyTextStyle5}>Task</Typography>
                                                     <span>/</span>
                                                 </Box>
-                                                <Typography sx={{ fontSize: 14 }}>Task Details</Typography>
+                                                <Typography sx={ViewTaskDesktopTypographyTextStyle6}>Task Details</Typography>
                                             </Box>
                                         </Box>
-                                        <Divider sx={{ marginY: 1 }}/>
-                                        <Card variant="outlined" sx={{ borderRadius: 5, marginBottom: 1, padding: 1 }}>
+                                        <Divider sx={ViewTaskDesktopDividerSpacingStyle7}/>
+                                        <Card variant="outlined" sx={ViewTaskDesktopCardSurfaceStyle8}>
                                             <Grid container spacing={1}>
                                                 <Grid size={6}>
-                                                    <Box sx={{ display: "flex", justifyContent: 'flex-start', alignItems: 'center', gap: 2, padding: 1 }}>
+                                                    <Box sx={ViewTaskDesktopBoxLayoutStyle9}>
                                                         <Avatar
                                                             variant="rounded"
-                                                            sx={{ bgcolor: "rgba(148, 0, 211, 0.15)" }}
+                                                            sx={ViewTaskDesktopAvatarTextStyle10}
                                                             >
                                                             <ListTodo size={20} color="#9400D3" strokeWidth={3}/>
                                                         </Avatar>
-                                                        <Typography variant="caption" sx={{ fontSize: 24, marginTop: 1 }}>{task.title}</Typography>
+                                                        <Typography variant="caption" sx={ViewTaskDesktopTypographyTextStyle11}>{task.title}</Typography>
                                                     </Box>
                                                 </Grid>
                                                 <Grid size={6}>
-                                                    <Box sx={{ display: "flex", justifyContent: 'flex-start', alignItems: 'flex-start', gap: 2, padding: 1, marginTop: 1 }}>
+                                                    <Box sx={ViewTaskDesktopBoxLayoutStyle12}>
                                                         <Button
                                                             variant="outlined"
                                                             startIcon={<CopyCheck size={20} />}
-                                                            sx={{
-                                                                backgroundColor: "#fff",
-                                                                borderRadius: 2,
-                                                                borderColor: "divider",
-                                                                color: "#424242",
-                                                                textTransform: "none",
-                                                                boxShadow: "none",
-                                                                "&:hover": {
-                                                                borderColor: "divider",
-                                                                backgroundColor: "#f5f5f5",
-                                                                boxShadow: "none",
-                                                                },
-                                                                "&:focus": { boxShadow: "none" },
-                                                            }}
+                                                            sx={ViewTaskDesktopButtonSurfaceStyle13}
                                                             >
                                                             Create Sub Task
                                                         </Button>
@@ -168,20 +197,7 @@ export default function ViewTaskDesktop(){
                                                             variant="outlined"
                                                             startIcon={<Edit size={20} />}
                                                             onClick={() => navigate(`/edit-task/${task.id}`)}
-                                                            sx={{
-                                                                backgroundColor: "#fff",
-                                                                borderRadius: 2,
-                                                                borderColor: "divider",
-                                                                color: "#424242",
-                                                                textTransform: "none",
-                                                                boxShadow: "none",
-                                                                "&:hover": {
-                                                                borderColor: "divider",
-                                                                backgroundColor: "#f5f5f5",
-                                                                boxShadow: "none",
-                                                                },
-                                                                "&:focus": { boxShadow: "none" },
-                                                            }}
+                                                            sx={ViewTaskDesktopButtonSurfaceStyle14}
                                                             >
                                                             Edit
                                                         </Button>
@@ -189,20 +205,7 @@ export default function ViewTaskDesktop(){
                                                             variant="outlined"
                                                             startIcon={<Trash size={20} />}
                                                             onClick={() => setDeleteItem(true)}
-                                                            sx={{
-                                                                backgroundColor: "#fff",
-                                                                borderRadius: 2,
-                                                                borderColor: "divider",
-                                                                color: "#424242",
-                                                                textTransform: "none",
-                                                                boxShadow: "none",
-                                                                "&:hover": {
-                                                                borderColor: "divider",
-                                                                backgroundColor: "#f5f5f5",
-                                                                boxShadow: "none",
-                                                                },
-                                                                "&:focus": { boxShadow: "none" },
-                                                            }}
+                                                            sx={ViewTaskDesktopButtonSurfaceStyle15}
                                                             >
                                                             Remove
                                                         </Button>
@@ -214,101 +217,68 @@ export default function ViewTaskDesktop(){
                                             <Grid size={smallLaptop ? 3 : 2}>
                                                 <Card
                                                     variant="outlined"
-                                                    sx={{
-                                                        height: "71vh",
-                                                        borderRadius: 3,
-                                                        borderColor: "divider",
-                                                        overflow: "hidden",
-                                                        display: "flex",
-                                                        flexDirection: "column",
-                                                    }}
+                                                    sx={ViewTaskDesktopCardSurfaceStyle16}
                                                     >
                                                     <CardHeader
                                                         avatar={
                                                         <Box
-                                                            sx={{
-                                                            width: 36,
-                                                            height: 36,
-                                                            display: "grid",
-                                                            placeItems: "center",
-                                                            borderRadius: 1.5,
-                                                            bgcolor: "primary.50",
-                                                            color: "primary.main",
-                                                            }}
+                                                            sx={ViewTaskDesktopBoxSurfaceStyle17}
                                                         >
                                                             <GripVertical size={18} />
                                                         </Box>
                                                         }
                                                         title={
-                                                        <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+                                                        <Typography variant="subtitle1" sx={ViewTaskDesktopTypographyTextStyle18}>
                                                             Task information
                                                         </Typography>
                                                         }
-                                                        sx={{
-                                                        px: 2.5,
-                                                        py: 2,
-                                                        borderBottom: "1px solid",
-                                                        borderColor: "divider",
-                                                        }}
+                                                        sx={ViewTaskDesktopCardHeaderSurfaceStyle19}
                                                     />
 
                                                     <CardContent
-                                                        sx={{
-                                                        flex: 1,
-                                                        overflowY: "auto",
-                                                        p: 2.5,
-                                                        "&:last-child": { pb: 2.5 },
-                                                        }}
+                                                        sx={ViewTaskDesktopCardContentLayoutStyle20}
                                                     >
-                                                        <Box sx={{ display: "flex", flexDirection: "column", gap: 2.5 }}>
+                                                        <Box sx={ViewTaskDesktopBoxLayoutStyle21}>
                                                             <Box>
-                                                                <Typography variant="caption" color="text.secondary" sx={{ display: "block", mb: 0.75 }}>Status</Typography>
+                                                                <Typography variant="caption" color="text.secondary" sx={ViewTaskDesktopTypographyLayoutStyle22}>Status</Typography>
                                                                 <Chip
                                                                     size="small"
                                                                     icon={status?.icon}
                                                                     label={status?.label ?? "—"}
-                                                                    sx={{
-                                                                        bgcolor: status?.bgColor,
-                                                                        color: status?.color,
-                                                                        fontWeight: 600,
-                                                                    }}
+                                                                    sx={ViewTaskDesktopChipTextStyle23({ status: status })}
                                                                 />
                                                             </Box>
                                                             <Box>
-                                                                <Typography variant="caption" color="text.secondary" sx={{ display: "block", mb: 0.75 }}>Priority</Typography>
+                                                                <Typography variant="caption" color="text.secondary" sx={ViewTaskDesktopTypographyLayoutStyle24}>Priority</Typography>
                                                                 <Chip
                                                                     size="small"
                                                                     icon={priority?.icon}
                                                                     label={priority?.label ?? "—"}
-                                                                    sx={{
-                                                                        bgcolor: priority?.bgColor,
-                                                                        color: priority?.color,
-                                                                        fontWeight: 600,
-                                                                    }}
+                                                                    sx={ViewTaskDesktopChipTextStyle25({ priority: priority })}
                                                                 />
                                                             </Box>
                                                             <Divider />
-                                                            <Box sx={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 2 }}>
+                                                            <Box sx={ViewTaskDesktopBoxGridStyle26}>
                                                                 <Box>
-                                                                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                                                                    <Box sx={ViewTaskDesktopBoxLayoutStyle27}>
                                                                         <CalendarClock size={15} />
                                                                         <Typography variant="caption" color="text.secondary">
                                                                             Due date
                                                                         </Typography>
                                                                     </Box>
-                                                                    <Typography variant="body2" sx={{ mt: 0.5, fontWeight: 600 }}>
+                                                                    <Typography variant="body2" sx={ViewTaskDesktopTypographyTextStyle28}>
                                                                         {task.due_date ? dayjs(task.due_date).format("D MMM YYYY") : "Not set"}
                                                                     </Typography>
                                                                 </Box>
 
                                                                 <Box>
-                                                                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                                                                    <Box sx={ViewTaskDesktopBoxLayoutStyle29}>
                                                                         <CalendarCheck size={15} />
                                                                         <Typography variant="caption" color="text.secondary">
                                                                             Created
                                                                         </Typography>
                                                                     </Box>
-                                                                    <Typography variant="body2" sx={{ mt: 0.5, fontWeight: 600 }}>
+                                                                    <Typography variant="body2" sx={ViewTaskDesktopTypographyTextStyle30}>
                                                                         {task.created_at ? dayjs(task.created_at).format("D MMM YYYY") : "—"}
                                                                     </Typography>
                                                                 </Box>
@@ -321,13 +291,7 @@ export default function ViewTaskDesktop(){
                                                                         <Typography variant="caption" color="text.secondary">Description</Typography>
                                                                         <Typography
                                                                             variant="body2"
-                                                                            sx={{
-                                                                                mt: 0.75,
-                                                                                lineHeight: 1.65,
-                                                                                color: "text.primary",
-                                                                                whiteSpace: "pre-wrap",
-                                                                                overflowWrap: "anywhere",
-                                                                            }}
+                                                                            sx={ViewTaskDesktopTypographyTextStyle31}
                                                                         >
                                                                         {task.description}
                                                                         </Typography>
@@ -339,49 +303,30 @@ export default function ViewTaskDesktop(){
                                                 </Card>
                                             </Grid>
                                             <Grid size={smallLaptop ? 9 : 10}>
-                                                <Card variant="outlined" sx={{ borderRadius: 5, height: '71vh' }}>
-                                                    <Box sx={{ marginTop: 1 }}>
+                                                <Card variant="outlined" sx={ViewTaskDesktopCardSurfaceStyle32}>
+                                                    <Box sx={ViewTaskDesktopBoxSpacingStyle33}>
                                                         <Tabs
                                                             value={tab}
                                                             onChange={(_, newValue) => setTab(newValue)}
                                                             aria-label="Task tabs"
-                                                            sx={{
-                                                                "& .MuiTabs-indicator": { display: "none" },
-                                                            }}
+                                                            sx={ViewTaskDesktopTabsSpacingStyle34}
                                                             >
                                                             {tabInfo.map((tabData, index) => (
                                                                 <Tab
                                                                     key={tabData.name}
                                                                     value={index}
                                                                     label={
-                                                                        <Box sx={{ display: "flex", justifyContent: 'center', alignItems: 'center', gap: 1, textAlign: 'center' }}>
-                                                                            <Box sx={{ pr: 1 }}>{tabData.name}</Box>
-                                                                            {tabData.count > 0 && <Box sx={{ backgroundColor: 'black', color: '#fff', textAlign: 'center', padding: 0.5, borderRadius: 2, fontSize: 12 }}>{tabData.count}</Box>}
+                                                                        <Box sx={ViewTaskDesktopBoxTextStyle35}>
+                                                                            <Box sx={ViewTaskDesktopBoxSpacingStyle36}>{tabData.name}</Box>
+                                                                            {tabData.count > 0 && <Box sx={ViewTaskDesktopBoxSurfaceStyle37}>{tabData.count}</Box>}
                                                                         </Box>
                                                                     }
-                                                                    sx={{
-                                                                        minHeight: "auto",
-                                                                        minWidth: 0,
-                                                                        px: 2,
-                                                                        py: 1,
-                                                                        ml: 1,
-                                                                        border: "1px solid transparent",
-                                                                        borderRadius: 2,
-                                                                        color: "#424242",
-                                                                        textTransform: "none",
-                                                                        "&:hover": { backgroundColor: "#f5f5f5" },
-                                                                        "&.Mui-selected": {
-                                                                        backgroundColor: "#fff",
-                                                                        borderColor: "divider",
-                                                                        color: "#424242",
-                                                                        boxShadow: "none",
-                                                                        },
-                                                                    }}
+                                                                    sx={ViewTaskDesktopTabSurfaceStyle38}
                                                                 />
                                                             ))}
                                                         </Tabs>
-                                                        <CardContent sx={{ overflowY: 'auto', height: '62vh' }}>
-                                                            <Box role="tabpanel" sx={{ mr: 1 }}>
+                                                        <CardContent sx={ViewTaskDesktopCardContentSizeStyle39}>
+                                                            <Box role="tabpanel" sx={ViewTaskDesktopBoxSpacingStyle40}>
                                                                 {tab === 0 && <Subtask subtasks={task.subtask}/>}
                                                                 {tab === 1 && <Attachments attachments={task.attachments}/>}
                                                             </Box>

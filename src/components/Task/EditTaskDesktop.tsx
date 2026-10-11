@@ -1,6 +1,52 @@
+import {
+  EditTaskDesktopBoxTextStyle1,
+  EditTaskDesktopBoxSizeStyle2,
+  EditTaskDesktopTypographyTextStyle3,
+  EditTaskDesktopPaperSurfaceStyle4,
+  EditTaskDesktopBoxLayoutStyle5,
+  EditTaskDesktopBoxLayoutStyle6,
+  EditTaskDesktopTypographyTextStyle7,
+  EditTaskDesktopTypographySpacingStyle8,
+  EditTaskDesktopTextFieldInputStyle9,
+  EditTaskDesktopTypographyTextStyle10,
+  EditTaskDesktopTypographySpacingStyle11,
+  EditTaskDesktopTypographyTextStyle12,
+  EditTaskDesktopTypographySpacingStyle13,
+  EditTaskDesktopTypographyTextStyle14,
+  EditTaskDesktopTypographySpacingStyle15,
+  EditTaskDesktopBoxSurfaceStyle16,
+  EditTaskDesktopBoxSurfaceStyle17,
+  EditTaskDesktopBoxLayoutStyle18,
+  EditTaskDesktopBoxSurfaceStyle19,
+  EditTaskDesktopBoxSizeStyle20,
+  EditTaskDesktopTypographyTextStyle21,
+  EditTaskDesktopTypographyTextStyle22,
+  EditTaskDesktopTypographyTextStyle23,
+  EditTaskDesktopBoxSurfaceStyle24,
+  EditTaskDesktopBoxSurfaceStyle25,
+  EditTaskDesktopBoxLayoutStyle26,
+  EditTaskDesktopBoxTextStyle27,
+  EditTaskDesktopBoxLayoutStyle28,
+  EditTaskDesktopTypographyLayoutStyle29,
+  EditTaskDesktopBoxLayoutStyle30,
+  EditTaskDesktopTypographyTextStyle31,
+  EditTaskDesktopButtonSurfaceStyle32,
+  EditTaskDesktopBoxSurfaceStyle33,
+  EditTaskDesktopBoxLayoutStyle34,
+  EditTaskDesktopBoxGridStyle35,
+  EditTaskDesktopBoxSurfaceStyle36,
+  EditTaskDesktopTextFieldInputStyle37,
+  EditTaskDesktopTextFieldGridStyle38,
+  EditTaskDesktopTypographyTextStyle39,
+  EditTaskDesktopIconButtonGridStyle40,
+  EditTaskDesktopBoxSurfaceStyle41,
+  EditTaskDesktopButtonSurfaceStyle42,
+  EditTaskDesktopButtonSurfaceStyle43,
+  EditTaskDesktopButtonSurfaceStyle44
+} from "../Styles/Task/EditTaskDesktop/EditTaskDesktop.styles";
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Typography, Paper, Button, TextField, MenuItem, Grid, LinearProgress, Divider, CircularProgress, IconButton } from '@mui/material'
+import { Box, Typography, Paper, Button, TextField, MenuItem, Grid, Divider, CircularProgress, IconButton } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -349,14 +395,7 @@ export default function EditTaskDesktop() {
 
     return (
         <Box
-            sx={{
-                boxSizing: "border-box",
-                minHeight: "100%",
-                display: "flex",
-                flexDirection: "column",
-                bgcolor: "#f6f8fb",
-                p: { xs: 1.5, md: 3 },
-            }}
+            sx={EditTaskDesktopBoxTextStyle1}
         >
             {fetchingTask ? (
                 <FetchingTask/>
@@ -372,16 +411,7 @@ export default function EditTaskDesktop() {
                     itemToDelete={subTaskToDelete.key}
                 />
                 <Box
-                sx={{
-                    width: "100%",
-                    maxWidth: 1000,
-                    mx: "auto",
-                    mb: 2,
-                    flexShrink: 0,
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 1.5,
-                }}
+                sx={EditTaskDesktopBoxSizeStyle2}
                 >
                 <IconButton
                     size='small'
@@ -392,7 +422,7 @@ export default function EditTaskDesktop() {
                 </IconButton>
 
                 <Box>
-                    <Typography variant="h5" sx={{ fontWeight: 700, lineHeight: 1.2 }}>Edit task</Typography>
+                    <Typography variant="h5" sx={EditTaskDesktopTypographyTextStyle3}>Edit task</Typography>
                     <Typography variant="body2" color="text.secondary">
                         Update task details, schedule, attachments, and subtasks.
                     </Typography>
@@ -400,30 +430,16 @@ export default function EditTaskDesktop() {
                 </Box>
                 <Paper
                 elevation={0}
-                sx={{
-                    width: "100%",
-                    maxWidth: 1000,
-                    mx: "auto",
-                    flex: 1,
-                    display: "flex",
-                    flexDirection: "column",
-                    border: "1px solid",
-                    borderColor: "#e3e8ef",
-                    borderRadius: 3,
-                    overflow: "hidden",
-                }}
+                sx={EditTaskDesktopPaperSurfaceStyle4}
                 >
                 <Box
-                    sx={{
-                    flex: 1,
-                    p: { xs: 2, sm: 3, md: 4 },
-                    }}
+                    sx={EditTaskDesktopBoxLayoutStyle5}
                 >
-                    <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+                    <Box sx={EditTaskDesktopBoxLayoutStyle6}>
                     {/* Task details */}
                     <Box>
-                        <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>Task details</Typography>
-                        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                        <Typography variant="subtitle1" sx={EditTaskDesktopTypographyTextStyle7}>Task details</Typography>
+                        <Typography variant="body2" color="text.secondary" sx={EditTaskDesktopTypographySpacingStyle8}>
                             Priority is fixed after creation. You can update the status and task information.
                         </Typography>
                         <Grid container spacing={2}>
@@ -495,12 +511,7 @@ export default function EditTaskDesktop() {
                                 helperText={
                                     errors.find((error) => error.key === "title")?.error ?? ""
                                 }
-                                sx={{
-                                    "& .MuiInputBase-input": {
-                                    fontSize: 18,
-                                    fontWeight: 600,
-                                    },
-                                }}
+                                sx={EditTaskDesktopTextFieldInputStyle9}
                                 />
                             </Grid>
                         </Grid>
@@ -508,8 +519,8 @@ export default function EditTaskDesktop() {
                     <Divider />
                     {/* Schedule */}
                     <Box>
-                        <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>Schedule</Typography>
-                        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                        <Typography variant="subtitle1" sx={EditTaskDesktopTypographyTextStyle10}>Schedule</Typography>
+                        <Typography variant="body2" color="text.secondary" sx={EditTaskDesktopTypographySpacingStyle11}>
                             Review the dates associated with this task.
                         </Typography>
 
@@ -554,8 +565,8 @@ export default function EditTaskDesktop() {
                     <Divider />
                     {/* Description */}
                     <Box>
-                        <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>Description</Typography>
-                        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                        <Typography variant="subtitle1" sx={EditTaskDesktopTypographyTextStyle12}>Description</Typography>
+                        <Typography variant="body2" color="text.secondary" sx={EditTaskDesktopTypographySpacingStyle13}>
                             Add context or instructions for this task.
                         </Typography>
                         <TextField
@@ -577,68 +588,35 @@ export default function EditTaskDesktop() {
                     <Divider />
                     {/* Attachments */}
                     <Box>
-                        <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>Attachments</Typography>
-                        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                        <Typography variant="subtitle1" sx={EditTaskDesktopTypographyTextStyle14}>Attachments</Typography>
+                        <Typography variant="body2" color="text.secondary" sx={EditTaskDesktopTypographySpacingStyle15}>
                             Add up to 5 files, with a maximum size of 10 MB per file.
                         </Typography>
                         <Box
                             {...getRootProps()}
-                            sx={{
-                                p: 2,
-                                border: "1.5px dashed",
-                                borderColor: fileError ? "error.main" : "#cbd5e1",
-                                borderRadius: 2,
-                                bgcolor: "#fafcff",
-                                cursor: uploading ? "default" : "pointer",
-                                transition: "background-color 150ms ease, border-color 150ms ease",
-                                "&:hover": {
-                                borderColor: fileError ? "error.main" : "primary.main",
-                                bgcolor: "#f3f8ff",
-                                },
-                            }}
+                            sx={EditTaskDesktopBoxSurfaceStyle16({ fileError: fileError, uploading: uploading })}
                             >
                         <input {...getInputProps()} />
 
                         {uploading ? (
                             <Box
-                                sx={{
-                                p: 2,
-                                border: "1px solid",
-                                borderColor: "divider",
-                                borderRadius: 3,
-                                bgcolor: "background.paper",
-                                }}
+                                sx={EditTaskDesktopBoxSurfaceStyle17}
                             >
-                                <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                                <Box sx={EditTaskDesktopBoxLayoutStyle18}>
                                 <Box
-                                    sx={{
-                                    width: 44,
-                                    height: 44,
-                                    flexShrink: 0,
-                                    display: "grid",
-                                    placeItems: "center",
-                                    borderRadius: 2.5,
-                                    bgcolor: "primary.50",
-                                    color: "primary.main",
-                                    }}
+                                    sx={EditTaskDesktopBoxSurfaceStyle19}
                                 >
                                     <UploadCloud size={22} />
                                 </Box>
 
-                                <Box sx={{ flex: 1, minWidth: 0 }}>
-                                    <Typography variant="body2" sx={{ fontWeight: 700 }}>
+                                <Box sx={EditTaskDesktopBoxSizeStyle20}>
+                                    <Typography variant="body2" sx={EditTaskDesktopTypographyTextStyle21}>
                                     Uploading files
                                     </Typography>
                                     <Typography
                                     variant="caption"
                                     color="text.secondary"
-                                    sx={{
-                                        display: "block",
-                                        overflow: "hidden",
-                                        textOverflow: "ellipsis",
-                                        whiteSpace: "nowrap",
-                                        mt: 0.25,
-                                    }}
+                                    sx={EditTaskDesktopTypographyTextStyle22}
                                     title={uploadedFileNames.join(", ")}
                                     >
                                     {uploadedFileNames.join(", ")}
@@ -648,7 +626,7 @@ export default function EditTaskDesktop() {
                                 <Typography
                                     variant="body2"
                                     color="primary.main"
-                                    sx={{ fontWeight: 700, fontVariantNumeric: "tabular-nums" }}
+                                    sx={EditTaskDesktopTypographyTextStyle23}
                                 >
                                     {Math.round(progress)}%
                                 </Typography>
@@ -660,38 +638,20 @@ export default function EditTaskDesktop() {
                                 aria-valuemin={0}
                                 aria-valuemax={100}
                                 aria-valuenow={Math.round(progress)}
-                                sx={{
-                                    mt: 1.75,
-                                    height: 6,
-                                    overflow: "hidden",
-                                    borderRadius: 999,
-                                    bgcolor: "action.hover",
-                                }}
+                                sx={EditTaskDesktopBoxSurfaceStyle24}
                                 >
                                 <Box
-                                    sx={{
-                                    width: `${Math.min(100, Math.max(0, progress))}%`,
-                                    height: "100%",
-                                    borderRadius: "inherit",
-                                    bgcolor: "primary.main",
-                                    transition: "width 250ms ease",
-                                    }}
+                                    sx={EditTaskDesktopBoxSurfaceStyle25({ progress: progress })}
                                 />
                                 </Box>
                             </Box>
                         ) : (
                             <Box
-                            sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                gap: 1.5,
-                                py: 1,
-                            }}
+                            sx={EditTaskDesktopBoxLayoutStyle26}
                             >
                             <UploadIcon size={20} color="#9e9e9e"/>
                             <Typography variant="body2">
-                                <Box component="span" sx={{ color: "primary.main", fontWeight: 700 }}>
+                                <Box component="span" sx={EditTaskDesktopBoxTextStyle27}>
                                 Browse files
                                 </Box>{" "}
                                 or drag and drop them here
@@ -701,12 +661,7 @@ export default function EditTaskDesktop() {
 
                         {!uploading && task.attachments.length > 0 && (
                             <Box
-                            sx={{
-                                display: "flex",
-                                flexWrap: "wrap",
-                                gap: 1.5,
-                                mt: 2,
-                            }}
+                            sx={EditTaskDesktopBoxLayoutStyle28}
                             >
                             {task.attachments.map((file, key) => (
                                 <EditFilePreview
@@ -722,7 +677,7 @@ export default function EditTaskDesktop() {
                         </Box>
 
                         {fileError && (
-                        <Typography variant="caption" color="error" sx={{ display: "block", mt: 1 }}>
+                        <Typography variant="caption" color="error" sx={EditTaskDesktopTypographyLayoutStyle29}>
                             {fileError.msg}
                         </Typography>
                         )}
@@ -731,15 +686,9 @@ export default function EditTaskDesktop() {
                     {/* Subtasks */}
                     <Box>
                         <Box
-                            sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "space-between",
-                                gap: 2,
-                                mb: 2,
-                            }}>
+                            sx={EditTaskDesktopBoxLayoutStyle30}>
                             <Box>
-                                <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+                                <Typography variant="subtitle1" sx={EditTaskDesktopTypographyTextStyle31}>
                                 Subtasks
                                 </Typography>
                                 <Typography variant="body2" color="text.secondary">
@@ -753,58 +702,26 @@ export default function EditTaskDesktop() {
                                 startIcon={<Plus size={20} />}
                                 disabled={task.subtask.length >= 10 || task.status === "completed"}
                                 onClick={handleNewSubTask}
-                                sx={{ textTransform: "none", borderRadius: 2, flexShrink: 0 }}
+                                sx={EditTaskDesktopButtonSurfaceStyle32}
                             >
                                 Add subtask
                             </Button>
                         </Box>
                         {task.subtask.length === 0 ? (
                         <Box
-                            sx={{
-                                p: 2.5,
-                                border: "1px dashed",
-                                borderColor: "divider",
-                                borderRadius: 2,
-                                bgcolor: "#fafcff",
-                                textAlign: "center",
-                            }}>
+                            sx={EditTaskDesktopBoxSurfaceStyle33}>
                             <Typography variant="body2" color="text.secondary">No subtasks added yet.</Typography>
                         </Box>
                         ) : (
-                            <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+                            <Box sx={EditTaskDesktopBoxLayoutStyle34}>
                                 {task.subtask.map((subTask, key) => {
                                     const isDone = subTask.status === "done";
                                     return (
                                     <Box
                                         key={key}
-                                        sx={{
-                                            display: "grid",
-                                            gridTemplateColumns: {
-                                                xs: "32px minmax(0, 1fr) 36px",
-                                                sm: "36px minmax(0, 1fr) 150px 36px",
-                                            },
-                                            gap: 1.25,
-                                            alignItems: "center",
-                                            p: 1.25,
-                                            border: "1px solid",
-                                            borderColor: "divider",
-                                            borderRadius: 2,
-                                            bgcolor: isDone ? "rgba(46, 125, 50, 0.035)" : "background.paper",
-                                            transition: "border-color 150ms ease, background-color 150ms ease",
-                                            "&:hover": { borderColor: "primary.light" },
-                                        }}>
+                                        sx={EditTaskDesktopBoxGridStyle35({ isDone: isDone })}>
                                         <Box
-                                            sx={{
-                                                width: 30,
-                                                height: 30,
-                                                display: "grid",
-                                                placeItems: "center",
-                                                borderRadius: "50%",
-                                                bgcolor: isDone ? "success.light" : "grey.100",
-                                                color: isDone ? "success.dark" : "text.secondary",
-                                                fontSize: 13,
-                                                fontWeight: 700,
-                                            }}>{key + 1}
+                                            sx={EditTaskDesktopBoxSurfaceStyle36({ isDone: isDone })}>{key + 1}
                                         </Box>
 
                                         <TextField
@@ -819,15 +736,7 @@ export default function EditTaskDesktop() {
                                             size="small"
                                             variant="standard"
                                             slotProps={{ input: { disableUnderline: true } }}
-                                            sx={{
-                                                "& .MuiInputBase-root": {
-                                                px: 1.25,
-                                                py: 0.75,
-                                                borderRadius: 1.5,
-                                                bgcolor: "grey.50",
-                                                },
-                                                "& .MuiInputLabel-root": { display: "none" },
-                                            }}
+                                            sx={EditTaskDesktopTextFieldInputStyle37}
                                         />
 
                                         <TextField
@@ -839,14 +748,11 @@ export default function EditTaskDesktop() {
                                             }
                                             fullWidth
                                             size="small"
-                                            sx={{
-                                                gridColumn: { xs: "2", sm: "auto" },
-                                                gridRow: { xs: "2", sm: "auto" },
-                                            }}
+                                            sx={EditTaskDesktopTextFieldGridStyle38}
                                         >
                                         {subTasksDropdown.map((option) => (
                                             <MenuItem key={option.value} value={option.value}>
-                                                <Typography variant="body2" sx={{ fontSize: 13 }}>{option.label}</Typography>
+                                                <Typography variant="body2" sx={EditTaskDesktopTypographyTextStyle39}>{option.label}</Typography>
                                             </MenuItem>
                                         ))}
                                         </TextField>
@@ -857,15 +763,7 @@ export default function EditTaskDesktop() {
                                             onClick={() =>
                                                 handleOpenSubTaskDeletionModal(subTask.title, key)
                                             }
-                                            sx={{
-                                                gridColumn: { xs: "3", sm: "4" },
-                                                gridRow: { xs: "1", sm: "auto" },
-                                                color: "text.secondary",
-                                                "&:hover": {
-                                                color: "error.main",
-                                                bgcolor: "error.lighter",
-                                                },
-                                            }}>
+                                            sx={EditTaskDesktopIconButtonGridStyle40}>
                                             <Trash size={17} />
                                         </IconButton>
                                     </Box>
@@ -879,23 +777,13 @@ export default function EditTaskDesktop() {
 
                     {/* Actions stay visible; only the form above scrolls */}
                     <Box
-                        sx={{
-                        flexShrink: 0,
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        gap: 1.5,
-                        px: { xs: 2, sm: 3, md: 4 },
-                        py: 2,
-                        borderTop: "1px solid",
-                        borderColor: "divider",
-                        bgcolor: "#fff",
-                        }}>
+                        sx={EditTaskDesktopBoxSurfaceStyle41}>
                         <Button
                             type="button"
                             variant="outlined"
                             onClick={() => navigate("/")}
                             disabled={loading}
-                            sx={{ textTransform: "none", borderRadius: 2, px: 3 }}
+                            sx={EditTaskDesktopButtonSurfaceStyle42}
                         >Cancel</Button>
 
                         {task.subtask.length > 0 && subtasksCompleted && task.status !== "completed" ? (
@@ -904,7 +792,7 @@ export default function EditTaskDesktop() {
                                 variant="contained"
                                 onClick={handleMarkAsComplete}
                                 disabled={loading || fetchingTask}
-                                sx={{ textTransform: "none", borderRadius: 2, px: 3, fontWeight: 700 }}
+                                sx={EditTaskDesktopButtonSurfaceStyle43}
                             >
                                 Mark as complete
                             </Button>
@@ -914,7 +802,7 @@ export default function EditTaskDesktop() {
                                 variant="contained"
                                 onClick={handleSubmit}
                                 disabled={loading || fetchingTask}
-                                sx={{ textTransform: "none", borderRadius: 2, px: 3, fontWeight: 700 }}
+                                sx={EditTaskDesktopButtonSurfaceStyle44}
                             >
                                 {loading ? (
                                 <CircularProgress size={22} color="inherit" />

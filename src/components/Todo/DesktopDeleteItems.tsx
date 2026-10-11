@@ -1,4 +1,16 @@
 import {
+  DesktopDeleteItemsDialogDialogStyle1,
+  DesktopDeleteItemsBoxLayoutStyle2,
+  DesktopDeleteItemsDialogContentSpacingStyle3,
+  DesktopDeleteItemsBoxTextStyle4,
+  DesktopDeleteItemsBoxSurfaceStyle5,
+  DesktopDeleteItemsTypographyTextStyle6,
+  DesktopDeleteItemsBoxTextStyle7,
+  DesktopDeleteItemsDialogActionsLayoutStyle8,
+  DesktopDeleteItemsButtonSurfaceStyle9,
+  DesktopDeleteItemsButtonSurfaceStyle10
+} from "../Styles/Todo/DesktopDeleteItems/DesktopDeleteItems.styles";
+import {
   Box,
   Button,
   CircularProgress,
@@ -35,16 +47,9 @@ export default function DesktopDeleteItems({
       aria-labelledby="delete-dialog-title"
       aria-describedby="delete-dialog-description"
       maxWidth={false}
-      sx={{
-        "& .MuiDialog-paper": {
-          width: 400,
-          maxWidth: "calc(100% - 32px)",
-          borderRadius: 3,
-          boxShadow: "0 20px 60px rgba(15, 23, 42, 0.18)",
-        },
-      }}
+      sx={DesktopDeleteItemsDialogDialogStyle1}
     >
-      <Box sx={{ display: "flex", justifyContent: "flex-end", px: 1.5, pt: 1.5 }}>
+      <Box sx={DesktopDeleteItemsBoxLayoutStyle2}>
         <IconButton
           onClick={close}
           disabled={loading}
@@ -55,24 +60,10 @@ export default function DesktopDeleteItems({
         </IconButton>
       </Box>
 
-      <DialogContent sx={{ px: 4, pt: 0, pb: 3 }}>
-        <Box sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 2,
-            alignItems: "center",
-            textAlign: "center",
-        }}>
+      <DialogContent sx={DesktopDeleteItemsDialogContentSpacingStyle3}>
+        <Box sx={DesktopDeleteItemsBoxTextStyle4}>
           <Box
-            sx={{
-              display: "grid",
-              placeItems: "center",
-              width: 64,
-              height: 64,
-              borderRadius: "50%",
-              color: "error.main",
-              bgcolor: "error.50",
-            }}
+            sx={DesktopDeleteItemsBoxSurfaceStyle5}
           >
             <TriangleAlert size={30} />
           </Box>
@@ -81,7 +72,7 @@ export default function DesktopDeleteItems({
             <Typography
               id="delete-dialog-title"
               variant="h6"
-              sx={{ mb: 0.75, fontWeight: 700 }}
+              sx={DesktopDeleteItemsTypographyTextStyle6}
             >
               Delete {itemLabel}?
             </Typography>
@@ -92,7 +83,7 @@ export default function DesktopDeleteItems({
               color="text.secondary"
             >
               You’re about to delete{" "}
-              <Box component="span" sx={{ color: "text.primary", fontWeight: 700 }}>
+              <Box component="span" sx={DesktopDeleteItemsBoxTextStyle7}>
                 {count} {itemLabel}
               </Box>
               . This action can’t be undone.
@@ -101,13 +92,13 @@ export default function DesktopDeleteItems({
         </Box>
       </DialogContent>
 
-      <DialogActions sx={{ px: 3, pb: 3, pt: 0, gap: 1.5 }}>
+      <DialogActions sx={DesktopDeleteItemsDialogActionsLayoutStyle8}>
         <Button
           variant="outlined"
           fullWidth
           onClick={close}
           disabled={loading}
-          sx={{ textTransform: "none", borderRadius: 2, py: 1 }}
+          sx={DesktopDeleteItemsButtonSurfaceStyle9}
         >
           Cancel
         </Button>
@@ -118,7 +109,7 @@ export default function DesktopDeleteItems({
           fullWidth
           onClick={() => proceed(ids)}
           disabled={loading || count === 0}
-          sx={{ textTransform: "none", borderRadius: 2, py: 1 }}
+          sx={DesktopDeleteItemsButtonSurfaceStyle10}
         >
           {loading ? <CircularProgress color="inherit" size={22} /> : "Delete"}
         </Button>

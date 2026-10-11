@@ -1,3 +1,11 @@
+import {
+  TaskNotFoundBoxSizeStyle1,
+  TaskNotFoundBoxSurfaceStyle2,
+  TaskNotFoundBoxSurfaceStyle3,
+  TaskNotFoundTypographyTextStyle4,
+  TaskNotFoundTypographySpacingStyle5,
+  TaskNotFoundButtonSurfaceStyle6
+} from "../Styles/NotFound/TaskNotFound/TaskNotFound.styles";
 import { Box, Typography, Button } from "@mui/material";
 import { ArrowLeft, FileQuestion } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -7,52 +15,25 @@ export default function TaskNotFound() {
 
   return (
     <Box
-      sx={{
-        minHeight: { xs: "55vh", sm: "60vh" },
-        display: "grid",
-        placeItems: "center",
-        px: { xs: 1.5, sm: 2 },
-        py: { xs: 2, sm: 3 },
-        boxSizing: "border-box",
-      }}
+      sx={TaskNotFoundBoxSizeStyle1}
     >
       <Box
-        sx={{
-          width: "100%",
-          maxWidth: 420,
-          boxSizing: "border-box",
-          p: { xs: 2.5, sm: 4 },
-          textAlign: "center",
-          bgcolor: "background.paper",
-          border: "1px solid",
-          borderColor: "divider",
-          borderRadius: { xs: 2.5, sm: 3 },
-        }}
+        sx={TaskNotFoundBoxSurfaceStyle2}
       >
         <Box
-          sx={{
-            width: { xs: 56, sm: 64 },
-            height: { xs: 56, sm: 64 },
-            mx: "auto",
-            mb: { xs: 1.5, sm: 2 },
-            display: "grid",
-            placeItems: "center",
-            borderRadius: 2,
-            bgcolor: "grey.100",
-            color: "text.secondary",
-          }}
+          sx={TaskNotFoundBoxSurfaceStyle3}
         >
           <FileQuestion size={26} />
         </Box>
 
-        <Typography variant="h6" sx={{ fontWeight: 700 }}>
+        <Typography variant="h6" sx={TaskNotFoundTypographyTextStyle4}>
           Task not found
         </Typography>
 
         <Typography
           variant="body2"
           color="text.secondary"
-          sx={{ mt: 0.75, mb: 2.5, overflowWrap: "anywhere" }}
+          sx={TaskNotFoundTypographySpacingStyle5}
         >
           This task may have been deleted, or the URL may contain an invalid task ID.
         </Typography>
@@ -62,11 +43,7 @@ export default function TaskNotFound() {
           fullWidth
           startIcon={<ArrowLeft size={17} />}
           onClick={() => navigate("/")}
-          sx={{
-            minHeight: 44,
-            textTransform: "none",
-            borderRadius: 2,
-          }}
+          sx={TaskNotFoundButtonSurfaceStyle6}
         >
           Back to dashboard
         </Button>

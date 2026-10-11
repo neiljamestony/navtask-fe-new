@@ -1,3 +1,19 @@
+import {
+  MobileRegistrationCircleTextStyle1,
+  MobileRegistrationCheckTextStyle2,
+  MobileRegistrationCheckTextStyle3,
+  MobileRegistrationCircleTextStyle4,
+  MobileRegistrationCheckTextStyle5,
+  MobileRegistrationCircleTextStyle6,
+  MobileRegistrationBoxTextStyle7,
+  MobileRegistrationformSizeStyle8,
+  MobileRegistrationBoxTextStyle9,
+  MobileRegistrationListSpacingStyle10,
+  MobileRegistrationListItemSpacingStyle11,
+  MobileRegistrationButtonTextStyle12,
+  MobileRegistrationTypographyTextStyle13,
+  MobileRegistrationspanTextStyle14
+} from "../Styles/Auth/MobileRegistration/MobileRegistration.styles";
 import { useState } from 'react'
 import { Box, TextField, Button, Stack, ListItem, ListItemText, ListItemIcon, List, CircularProgress, Typography, Grid, InputAdornment, IconButton } from '@mui/material'
 import { Circle, Check } from '@mui/icons-material'
@@ -31,15 +47,15 @@ export default function MobileRegistration() {
 
     const passwordRequirements = [
         {
-            icon: containsNameOrEmail ? <Circle sx={{ fontSize: 11, color: 'black' }}/> : <Check sx={{ fontSize: 15 }} color="primary"/>,
+            icon: containsNameOrEmail ? <Circle sx={MobileRegistrationCircleTextStyle1}/> : <Check sx={MobileRegistrationCheckTextStyle2} color="primary"/>,
             text: "Cannot contain your name or email address",
         },
         {
-            icon: hasMinLength ? <Check sx={{ fontSize: 15 }} color="primary"/> : <Circle sx={{ fontSize: 11, color: 'black' }}/>,
+            icon: hasMinLength ? <Check sx={MobileRegistrationCheckTextStyle3} color="primary"/> : <Circle sx={MobileRegistrationCircleTextStyle4}/>,
             text: "Atleast 8 characters",
         },
         {
-            icon: hasNumberOrSymbol ? <Check sx={{ fontSize: 18 }} color="primary"/> : <Circle sx={{ fontSize: 11, color: 'black' }}/>,
+            icon: hasNumberOrSymbol ? <Check sx={MobileRegistrationCheckTextStyle5} color="primary"/> : <Circle sx={MobileRegistrationCircleTextStyle6}/>,
             text: "Contains a number or symbol",
         }
     ]
@@ -79,8 +95,8 @@ export default function MobileRegistration() {
     return (
         <Grid container>
             <Grid size={12}>
-                <Box sx={{ display: "flex", justifyContent: 'center', alignItems: 'center', textAlign: 'center', height: "100vh" }}>
-                    <form style={{ height: '80%', width: '100%', margin: 30 }} onSubmit={(e) => {
+                <Box sx={MobileRegistrationBoxTextStyle7}>
+                    <form style={MobileRegistrationformSizeStyle8} onSubmit={(e) => {
                             e.preventDefault();
                             handleSubmit(formData)
                         }}>
@@ -122,20 +138,14 @@ export default function MobileRegistration() {
                                     },
                                 }}
                             />
-                            <Box sx={{ 
-                                    textAlign: "left", 
-                                    color: passwordStrength === "Weak" ? '#d32f2f' : '#1976d2', 
-                                    fontSize: 13, 
-                                    fontFamily: 'Roboto',
-                                    display: formData.username === "" || formData.password === "" ? "none" : "block"
-                                }}>
+                            <Box sx={MobileRegistrationBoxTextStyle9({ passwordStrength: passwordStrength, formData: formData })}>
                                     Password Strength: {passwordStrength}
                                 </Box>
                             <Box>
                                 {
                                     passwordRequirements.map((value, key) => {
-                                        return <List key={key} sx={{ margin: 0, padding: 0 }}>
-                                                <ListItem sx={{ margin: 0, padding: 0 }}>
+                                        return <List key={key} sx={MobileRegistrationListSpacingStyle10}>
+                                                <ListItem sx={MobileRegistrationListItemSpacingStyle11}>
                                                 <ListItemIcon>
                                                     {value.icon}
                                                 </ListItemIcon>
@@ -147,8 +157,8 @@ export default function MobileRegistration() {
                                     })
                                 }
                             </Box>
-                            <Button variant="contained" type="submit" color="primary" disabled={loading} sx={{ textTransform: 'none'}}>{loading ? <CircularProgress size={30} color="inherit"/> : "Sign In"}</Button>
-                            <Typography variant="caption" sx={{ fontFamily: 'Roboto', fontSize: 20, fontWeight: 'medium' }}>Already have an account? <Link to='/login'><span style={{ fontFamily: "Roboto", fontWeight: "bold", color: "#1976d2"}}>Sign in</span></Link></Typography>
+                            <Button variant="contained" type="submit" color="primary" disabled={loading} sx={MobileRegistrationButtonTextStyle12}>{loading ? <CircularProgress size={30} color="inherit"/> : "Sign In"}</Button>
+                            <Typography variant="caption" sx={MobileRegistrationTypographyTextStyle13}>Already have an account? <Link to='/login'><span style={MobileRegistrationspanTextStyle14}>Sign in</span></Link></Typography>
                             <SocialMediaAuth/>
                         </Stack>     
                     </form>  

@@ -1,3 +1,61 @@
+import {
+  NewTaskDesktopBoxTextStyle1,
+  NewTaskDesktopBoxSizeStyle2,
+  NewTaskDesktopBoxLayoutStyle3,
+  NewTaskDesktopIconButtonSurfaceStyle4,
+  NewTaskDesktopTypographyTextStyle5,
+  NewTaskDesktopPaperSurfaceStyle6,
+  NewTaskDesktopBoxSpacingStyle7,
+  NewTaskDesktopTypographyTextStyle8,
+  NewTaskDesktopTypographySpacingStyle9,
+  NewTaskDesktopTextFieldInputStyle10,
+  NewTaskDesktopGridLayoutStyle11,
+  NewTaskDesktopGridSpacingStyle12,
+  NewTaskDesktopTypographyTextStyle13,
+  NewTaskDesktopTypographySpacingStyle14,
+  NewTaskDesktopGridSpacingStyle15,
+  NewTaskDesktopBoxSpacingStyle16,
+  NewTaskDesktopTypographyTextStyle17,
+  NewTaskDesktopBoxSurfaceStyle18,
+  NewTaskDesktopBoxSurfaceStyle19,
+  NewTaskDesktopBoxSurfaceStyle20,
+  NewTaskDesktopBoxLayoutStyle21,
+  NewTaskDesktopBoxSurfaceStyle22,
+  NewTaskDesktopBoxSizeStyle23,
+  NewTaskDesktopTypographyTextStyle24,
+  NewTaskDesktopTypographyTextStyle25,
+  NewTaskDesktopTypographyTextStyle26,
+  NewTaskDesktopBoxSurfaceStyle27,
+  NewTaskDesktopBoxSurfaceStyle28,
+  NewTaskDesktopLinearProgressSurfaceStyle29,
+  NewTaskDesktopBoxLayoutStyle30,
+  NewTaskDesktopBoxSizeStyle31,
+  NewTaskDesktopTypographyTextStyle32,
+  NewTaskDesktopBoxTextStyle33,
+  NewTaskDesktopBoxLayoutStyle34,
+  NewTaskDesktopTypographyLayoutStyle35,
+  NewTaskDesktopPaperSurfaceStyle36,
+  NewTaskDesktopTypographyTextStyle37,
+  NewTaskDesktopTypographySpacingStyle38,
+  NewTaskDesktopGridSpacingStyle39,
+  NewTaskDesktopTypographyTextStyle40,
+  NewTaskDesktopGridSpacingStyle41,
+  NewTaskDesktopBoxLayoutStyle42,
+  NewTaskDesktopTypographyTextStyle43,
+  NewTaskDesktopButtonSurfaceStyle44,
+  NewTaskDesktopBoxSurfaceStyle45,
+  NewTaskDesktopBoxSizeStyle46,
+  NewTaskDesktopBoxSizeStyle47,
+  NewTaskDesktopBoxSizeStyle48,
+  NewTaskDesktopBoxGridStyle49,
+  NewTaskDesktopBoxSurfaceStyle50,
+  NewTaskDesktopTextFieldInputStyle51,
+  NewTaskDesktopTextFieldGridStyle52,
+  NewTaskDesktopTypographyTextStyle53,
+  NewTaskDesktopBoxSurfaceStyle54,
+  NewTaskDesktopButtonSurfaceStyle55,
+  NewTaskDesktopButtonSurfaceStyle56
+} from "../Styles/Task/NewTaskDesktop/NewTaskDesktop.styles";
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, Paper, Button, TextField, LinearProgress, MenuItem, Grid, Divider, CircularProgress, IconButton } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
@@ -229,30 +287,23 @@ export default function NewTaskDesktop() {
     }, [uploading]);
 
     return (
-      <Box sx={{ minHeight: "100vh", bgcolor: "#f6f8fb", pb: 12 }}>
+      <Box sx={NewTaskDesktopBoxTextStyle1}>
         <Box
-          sx={{
-            width: "100%",
-            maxWidth: 1180,
-            boxSizing: "border-box",
-            mx: "auto",
-            px: { xs: 2, sm: 3, lg: 4 },
-            pt: { xs: 2, sm: 3, md: 3 },
-          }}
+          sx={NewTaskDesktopBoxSizeStyle2}
         >
           {/* Page header */}
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}>
+          <Box sx={NewTaskDesktopBoxLayoutStyle3}>
             <IconButton
                 size='small'
                 aria-label="Go back"
                 onClick={() => navigate("/")}
-                sx={{ bgcolor: "white", border: "1px solid", borderColor: "divider" }}
+                sx={NewTaskDesktopIconButtonSurfaceStyle4}
             >
               <ChevronLeft size={20} />
             </IconButton>
 
             <Box>
-              <Typography variant="h5" sx={{ fontWeight: 700, color: "#17212b" }}>
+              <Typography variant="h5" sx={NewTaskDesktopTypographyTextStyle5}>
                 Create a task
               </Typography>
               <Typography variant="body2" color="text.secondary">
@@ -263,21 +314,16 @@ export default function NewTaskDesktop() {
 
           <Paper
             elevation={0}
-            sx={{
-              border: "1px solid",
-              borderColor: "#e6eaf0",
-              borderRadius: 3,
-              overflow: "hidden",
-            }}
+            sx={NewTaskDesktopPaperSurfaceStyle6}
           >
-            <Box sx={{ p: { xs: 2, sm: 3, lg: 4 } }}>
+            <Box sx={NewTaskDesktopBoxSpacingStyle7}>
               <Grid container spacing={{ xs: 2, md: 2.25, lg: 2.5 }}>
                 {/* Task details */}
                 <Grid size={12}>
-                  <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+                  <Typography variant="subtitle1" sx={NewTaskDesktopTypographyTextStyle8}>
                     Task details
                   </Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                  <Typography variant="body2" color="text.secondary" sx={NewTaskDesktopTypographySpacingStyle9}>
                     Add a clear title, then organize the work and timing.
                   </Typography>
                 </Grid>
@@ -294,30 +340,25 @@ export default function NewTaskDesktop() {
                     fullWidth
                     error={errors.some((error) => error.key === "title")}
                     helperText={errors.find((error) => error.key === "title")?.error ?? ""}
-                    sx={{
-                      "& .MuiInputBase-input": {
-                        fontSize: 18,
-                        fontWeight: 600,
-                      },
-                    }}
+                    sx={NewTaskDesktopTextFieldInputStyle10}
                   />
                 </Grid>
 
 
                 <Grid size={12}>
-                  <Grid container spacing={{ xs: 2, lg: 3 }} sx={{ alignItems: "flex-start" }}>
+                  <Grid container spacing={{ xs: 2, lg: 3 }} sx={NewTaskDesktopGridLayoutStyle11}>
                     <Grid size={{ xs: 12, lg: 8 }}>
                       <Grid container spacing={2.25}>
                         {/* Description */}
-                        <Grid size={12} sx={{ mt: 1 }}>
+                        <Grid size={12} sx={NewTaskDesktopGridSpacingStyle12}>
                           <Divider />
                         </Grid>
 
                         <Grid size={12}>
-                          <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+                          <Typography variant="subtitle1" sx={NewTaskDesktopTypographyTextStyle13}>
                             Description
                           </Typography>
-                          <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                          <Typography variant="body2" color="text.secondary" sx={NewTaskDesktopTypographySpacingStyle14}>
                             Add context or instructions (optional).
                           </Typography>
 
@@ -339,13 +380,13 @@ export default function NewTaskDesktop() {
                         </Grid>
 
                         {/* Attachments */}
-                        <Grid size={12} sx={{ mt: 1 }}>
+                        <Grid size={12} sx={NewTaskDesktopGridSpacingStyle15}>
                           <Divider />
                         </Grid>
 
                         <Grid size={12}>
-                          <Box sx={{ mb: 1 }}>
-                            <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+                          <Box sx={NewTaskDesktopBoxSpacingStyle16}>
+                            <Typography variant="subtitle1" sx={NewTaskDesktopTypographyTextStyle17}>
                               Attachments
                             </Typography>
                             <Typography variant="body2" color="text.secondary">
@@ -355,20 +396,7 @@ export default function NewTaskDesktop() {
 
                           <Box
                             {...getRootProps()}
-                            sx={{
-                              position: "relative",
-                              p: 2,
-                              border: "1.5px dashed",
-                              borderColor: fileError ? "error.main" : "#cbd5e1",
-                              borderRadius: 2,
-                              bgcolor: "#fafcff",
-                              cursor: uploading ? "default" : "pointer",
-                              transition: "border-color 150ms ease, background-color 150ms ease",
-                              "&:hover": {
-                                borderColor: fileError ? "error.main" : "primary.main",
-                                bgcolor: "#f3f8ff",
-                              },
-                            }}
+                            sx={NewTaskDesktopBoxSurfaceStyle18({ fileError: fileError, uploading: uploading })}
                           >
                             <input {...getInputProps()} />
 
@@ -376,57 +404,26 @@ export default function NewTaskDesktop() {
                              <Box
                                 role="status"
                                 aria-live="polite"
-                                sx={{
-                                  width: "100%",
-                                  maxWidth: 480,
-                                  mx: "auto",
-                                  p: 2,
-                                  border: "1px solid",
-                                  borderColor: "primary.light",
-                                  borderRadius: 2.5,
-                                  bgcolor: "background.paper",
-                                  textAlign: "left",
-                                }}
+                                sx={NewTaskDesktopBoxSurfaceStyle19}
                               >
                                 <Box
-                                  sx={{
-                                    p: 2,
-                                    border: "1px solid",
-                                    borderColor: "divider",
-                                    borderRadius: 3,
-                                    bgcolor: "background.paper",
-                                  }}
+                                  sx={NewTaskDesktopBoxSurfaceStyle20}
                                 >
-                                  <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                                  <Box sx={NewTaskDesktopBoxLayoutStyle21}>
                                     <Box
-                                      sx={{
-                                        width: 44,
-                                        height: 44,
-                                        flexShrink: 0,
-                                        display: "grid",
-                                        placeItems: "center",
-                                        borderRadius: 2.5,
-                                        bgcolor: "primary.50",
-                                        color: "primary.main",
-                                      }}
+                                      sx={NewTaskDesktopBoxSurfaceStyle22}
                                     >
                                       <UploadCloud size={22} />
                                     </Box>
 
-                                    <Box sx={{ flex: 1, minWidth: 0 }}>
-                                      <Typography variant="body2" sx={{ fontWeight: 700 }}>
+                                    <Box sx={NewTaskDesktopBoxSizeStyle23}>
+                                      <Typography variant="body2" sx={NewTaskDesktopTypographyTextStyle24}>
                                         Uploading files
                                       </Typography>
                                       <Typography
                                         variant="caption"
                                         color="text.secondary"
-                                        sx={{
-                                          display: "block",
-                                          overflow: "hidden",
-                                          textOverflow: "ellipsis",
-                                          whiteSpace: "nowrap",
-                                          mt: 0.25,
-                                        }}
+                                        sx={NewTaskDesktopTypographyTextStyle25}
                                         title={uploadedFileNames.join(", ")}
                                       >
                                         {uploadedFileNames.join(", ")}
@@ -436,7 +433,7 @@ export default function NewTaskDesktop() {
                                     <Typography
                                       variant="body2"
                                       color="primary.main"
-                                      sx={{ fontWeight: 700, fontVariantNumeric: "tabular-nums" }}
+                                      sx={NewTaskDesktopTypographyTextStyle26}
                                     >
                                       {Math.round(progress)}%
                                     </Typography>
@@ -448,22 +445,10 @@ export default function NewTaskDesktop() {
                                     aria-valuemin={0}
                                     aria-valuemax={100}
                                     aria-valuenow={Math.round(progress)}
-                                    sx={{
-                                      mt: 1.75,
-                                      height: 6,
-                                      overflow: "hidden",
-                                      borderRadius: 999,
-                                      bgcolor: "action.hover",
-                                    }}
+                                    sx={NewTaskDesktopBoxSurfaceStyle27}
                                   >
                                     <Box
-                                      sx={{
-                                        width: `${Math.min(100, Math.max(0, progress))}%`,
-                                        height: "100%",
-                                        borderRadius: "inherit",
-                                        bgcolor: "primary.main",
-                                        transition: "width 250ms ease",
-                                      }}
+                                      sx={NewTaskDesktopBoxSurfaceStyle28({ progress: progress })}
                                     />
                                   </Box>
                                 </Box>
@@ -472,27 +457,21 @@ export default function NewTaskDesktop() {
                                   variant="determinate"
                                   value={progress}
                                   aria-label="File upload progress"
-                                  sx={{ height: 7, borderRadius: 999 }}
+                                  sx={NewTaskDesktopLinearProgressSurfaceStyle29}
                                 />
                               </Box>
                             ) : (
                               <Box
-                                sx={{
-                                  display: "flex",
-                                  flexDirection: "column",
-                                  alignItems: "center",
-                                  gap: 1,
-                                  py: 1,
-                                }}
+                                sx={NewTaskDesktopBoxLayoutStyle30}
                               >
                                 <Box
                                   component="img"
                                   src={UploadIcon}
                                   alt=""
-                                  sx={{ width: 34, height: 34, objectFit: "contain" }}
+                                  sx={NewTaskDesktopBoxSizeStyle31}
                                 />
-                                <Typography variant="body2" sx={{ textAlign: "center" }}>
-                                  <Box component="span" sx={{ color: "primary.main", fontWeight: 700 }}>
+                                <Typography variant="body2" sx={NewTaskDesktopTypographyTextStyle32}>
+                                  <Box component="span" sx={NewTaskDesktopBoxTextStyle33}>
                                     Choose files
                                   </Box>{" "}
                                   or drag and drop them here
@@ -502,12 +481,7 @@ export default function NewTaskDesktop() {
 
                             {!uploading && task.attachments.length > 0 && (
                               <Box
-                                sx={{
-                                  display: "flex",
-                                  flexWrap: "wrap",
-                                  gap: 1.5,
-                                  mt: 2,
-                                }}
+                                sx={NewTaskDesktopBoxLayoutStyle34}
                               >
                                 {task.attachments.map((file, key) => (
                                   <FilePreview
@@ -523,7 +497,7 @@ export default function NewTaskDesktop() {
                           </Box>
 
                           {fileError && (
-                            <Typography variant="caption" color="error" sx={{ display: "block", mt: 1 }}>
+                            <Typography variant="caption" color="error" sx={NewTaskDesktopTypographyLayoutStyle35}>
                               {fileError.msg}
                             </Typography>
                           )}
@@ -532,9 +506,9 @@ export default function NewTaskDesktop() {
                       </Grid>
                     </Grid>
                     <Grid size={{ xs: 12, lg: 4 }}>
-                      <Paper variant="outlined" sx={{ p: { xs: 2, sm: 2.5 }, borderRadius: 2.5, bgcolor: "#fbfcfe" }}>
-                        <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 0.5 }}>Planning</Typography>
-                        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>Set the task priority, status, and dates.</Typography>
+                      <Paper variant="outlined" sx={NewTaskDesktopPaperSurfaceStyle36}>
+                        <Typography variant="subtitle1" sx={NewTaskDesktopTypographyTextStyle37}>Planning</Typography>
+                        <Typography variant="body2" color="text.secondary" sx={NewTaskDesktopTypographySpacingStyle38}>Set the task priority, status, and dates.</Typography>
                         <Grid container spacing={2}>
                         <Grid size={12}>
                           <TextField
@@ -573,12 +547,12 @@ export default function NewTaskDesktop() {
                         </Grid>
 
                         {/* Schedule */}
-                        <Grid size={12} sx={{ mt: 1 }}>
+                        <Grid size={12} sx={NewTaskDesktopGridSpacingStyle39}>
                           <Divider />
                         </Grid>
 
                         <Grid size={12}>
-                          <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+                          <Typography variant="subtitle1" sx={NewTaskDesktopTypographyTextStyle40}>
                             Schedule
                           </Typography>
                           <Typography variant="body2" color="text.secondary">
@@ -621,21 +595,16 @@ export default function NewTaskDesktop() {
                   </Grid>
                 </Grid>
                 {/* Subtasks */}
-                <Grid size={12} sx={{ mt: 1 }}>
+                <Grid size={12} sx={NewTaskDesktopGridSpacingStyle41}>
                   <Divider />
                 </Grid>
 
                 <Grid size={12}>
                   <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      gap: 2,
-                    }}
+                    sx={NewTaskDesktopBoxLayoutStyle42}
                   >
                     <Box>
-                      <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+                      <Typography variant="subtitle1" sx={NewTaskDesktopTypographyTextStyle43}>
                         Subtasks
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
@@ -649,7 +618,7 @@ export default function NewTaskDesktop() {
                       startIcon={<Plus />}
                       disabled={task.subTask.length >= 10}
                       onClick={handleNewSubTask}
-                      sx={{ textTransform: "none", borderRadius: 2, flexShrink: 0 }}
+                      sx={NewTaskDesktopButtonSurfaceStyle44}
                     >
                       Add subtask
                     </Button>
@@ -660,14 +629,7 @@ export default function NewTaskDesktop() {
                     {task.subTask.length === 0 ? (
                     <Grid size={12}>
                       <Box
-                        sx={{
-                          p: 2,
-                          border: "1px dashed",
-                          borderColor: "divider",
-                          borderRadius: 2,
-                          textAlign: "center",
-                          bgcolor: "#fafcff",
-                        }}
+                        sx={NewTaskDesktopBoxSurfaceStyle45}
                       >
                         <Typography variant="body2" color="text.secondary">
                           No subtasks added yet.
@@ -675,45 +637,18 @@ export default function NewTaskDesktop() {
                       </Box>
                     </Grid>
                   ) : (
-                    <Box sx={{ display: "flex", flexDirection: "column", gap: 1, width: '100%' }}>
+                    <Box sx={NewTaskDesktopBoxSizeStyle46}>
                     {task.subTask.map((subTask, key) => {
                       const isDone = subTask.status === "done";
 
                       return (
-                        <Box key={key} sx={{ width: "100%", boxSizing: "border-box" }}>
+                        <Box key={key} sx={NewTaskDesktopBoxSizeStyle47}>
                           <Box
-                            sx={{
-                              width: "100%",
-                              boxSizing: "border-box" }}>
+                            sx={NewTaskDesktopBoxSizeStyle48}>
                               <Box
-                                sx={{
-                                  display: "grid",
-                                  gridTemplateColumns: {
-                                    xs: "32px minmax(0, 1fr) 36px",
-                                    sm: "36px minmax(0, 1fr) 150px 36px",
-                                  },
-                                  gap: 1.25,
-                                  alignItems: "center",
-                                  p: 1.25,
-                                  border: "1px solid",
-                                  borderColor: "divider",
-                                  borderRadius: 2,
-                                  bgcolor: isDone ? "rgba(46, 125, 50, 0.035)" : "background.paper",
-                                  transition: "border-color 150ms ease, background-color 150ms ease",
-                                  "&:hover": { borderColor: "primary.light" },
-                                }}>
+                                sx={NewTaskDesktopBoxGridStyle49({ isDone: isDone })}>
                               <Box
-                                sx={{
-                                  width: 30,
-                                  height: 30,
-                                  display: "grid",
-                                  placeItems: "center",
-                                  borderRadius: "50%",
-                                  bgcolor: isDone ? "success.light" : "grey.100",
-                                  color: isDone ? "success.dark" : "text.secondary",
-                                  fontSize: 13,
-                                  fontWeight: 700,
-                                }}
+                                sx={NewTaskDesktopBoxSurfaceStyle50({ isDone: isDone })}
                               >
                                 {key + 1}
                               </Box>
@@ -730,15 +665,7 @@ export default function NewTaskDesktop() {
                                 size="small"
                                 variant="standard"
                                 slotProps={{ input: { disableUnderline: true } }}
-                                sx={{
-                                  "& .MuiInputBase-root": {
-                                    px: 1.25,
-                                    py: 0.75,
-                                    borderRadius: 1.5,
-                                    bgcolor: "grey.50",
-                                  },
-                                  "& .MuiInputLabel-root": { display: "none" },
-                                }}
+                                sx={NewTaskDesktopTextFieldInputStyle51}
                               />
 
                               <TextField
@@ -750,14 +677,11 @@ export default function NewTaskDesktop() {
                                 }
                                 fullWidth
                                 size="small"
-                                sx={{
-                                  gridColumn: { xs: "2", sm: "auto" },
-                                  gridRow: { xs: "2", sm: "auto" },
-                                }}
+                                sx={NewTaskDesktopTextFieldGridStyle52}
                               >
                                 {subTasksDropdown.map((option) => (
                                   <MenuItem key={option.value} value={option.value}>
-                                    <Typography variant="body2" sx={{ fontSize: 13 }}>
+                                    <Typography variant="body2" sx={NewTaskDesktopTypographyTextStyle53}>
                                       {option.label}
                                     </Typography>
                                   </MenuItem>
@@ -783,23 +707,14 @@ export default function NewTaskDesktop() {
 
             {/* Form actions */}
             <Box
-              sx={{
-                display: "flex",
-                justifyContent: "flex-end",
-                gap: 1.5,
-                px: { xs: 2, sm: 3, lg: 4 },
-                py: { xs: 1.5, sm: 2 },
-                borderTop: "1px solid",
-                borderColor: "divider",
-                bgcolor: "#fcfdff",
-              }}
+              sx={NewTaskDesktopBoxSurfaceStyle54}
             >
               <Button
                 type="button"
                 variant="outlined"
                 onClick={() => navigate("/")}
                 disabled={loading}
-                sx={{ textTransform: "none", borderRadius: 2, px: 3 }}
+                sx={NewTaskDesktopButtonSurfaceStyle55}
               >
                 Cancel
               </Button>
@@ -809,7 +724,7 @@ export default function NewTaskDesktop() {
                 variant="contained"
                 onClick={handleSubmit}
                 disabled={loading}
-                sx={{ textTransform: "none", borderRadius: 2, px: 3, fontWeight: 700 }}
+                sx={NewTaskDesktopButtonSurfaceStyle56}
               >
                 {loading ? <CircularProgress size={22} color="inherit" /> : "Create task"}
               </Button>

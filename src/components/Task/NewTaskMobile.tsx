@@ -1,3 +1,54 @@
+import {
+  NewTaskMobileBoxTextStyle1,
+  NewTaskMobileAppBarSurfaceStyle2,
+  NewTaskMobileToolbarSizeStyle3,
+  NewTaskMobileIconButtonSurfaceStyle4,
+  NewTaskMobileTypographyTextStyle5,
+  NewTaskMobileBoxSizeStyle6,
+  NewTaskMobileBoxLayoutStyle7,
+  NewTaskMobileBoxGridStyle8,
+  NewTaskMobileBoxSurfaceStyle9,
+  NewTaskMobileTypographyLayoutStyle10,
+  NewTaskMobileBoxSurfaceStyle11,
+  NewTaskMobileTypographyTextStyle12,
+  NewTaskMobileTypographyTextStyle13,
+  NewTaskMobileBoxSurfaceStyle14,
+  NewTaskMobileTypographyTextStyle15,
+  NewTaskMobileBoxGridStyle16,
+  NewTaskMobileBoxSurfaceStyle17,
+  NewTaskMobileBoxSurfaceStyle18,
+  NewTaskMobileTypographyTextStyle19,
+  NewTaskMobileBoxSurfaceStyle20,
+  NewTaskMobileBoxLayoutStyle21,
+  NewTaskMobileTypographyTextStyle22,
+  NewTaskMobileBoxSurfaceStyle23,
+  NewTaskMobileTypographyTextStyle24,
+  NewTaskMobileTextFieldInputStyle25,
+  NewTaskMobileBoxSurfaceStyle26,
+  NewTaskMobileBoxLayoutStyle27,
+  NewTaskMobileTypographyTextStyle28,
+  NewTaskMobileBoxSurfaceStyle29,
+  NewTaskMobileTypographySpacingStyle30,
+  NewTaskMobileLinearProgressSurfaceStyle31,
+  NewTaskMobileBoxLayoutStyle32,
+  NewTaskMobileBoxSizeStyle33,
+  NewTaskMobileBoxTextStyle34,
+  NewTaskMobileTypographyLayoutStyle35,
+  NewTaskMobileBoxLayoutStyle36,
+  NewTaskMobileBoxSurfaceStyle37,
+  NewTaskMobileBoxLayoutStyle38,
+  NewTaskMobileTypographyTextStyle39,
+  NewTaskMobileButtonSurfaceStyle40,
+  NewTaskMobileBoxLayoutStyle41,
+  NewTaskMobileBoxSurfaceStyle42,
+  NewTaskMobileBoxLayoutStyle43,
+  NewTaskMobileBoxSurfaceStyle44,
+  NewTaskMobileChipIconStyle45,
+  NewTaskMobileBoxLayoutStyle46,
+  NewTaskMobileIconButtonTextStyle47,
+  NewTaskMobileTextFieldInputStyle48,
+  NewTaskMobileButtonSurfaceStyle49
+} from "../Styles/Task/NewTaskMobile/NewTaskMobile.styles";
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, Button, TextField, LinearProgress, CircularProgress, IconButton, AppBar, Toolbar, Chip } from '@mui/material'
 import { ArrowBackIosNewRounded, Add } from '@mui/icons-material'
@@ -252,29 +303,24 @@ export default function NewTaskMobile() {
     }, [uploading]);
 
     return (
-        <Box sx={{ minHeight: "100dvh", bgcolor: "#f6f8fb", pb: 10 }}>
+        <Box sx={NewTaskMobileBoxTextStyle1}>
             <AppBar
             position="fixed"
             color="inherit"
             elevation={0}
-            sx={{
-                bgcolor: "rgba(255,255,255,0.96)",
-                backdropFilter: "blur(12px)",
-                borderBottom: "1px solid",
-                borderColor: "divider",
-            }}
+            sx={NewTaskMobileAppBarSurfaceStyle2}
             >
-            <Toolbar sx={{ minHeight: 58, gap: 1 }}>
+            <Toolbar sx={NewTaskMobileToolbarSizeStyle3}>
                 <IconButton
                 aria-label="Back to tasks"
                 onClick={() => navigate("/")}
                 size="small"
-                sx={{ border: "1px solid", borderColor: "divider", borderRadius: 2 }}
+                sx={NewTaskMobileIconButtonSurfaceStyle4}
                 >
                 <ArrowBackIosNewRounded fontSize="small" />
                 </IconButton>
                 <Box>
-                <Typography variant="subtitle1" sx={{ fontWeight: 700, lineHeight: 1.2 }}>
+                <Typography variant="subtitle1" sx={NewTaskMobileTypographyTextStyle5}>
                     Create task
                 </Typography>
                 <Typography variant="caption" color="text.secondary">
@@ -301,19 +347,11 @@ export default function NewTaskMobile() {
 
             <Box
             component="main"
-            sx={{
-                width: "100%",
-                maxWidth: 640,
-                boxSizing: "border-box",
-                mx: "auto",
-                px: 2,
-                pt: 9,
-                pb: 3,
-            }}
+            sx={NewTaskMobileBoxSizeStyle6}
             >
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 1.75 }}>
+            <Box sx={NewTaskMobileBoxLayoutStyle7}>
                 {/* Priority and status */}
-                <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1.25 }}>
+                <Box sx={NewTaskMobileBoxGridStyle8}>
                     {[
                         {
                         label: "Priority",
@@ -331,44 +369,27 @@ export default function NewTaskMobile() {
                         component="button"
                         type="button"
                         onClick={onClick}
-                        sx={{
-                            p: 1.5,
-                            border: "1px solid",
-                            borderColor: "divider",
-                            borderRadius: 2.5,
-                            bgcolor: "background.paper",
-                            textAlign: "left",
-                            cursor: "pointer",
-                        }}
+                        sx={NewTaskMobileBoxSurfaceStyle9}
                         >
                         <Typography
                             variant="caption"
                             color="text.secondary"
-                            sx={{ display: "block", mb: 0.75 }}
+                            sx={NewTaskMobileTypographyLayoutStyle10}
                         >
                             {label}
                         </Typography>
 
                         {item ? (
                             <Box
-                            sx={{
-                                display: "inline-flex",
-                                alignItems: "center",
-                                gap: 0.75,
-                                px: 1,
-                                py: 0.5,
-                                borderRadius: 10,
-                                bgcolor: item.bgColor,
-                                color: item.color,
-                            }}
+                            sx={NewTaskMobileBoxSurfaceStyle11({ item: item })}
                             >
                             {item.icon}
-                            <Typography variant="caption" sx={{ fontWeight: 700, lineHeight: 1 }}>
+                            <Typography variant="caption" sx={NewTaskMobileTypographyTextStyle12}>
                                 {item.label}
                             </Typography>
                             </Box>
                         ) : (
-                            <Typography variant="body2" sx={{ fontWeight: 700 }}>
+                            <Typography variant="body2" sx={NewTaskMobileTypographyTextStyle13}>
                             —
                             </Typography>
                         )}
@@ -378,15 +399,9 @@ export default function NewTaskMobile() {
 
                 {/* Title */}
                 <Box
-                    sx={{
-                        p: 2,
-                        border: "1px solid",
-                        borderColor: "divider",
-                        borderRadius: 2.5,
-                        bgcolor: "background.paper",
-                    }}
+                    sx={NewTaskMobileBoxSurfaceStyle14}
                 >
-                <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1.25 }}>
+                <Typography variant="subtitle2" sx={NewTaskMobileTypographyTextStyle15}>
                     Task title
                 </Typography>
                 <TextField
@@ -407,35 +422,13 @@ export default function NewTaskMobile() {
 
                 {/* Schedule */}
                 <Box
-                    sx={{
-                        display: "grid",
-                        gridTemplateColumns: { xs: "1fr", sm: "1fr 1.4fr" },
-                        gap: 1.25,
-                    }}
+                    sx={NewTaskMobileBoxGridStyle16}
                     >
                     <Box
-                        sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 1.25,
-                        p: 1.5,
-                        border: "1px solid",
-                        borderColor: "divider",
-                        borderRadius: 2.5,
-                        bgcolor: "background.paper",
-                        }}
+                        sx={NewTaskMobileBoxSurfaceStyle17}
                     >
                         <Box
-                        sx={{
-                            width: 36,
-                            height: 36,
-                            flexShrink: 0,
-                            display: "grid",
-                            placeItems: "center",
-                            borderRadius: 1.5,
-                            bgcolor: "grey.100",
-                            color: "text.secondary",
-                        }}
+                        sx={NewTaskMobileBoxSurfaceStyle18}
                         >
                         <CalendarDays size={17} />
                         </Box>
@@ -444,26 +437,18 @@ export default function NewTaskMobile() {
                         <Typography variant="caption" color="text.secondary">
                             Created
                         </Typography>
-                        <Typography variant="body2" sx={{ fontWeight: 700 }}>
+                        <Typography variant="body2" sx={NewTaskMobileTypographyTextStyle19}>
                             {dayjs().format("D MMM YYYY")}
                         </Typography>
                         </Box>
                     </Box>
 
                     <Box
-                        sx={{
-                        p: 1.25,
-                        border: "1px solid",
-                        borderColor: errors.some((error) => error.key === "due_date")
-                            ? "error.main"
-                            : "primary.light",
-                        borderRadius: 2.5,
-                        bgcolor: "primary.50",
-                        }}
+                        sx={NewTaskMobileBoxSurfaceStyle20({ errors: errors })}
                     >
-                        <Box sx={{ display: "flex", alignItems: "center", gap: 0.75, mb: 1 }}>
+                        <Box sx={NewTaskMobileBoxLayoutStyle21}>
                             <CalendarClock size={15} color="#2563eb" />
-                            <Typography variant="caption" sx={{ color: "primary.dark", fontWeight: 700 }}>
+                            <Typography variant="caption" sx={NewTaskMobileTypographyTextStyle22}>
                                 Due date
                             </Typography>
                         </Box>
@@ -493,15 +478,9 @@ export default function NewTaskMobile() {
 
                 {/* Description */}
                 <Box
-                sx={{
-                    p: 2,
-                    border: "1px solid",
-                    borderColor: "divider",
-                    borderRadius: 2.5,
-                    bgcolor: "background.paper",
-                }}
+                sx={NewTaskMobileBoxSurfaceStyle23}
                 >
-                <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1.25 }}>
+                <Typography variant="subtitle2" sx={NewTaskMobileTypographyTextStyle24}>
                     Description
                 </Typography>
                 <TextField
@@ -518,34 +497,17 @@ export default function NewTaskMobile() {
                         errors.find((error) => error.key === "description")?.error ??
                         `${task.description?.length ?? 0}/300`
                     }
-                    sx={{
-                        "& .MuiInputBase-input": {
-                        fontSize: 14,
-                        lineHeight: 1.5,
-                        },
-                        "& .MuiInputLabel-root": {
-                        fontSize: 14,
-                        },
-                        "& .MuiFormHelperText-root": {
-                        fontSize: 11,
-                        },
-                    }}
+                    sx={NewTaskMobileTextFieldInputStyle25}
                     />
                 </Box>
 
                 {/* Attachments */}
                 <Box
-                sx={{
-                    p: 2,
-                    border: "1px solid",
-                    borderColor: "divider",
-                    borderRadius: 2.5,
-                    bgcolor: "background.paper",
-                }}
+                sx={NewTaskMobileBoxSurfaceStyle26}
                 >
-                <Box sx={{ display: "flex", justifyContent: "space-between", gap: 1, mb: 1.5 }}>
+                <Box sx={NewTaskMobileBoxLayoutStyle27}>
                     <Box>
-                    <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
+                    <Typography variant="subtitle2" sx={NewTaskMobileTypographyTextStyle28}>
                         Attachments
                     </Typography>
                     <Typography variant="caption" color="text.secondary">
@@ -557,40 +519,32 @@ export default function NewTaskMobile() {
 
                 <Box
                     {...getRootProps()}
-                    sx={{
-                    p: 2.5,
-                    border: "1px dashed",
-                    borderColor: fileError ? "error.main" : "primary.light",
-                    borderRadius: 2,
-                    bgcolor: fileError ? "error.50" : "primary.50",
-                    textAlign: "center",
-                    cursor: uploading ? "default" : "pointer",
-                    }}
+                    sx={NewTaskMobileBoxSurfaceStyle29({ fileError: fileError, uploading: uploading })}
                 >
                     <input {...getInputProps()} />
 
                     {uploading ? (
                     <>
-                        <Typography variant="body2" sx={{ mb: 1, overflowWrap: "anywhere" }}>
+                        <Typography variant="body2" sx={NewTaskMobileTypographySpacingStyle30}>
                         Uploading {uploadedFileNames.join(", ")}
                         </Typography>
                         <LinearProgress
                         variant="determinate"
                         value={progress}
                         aria-label="Upload progress"
-                        sx={{ borderRadius: 5, height: 6 }}
+                        sx={NewTaskMobileLinearProgressSurfaceStyle31}
                         />
                     </>
                     ) : (
-                    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1 }}>
+                    <Box sx={NewTaskMobileBoxLayoutStyle32}>
                         <Box
                         component="img"
                         src={UploadIcon}
                         alt=""
-                        sx={{ width: 28, height: 28, objectFit: "contain" }}
+                        sx={NewTaskMobileBoxSizeStyle33}
                         />
                         <Typography variant="body2">
-                        <Box component="span" sx={{ color: "primary.main", fontWeight: 700 }}>
+                        <Box component="span" sx={NewTaskMobileBoxTextStyle34}>
                             Tap to choose files
                         </Box>{" "}
                         or drop them here
@@ -600,13 +554,13 @@ export default function NewTaskMobile() {
                 </Box>
 
                 {fileError && (
-                    <Typography variant="caption" color="error" sx={{ display: "block", mt: 1 }}>
+                    <Typography variant="caption" color="error" sx={NewTaskMobileTypographyLayoutStyle35}>
                     {fileError.msg}
                     </Typography>
                 )}
 
                 {!uploading && task.attachments.length > 0 && (
-                    <Box sx={{ display: "flex", flexDirection: "column", gap: 1, mt: 1.5 }}>
+                    <Box sx={NewTaskMobileBoxLayoutStyle36}>
                     {task.attachments.map((file, key) => (
                         <FilePreview
                         key={key}
@@ -622,25 +576,13 @@ export default function NewTaskMobile() {
 
                 {/* Subtasks */}
                 <Box
-                    sx={{
-                        p: 2,
-                        border: "1px solid",
-                        borderColor: "divider",
-                        borderRadius: 2.5,
-                        bgcolor: "background.paper",
-                    }}
+                    sx={NewTaskMobileBoxSurfaceStyle37}
                 >
                 <Box
-                    sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    gap: 1,
-                    mb: 1.5,
-                    }}
+                    sx={NewTaskMobileBoxLayoutStyle38}
                 >
                     <Box>
-                    <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
+                    <Typography variant="subtitle2" sx={NewTaskMobileTypographyTextStyle39}>
                         Subtasks
                     </Typography>
                     <Typography variant="caption" color="text.secondary">
@@ -655,7 +597,7 @@ export default function NewTaskMobile() {
                         startIcon={<Add />}
                         disabled={task.subTask.length >= 10}
                         onClick={handleNewSubTask}
-                        sx={{ textTransform: "none", borderRadius: 2 }}
+                        sx={NewTaskMobileButtonSurfaceStyle40}
                     >Add</Button>
                 </Box>
 
@@ -664,42 +606,19 @@ export default function NewTaskMobile() {
                     No subtasks added.
                     </Typography>
                 ) : (
-                    <Box sx={{ display: "flex", flexDirection: "column", gap: 1.25 }}>
+                    <Box sx={NewTaskMobileBoxLayoutStyle41}>
                         {task.subTask.map((subTask, key) => {
                             const isDone = subTask.status === "done";
 
                             return (
                             <Box
                                 key={key}
-                                sx={{
-                                    p: 1.5,
-                                    border: "1px solid",
-                                    borderColor: isDone ? "success.200" : "divider",
-                                    borderRadius: 2.5,
-                                    bgcolor: isDone ? "success.50" : "background.paper",
-                                    transition: "background-color 150ms ease, border-color 150ms ease",
-                                }}
+                                sx={NewTaskMobileBoxSurfaceStyle42({ isDone: isDone })}
                             >
                                 <Box
-                                    sx={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                        gap: 1,
-                                        mb: 1.25,
-                                    }}>
+                                    sx={NewTaskMobileBoxLayoutStyle43}>
                                     <Box
-                                        sx={{
-                                        width: 26,
-                                        height: 26,
-                                        flexShrink: 0,
-                                        display: "grid",
-                                        placeItems: "center",
-                                        borderRadius: "50%",
-                                        bgcolor: isDone ? "success.main" : "grey.200",
-                                        color: isDone ? "common.white" : "text.secondary",
-                                        fontSize: 12,
-                                        fontWeight: 700,
-                                        }}
+                                        sx={NewTaskMobileBoxSurfaceStyle44({ isDone: isDone })}
                                     >
                                         {key + 1}
                                     </Box>
@@ -712,30 +631,16 @@ export default function NewTaskMobile() {
                                         onClick={() =>
                                             handleSubTaskChange(key, "status", isDone ? "not-done" : "done")
                                         }
-                                        sx={{
-                                            height: 28,
-                                            borderRadius: 10,
-                                            fontSize: 11,
-                                            fontWeight: 600,
-                                            cursor: "pointer",
-                                            bgcolor: isDone ? "success.50" : "grey.100",
-                                            color: isDone ? "success.dark" : "text.secondary",
-                                            border: "1px solid",
-                                            borderColor: isDone ? "success.200" : "divider",
-                                            "& .MuiChip-icon": { color: "inherit", ml: 0.75 },
-                                            "&:hover": { bgcolor: isDone ? "success.100" : "grey.200" },
-                                        }}
+                                        sx={NewTaskMobileChipIconStyle45({ isDone: isDone })}
                                     />
 
-                                    <Box sx={{ flex: 1 }} />
+                                    <Box sx={NewTaskMobileBoxLayoutStyle46} />
 
                                     <IconButton
                                         size="small"
                                         aria-label={`Remove subtask ${key + 1}`}
                                         onClick={() => handleRemoveSubTask(key)}
-                                        sx={{
-                                        color: "text.secondary",
-                                        }}
+                                        sx={NewTaskMobileIconButtonTextStyle47}
                                     >
                                         <Trash size={15}/>
                                     </IconButton>
@@ -749,22 +654,7 @@ export default function NewTaskMobile() {
                                     helperText={!subTask.title.trim() ? "Title is required" : " "}
                                     fullWidth
                                     size="small"
-                                    sx={{
-                                        mt: 2,
-                                        mb: -3,
-                                        "& .MuiOutlinedInput-root": {
-                                        bgcolor: "background.paper",
-                                        },
-                                        "& .MuiInputBase-input": {
-                                        fontSize: 14,
-                                        },
-                                        "& .MuiInputLabel-root": {
-                                        fontSize: 14,
-                                        },
-                                        "& .MuiFormHelperText-root": {
-                                        fontSize: 11,
-                                        },
-                                    }}
+                                    sx={NewTaskMobileTextFieldInputStyle48}
                                     />
                             </Box>
                             );
@@ -782,7 +672,7 @@ export default function NewTaskMobile() {
                     fullWidth
                     onClick={handleSubmit}
                     disabled={loading}
-                    sx={{ minHeight: 44, borderRadius: 2, textTransform: "none", fontWeight: 700 }}
+                    sx={NewTaskMobileButtonSurfaceStyle49}
                 >
                     {loading ? <CircularProgress size={22} color="inherit" /> : "Create task"}
                 </Button>

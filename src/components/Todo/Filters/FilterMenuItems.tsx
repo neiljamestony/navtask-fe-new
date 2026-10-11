@@ -1,3 +1,12 @@
+import {
+  FilterMenuItemsBoxSurfaceStyle1,
+  FilterMenuItemsBoxSurfaceStyle2,
+  FilterMenuItemsBoxSurfaceStyle3,
+  FilterMenuItemsBoxSizeStyle4,
+  FilterMenuItemsTypographyTextStyle5,
+  FilterMenuItemsBoxSurfaceStyle6,
+  FilterMenuItemsFormControlLabelSurfaceStyle7
+} from "../../Styles/Todo/Filters/FilterMenuItems/FilterMenuItems.styles";
 import { useState } from "react";
 import {
   Box,
@@ -45,51 +54,23 @@ export default function FilterMenuItem({ filterMenuItems, name }: { filterMenuIt
 
   return (
     <Box
-      sx={{
-        overflow: "hidden",
-        border: "1px solid",
-        borderColor: "divider",
-        borderRadius: 2.5,
-        bgcolor: "background.paper",
-        transition: "border-color 150ms ease",
-      }}
+      sx={FilterMenuItemsBoxSurfaceStyle1}
     >
       <Box
         component="button"
         type="button"
         aria-expanded={openFilter}
         onClick={() => setOpenFilter((open) => !open)}
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          width: "100%",
-          px: 1.75,
-          py: 1.5,
-          border: 0,
-          bgcolor: "transparent",
-          color: "text.primary",
-          textAlign: "left",
-          cursor: "pointer",
-          "&:hover": { bgcolor: "action.hover" },
-        }}
+        sx={FilterMenuItemsBoxSurfaceStyle2}
       >
         <Box
-          sx={{
-            width: 34,
-            height: 34,
-            mr: 1.25,
-            display: "grid",
-            placeItems: "center",
-            borderRadius: 1.5,
-            bgcolor: "primary.50",
-            color: "primary.main",
-          }}
+          sx={FilterMenuItemsBoxSurfaceStyle3}
         >
           {isPriority ? <Flag size={18} /> : <CircleCheckBig size={18} />}
         </Box>
 
-        <Box sx={{ flex: 1, minWidth: 0 }}>
-          <Typography variant="body2" sx={{ fontWeight: 700 }}>
+        <Box sx={FilterMenuItemsBoxSizeStyle4}>
+          <Typography variant="body2" sx={FilterMenuItemsTypographyTextStyle5}>
             {name}
           </Typography>
           <Typography variant="caption" color="text.secondary">
@@ -101,7 +82,7 @@ export default function FilterMenuItem({ filterMenuItems, name }: { filterMenuIt
       </Box>
 
       <Collapse in={openFilter} timeout="auto">
-        <Box sx={{ px: 2, pb: 1.5, pt: 0.5, borderTop: "1px solid", borderColor: "divider" }}>
+        <Box sx={FilterMenuItemsBoxSurfaceStyle6}>
           <FormControl fullWidth>
             <RadioGroup
               value={selectedItem}
@@ -127,16 +108,7 @@ export default function FilterMenuItem({ filterMenuItems, name }: { filterMenuIt
                       />
                     }
                     label={item.name}
-                    sx={{
-                      mx: 0,
-                      minHeight: 38,
-                      borderRadius: 1.5,
-                      "&:hover": { bgcolor: "action.hover" },
-                      "& .MuiFormControlLabel-label": {
-                        fontSize: 14,
-                        fontWeight: selected ? 600 : 400,
-                      },
-                    }}
+                    sx={FilterMenuItemsFormControlLabelSurfaceStyle7({ selected: selected })}
                   />
                 );
               })}

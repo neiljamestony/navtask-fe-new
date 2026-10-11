@@ -1,3 +1,7 @@
+import {
+  MobileAppBarAppBarSpacingStyle1,
+  MobileAppBarToolbarLayoutStyle2
+} from "./Styles/MobileAppBar/MobileAppBar.styles";
 import { useState } from "react"
 
 import { AppBar, Toolbar, IconButton } from "@mui/material"
@@ -9,8 +13,8 @@ export function MobileAppBar({ children }: { children : React.ReactNode }) {
     return (
         <>
             <SignOutComponent open={openSignOut} handleCancel={() => setOpenSignOut(false)}/>
-            <AppBar position="fixed" color="inherit" sx={{ top: 'auto', bottom: 0 }}>
-                <Toolbar sx={{ display: "flex", justifyContent: 'space-evenly', alignItems: 'center'}}>
+            <AppBar position="fixed" color="inherit" sx={MobileAppBarAppBarSpacingStyle1}>
+                <Toolbar sx={MobileAppBarToolbarLayoutStyle2}>
                     {children}
                     <IconButton color="inherit" aria-label="new-task" onClick={() => setOpenSignOut(true)}>
                         <img src={Avatar} alt="sign-out-icon" height={20} width={20}/>

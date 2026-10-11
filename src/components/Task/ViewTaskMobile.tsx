@@ -1,3 +1,42 @@
+import {
+  ViewTaskMobileAppBarSurfaceStyle1,
+  ViewTaskMobileToolbarSizeStyle2,
+  ViewTaskMobileIconButtonSurfaceStyle3,
+  ViewTaskMobileArrowBackIosNewRoundedTextStyle4,
+  ViewTaskMobileBoxSizeStyle5,
+  ViewTaskMobileTypographySizeStyle6,
+  ViewTaskMobileTypographyTextStyle7,
+  ViewTaskMobileBoxSizeStyle8,
+  ViewTaskMobileBoxTextStyle9,
+  ViewTaskMobileBoxLayoutStyle10,
+  ViewTaskMobileBoxSurfaceStyle11,
+  ViewTaskMobileBoxLayoutStyle12,
+  ViewTaskMobileChipTextStyle13,
+  ViewTaskMobileChipTextStyle14,
+  ViewTaskMobileTypographyTextStyle15,
+  ViewTaskMobileBoxSurfaceStyle16,
+  ViewTaskMobileBoxLayoutStyle17,
+  ViewTaskMobileBoxSurfaceStyle18,
+  ViewTaskMobileBoxSizeStyle19,
+  ViewTaskMobileTypographyTextStyle20,
+  ViewTaskMobileBoxSurfaceStyle21,
+  ViewTaskMobileTypographyTextStyle22,
+  ViewTaskMobileTypographySizeStyle23,
+  ViewTaskMobileBoxSurfaceStyle24,
+  ViewTaskMobileTypographyTextStyle25,
+  ViewTaskMobileBoxGridStyle26,
+  ViewTaskMobileBoxSizeStyle27,
+  ViewTaskMobileBoxTextStyle28,
+  ViewTaskMobileBoxSurfaceStyle29,
+  ViewTaskMobileTypographyTextStyle30,
+  ViewTaskMobileBoxSurfaceStyle31,
+  ViewTaskMobileTypographyTextStyle32,
+  ViewTaskMobileBoxLayoutStyle33,
+  ViewTaskMobileBoxSurfaceStyle34,
+  ViewTaskMobileAvatarTextStyle35,
+  ViewTaskMobileTypographyLayoutStyle36,
+  ViewTaskMobileChipTextStyle37
+} from "../Styles/Task/ViewTaskMobile/ViewTaskMobile.styles";
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom"
 import { Box, Typography, IconButton, AppBar, Toolbar, Chip, Avatar } from "@mui/material";
@@ -94,47 +133,29 @@ export default function ViewTaskMobile(){
                 position="fixed"
                 color="inherit"
                 elevation={0}
-                sx={{
-                    bgcolor: "rgba(255,255,255,0.94)",
-                    backdropFilter: "blur(12px)",
-                    borderBottom: "1px solid",
-                    borderColor: "divider",
-                }}
+                sx={ViewTaskMobileAppBarSurfaceStyle1}
                 >
-                <Toolbar sx={{ minHeight: 64, gap: 1.5 }}>
+                <Toolbar sx={ViewTaskMobileToolbarSizeStyle2}>
                     <IconButton
                     aria-label="Back to tasks"
                     onClick={() => navigate("/")}
-                    sx={{
-                        width: 38,
-                        height: 38,
-                        border: "1px solid",
-                        borderColor: "divider",
-                        borderRadius: 2,
-                        color: "text.primary",
-                    }}
+                    sx={ViewTaskMobileIconButtonSurfaceStyle3}
                     >
-                    <ArrowBackIosNewRounded sx={{ fontSize: 16 }} />
+                    <ArrowBackIosNewRounded sx={ViewTaskMobileArrowBackIosNewRoundedTextStyle4} />
                     </IconButton>
 
-                    <Box sx={{ minWidth: 0 }}>
+                    <Box sx={ViewTaskMobileBoxSizeStyle5}>
                     <Typography
                         variant="caption"
                         color="text.secondary"
-                        sx={{ display: "block", lineHeight: 1.2 }}
+                        sx={ViewTaskMobileTypographySizeStyle6}
                     >
                         Tasks / Details
                     </Typography>
 
                     <Typography
                         variant="subtitle1"
-                        sx={{
-                        fontWeight: 700,
-                        lineHeight: 1.4,
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        whiteSpace: "nowrap",
-                        }}
+                        sx={ViewTaskMobileTypographyTextStyle7}
                     >
                         {task.title || "Task details"}
                     </Typography>
@@ -144,15 +165,7 @@ export default function ViewTaskMobile(){
 
             {fetchingTask ? (
                 <Box
-                    sx={{
-                    width: "100%",
-                    minHeight: "50dvh",
-                    boxSizing: "border-box",
-                    pt: "64px",
-                    px: 2,
-                    display: "flex",
-                    alignItems: "center",
-                    }}
+                    sx={ViewTaskMobileBoxSizeStyle8}
                 >
                     <FetchingTask />
                 </Box>
@@ -170,37 +183,19 @@ export default function ViewTaskMobile(){
 
                 <Box
                     component="main"
-                    sx={{
-                        px: 2,
-                        pt: 10,
-                        pb: 12,
-                        bgcolor: "#f6f8fb",
-                        minHeight: "100dvh",
-                        boxSizing: "border-box",
-                    }}
+                    sx={ViewTaskMobileBoxTextStyle9}
                 >
-                    <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                    <Box sx={ViewTaskMobileBoxLayoutStyle10}>
                         <Box
-                            sx={{
-                                p: 2,
-                                bgcolor: "background.paper",
-                                border: "1px solid",
-                                borderColor: "divider",
-                                borderRadius: 3,
-                            }}
+                            sx={ViewTaskMobileBoxSurfaceStyle11}
                         >
-                            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+                            <Box sx={ViewTaskMobileBoxLayoutStyle12}>
                                 {priority && (
                                     <Chip
                                         size="small"
                                         icon={priority.icon}
                                         label={priority.label}
-                                        sx={{
-                                        flexShrink: 0,
-                                        bgcolor: priority.bgColor,
-                                        color: priority.color,
-                                        fontSize: 11,
-                                        }}
+                                        sx={ViewTaskMobileChipTextStyle13({ priority: priority })}
                                     />
                                 )}
                                 {status && (
@@ -208,35 +203,20 @@ export default function ViewTaskMobile(){
                                         size="small"
                                         icon={status.icon}
                                         label={status.label}
-                                        sx={{
-                                        flexShrink: 0,
-                                        bgcolor: status.bgColor,
-                                        color: status.color,
-                                        fontSize: 11,
-                                        }}
+                                        sx={ViewTaskMobileChipTextStyle14({ status: status })}
                                     />
                                 )}
                             </Box>
 
                             <Typography
                                 variant="h5"
-                                sx={{ mt: 2, fontWeight: 750, overflowWrap: "anywhere" }}
+                                sx={ViewTaskMobileTypographyTextStyle15}
                             >
                                 {task.title}
                             </Typography>
 
                             <Box
-                                sx={{
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    gap: 1.5,
-                                    mt: 2,
-                                    p: 1.5,
-                                    border: "1px solid",
-                                    borderColor: "divider",
-                                    borderRadius: 2,
-                                    bgcolor: "background.paper",
-                                }}
+                                sx={ViewTaskMobileBoxSurfaceStyle16}
                                 >
                                 {[
                                     {
@@ -256,28 +236,19 @@ export default function ViewTaskMobile(){
                                 ].map((date) => (
                                     <Box
                                     key={date.label}
-                                    sx={{ display: "flex", alignItems: "center", gap: 1.25 }}
+                                    sx={ViewTaskMobileBoxLayoutStyle17}
                                     >
                                     <Box
-                                        sx={{
-                                        width: 32,
-                                        height: 32,
-                                        flexShrink: 0,
-                                        display: "grid",
-                                        placeItems: "center",
-                                        borderRadius: 1.5,
-                                        bgcolor: "grey.100",
-                                        color: "text.secondary",
-                                        }}
+                                        sx={ViewTaskMobileBoxSurfaceStyle18}
                                     >
                                         {date.icon}
                                     </Box>
 
-                                    <Box sx={{ minWidth: 0 }}>
+                                    <Box sx={ViewTaskMobileBoxSizeStyle19}>
                                         <Typography variant="caption" color="text.secondary">
                                         {date.label}
                                         </Typography>
-                                        <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                                        <Typography variant="body2" sx={ViewTaskMobileTypographyTextStyle20}>
                                         {date.value}
                                         </Typography>
                                     </Box>
@@ -288,21 +259,15 @@ export default function ViewTaskMobile(){
 
                         {task.description && (
                             <Box
-                                sx={{
-                                p: 2,
-                                bgcolor: "background.paper",
-                                border: "1px solid",
-                                borderColor: "divider",
-                                borderRadius: 3,
-                                }}
+                                sx={ViewTaskMobileBoxSurfaceStyle21}
                             >
-                                <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.75 }}>
+                                <Typography variant="subtitle2" sx={ViewTaskMobileTypographyTextStyle22}>
                                 Description
                                 </Typography>
                                 <Typography
                                 variant="body2"
                                 color="text.secondary"
-                                sx={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere", lineHeight: 1.6 }}
+                                sx={ViewTaskMobileTypographySizeStyle23}
                                 >
                                 {task.description}
                                 </Typography>
@@ -311,58 +276,35 @@ export default function ViewTaskMobile(){
 
                         {task.attachments && task.attachments.length > 0 && (
                             <Box
-                                sx={{
-                                p: 2,
-                                bgcolor: "background.paper",
-                                border: "1px solid",
-                                borderColor: "divider",
-                                borderRadius: 3,
-                                }}
+                                sx={ViewTaskMobileBoxSurfaceStyle24}
                             >
-                                <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1.5 }}>
+                                <Typography variant="subtitle2" sx={ViewTaskMobileTypographyTextStyle25}>
                                     Attachments ({task.attachments.length})
                                 </Typography>
 
                                 <Box
-                                    sx={{
-                                        display: "grid",
-                                        gridTemplateColumns: "repeat(auto-fill, minmax(100px, 1fr))",
-                                        gap: 1.5,
-                                    }}
+                                    sx={ViewTaskMobileBoxGridStyle26}
                                 >
                                 {task.attachments.map((item, key) => (
-                                    <Box key={`${item.name}-${key}`} sx={{ minWidth: 0 }}>
+                                    <Box key={`${item.name}-${key}`} sx={ViewTaskMobileBoxSizeStyle27}>
                                     {item.url && (
                                         <Box
                                         component="a"
                                         href={item.url}
                                         target="_blank"
                                         rel="noreferrer"
-                                        sx={{ display: "block", color: "inherit", textDecoration: "none" }}
+                                        sx={ViewTaskMobileBoxTextStyle28}
                                         >
                                         <Box
                                             component="img"
                                             src={item.url}
                                             alt={item.name}
-                                            sx={{
-                                            width: "100%",
-                                            aspectRatio: "1",
-                                            display: "block",
-                                            objectFit: "cover",
-                                            borderRadius: 2,
-                                            bgcolor: "grey.100",
-                                            }}
+                                            sx={ViewTaskMobileBoxSurfaceStyle29}
                                         />
                                         <Typography
                                             variant="caption"
                                             title={item.name}
-                                            sx={{
-                                            display: "block",
-                                            mt: 0.75,
-                                            overflow: "hidden",
-                                            textOverflow: "ellipsis",
-                                            whiteSpace: "nowrap",
-                                            }}
+                                            sx={ViewTaskMobileTypographyTextStyle30}
                                         >
                                             {limitText(item.name)}
                                         </Typography>
@@ -375,15 +317,9 @@ export default function ViewTaskMobile(){
                         )}
 
                         <Box
-                            sx={{
-                                p: 2,
-                                bgcolor: "background.paper",
-                                border: "1px solid",
-                                borderColor: "divider",
-                                borderRadius: 3,
-                            }}
+                            sx={ViewTaskMobileBoxSurfaceStyle31}
                         >
-                            <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1.5 }}>
+                            <Typography variant="subtitle2" sx={ViewTaskMobileTypographyTextStyle32}>
                                 Subtasks
                                 <Typography component="span" variant="caption" color="text.secondary">
                                 {" "}({task.subtask.length})
@@ -392,35 +328,21 @@ export default function ViewTaskMobile(){
 
                             {task.subtask.length > 0 ? (
                                 
-                                <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+                                <Box sx={ViewTaskMobileBoxLayoutStyle33}>
                                 {task.subtask.map((subTask, key) => {
                                     const subtaskStatus = subTaskStatusIcons[subTask?.status as keyof typeof subTaskStatusIcons]
                                     return (
                                     <Box
                                         key={`${subTask.title}-${key}`}
-                                        sx={{
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "space-between",
-                                            gap: 1.5,
-                                            p: 1.25,
-                                            border: "1px solid",
-                                            borderColor: "divider",
-                                            borderRadius: 2,
-                                        }}
+                                        sx={ViewTaskMobileBoxSurfaceStyle34}
                                     >
                                         <Avatar
                                             variant="rounded"
-                                            sx={{
-                                                width: 36,
-                                                height: 36,
-                                                bgcolor: "rgba(148, 0, 211, 0.10)",
-                                                color: "#9400D3",
-                                            }}
+                                            sx={ViewTaskMobileAvatarTextStyle35}
                                             >
                                             <ListTodo size={18} />
                                         </Avatar>
-                                    <Typography variant="body2" sx={{ flex: 1, overflowWrap: "anywhere" }}>
+                                    <Typography variant="body2" sx={ViewTaskMobileTypographyLayoutStyle36}>
                                         {subTask.title}
                                     </Typography>
                                     {subtaskStatus && (
@@ -428,12 +350,7 @@ export default function ViewTaskMobile(){
                                             size="small"
                                             icon={subtaskStatus.icon}
                                             label={subtaskStatus.label}
-                                            sx={{
-                                            flexShrink: 0,
-                                            bgcolor: subtaskStatus.bgColor,
-                                            color: subtaskStatus.color,
-                                            fontSize: 11,
-                                            }}
+                                            sx={ViewTaskMobileChipTextStyle37({ subtaskStatus: subtaskStatus })}
                                         />
                                     )}
                                     </Box>
